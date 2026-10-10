@@ -1742,10 +1742,10 @@
     "designPreferenceElo": 891.08,
     "designComparisonCount": 13,
     "price": {
-      "amount": 395,
+      "amount": 445,
       "currency": "USD"
     },
-    "priceUpdatedAt": "2026-09-10T21:30:05.164Z",
+    "priceUpdatedAt": "2026-10-10T04:21:11.529Z",
     "priceHistory": [
       {
         "price": {
@@ -1770,6 +1770,14 @@
         },
         "date": "2026-09-10T20:53:18.743Z",
         "source": "scrape"
+      },
+      {
+        "price": {
+          "amount": 445,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T04:21:11.529Z",
+        "source": "manual"
       }
     ],
     "links": [
@@ -1781,7 +1789,7 @@
           "currency": "USD"
         },
         "condition": "new",
-        "observedAt": "2026-09-10T21:30:05.046Z"
+        "observedAt": "2026-09-10"
       }
     ],
     "imageUrl": "https://mreatwell.com/_next/image?url=https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0408%2F7837%2F5065%2Ffiles%2F2025.06.20SubLimeOverheadJubileeOnCounter_258cf200-6ef9-4e38-86b3-dc2aa91a595a.png%3Fv%3D1773428909&w=2048&q=75&dpl=dpl_AEnoZeYhMXjFcyygDcXaHQo3ntpb",
@@ -1790,9 +1798,9 @@
       "caseThicknessMm": 13.6,
       "lugWidthMm": 20,
       "movement": "automatic",
+      "caliber": "NH35",
       "waterResistanceM": 200,
-      "crystal": "Sapphire",
-      "caliber": "NH35"
+      "crystal": "Sapphire"
     },
     "tags": [
       "diver"
@@ -2453,7 +2461,7 @@
     "designPreferenceElo": 984.01,
     "designComparisonCount": 13,
     "price": {
-      "amount": 299,
+      "amount": 335,
       "currency": "USD"
     },
     "qualityFlags": {
@@ -2474,16 +2482,35 @@
       "caseDiameterMm": 37,
       "caseThicknessMm": 13.8,
       "lugToLugMm": 44,
-      "crystal": "Sapphire-coated mineral crystal (domed)",
       "movement": "quartz",
       "caliber": "Seiko VK63 Meca-quartz",
-      "waterResistanceM": 50
+      "waterResistanceM": 50,
+      "crystal": "Sapphire-coated mineral crystal (domed)"
     },
     "tags": [
       "chronograph"
     ],
     "id": "mqzciq3z036pvx",
-    "dateAdded": "2026-06-29T15:01:36.047Z"
+    "dateAdded": "2026-06-29T15:01:36.047Z",
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 299,
+          "currency": "USD"
+        },
+        "date": "2026-06-29T15:01:36.047Z",
+        "source": "manual"
+      },
+      {
+        "price": {
+          "amount": 335,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T04:21:32.483Z",
+        "source": "manual"
+      }
+    ],
+    "priceUpdatedAt": "2026-10-10T04:21:32.483Z"
   },
   {
     "brand": "Baltic",
@@ -3368,10 +3395,10 @@
       "caseThicknessMm": 11,
       "lugToLugMm": 47,
       "movement": "automatic",
-      "waterResistanceM": 300,
-      "crystal": "Sapphire",
       "caliber": "La Joux-Perret G100",
-      "powerReserveHours": 68
+      "powerReserveHours": 68,
+      "waterResistanceM": 300,
+      "crystal": "Sapphire"
     },
     "tags": [
       "diver"
@@ -4083,6 +4110,9 @@
         "source": "manual"
       }
     ],
+    "qualityFlags": {
+      "arCoated": true
+    },
     "links": [
       {
         "url": "https://viiswatch.com/en/products/flieger-gmt-42-adriatic?variant=56067814490460",
@@ -4097,24 +4127,21 @@
     "imageUrl": "https://viiswatch.com/cdn/shop/files/VIIS_Adriatic_Orange_Strap_1.jpg?v=1783884283&width=2400",
     "specs": {
       "caseDiameterMm": 42,
+      "caseThicknessMm": 13.4,
+      "lugToLugMm": 49,
       "movement": "automatic",
-      "braceletStrap": "Orange Peel",
-      "complications": "GMT",
       "caliber": "Miyota 9075",
       "powerReserveHours": 42,
       "waterResistanceM": 100,
-      "lugToLugMm": 49,
       "crystal": "Double-domed sapphire, internal AR coating",
-      "caseThicknessMm": 13.4
+      "braceletStrap": "Orange Peel",
+      "complications": "GMT"
     },
     "tags": [
       "GMT"
     ],
     "id": "mu224sxacwsdrj",
-    "dateAdded": "2026-09-15T02:33:15.882Z",
-    "qualityFlags": {
-      "arCoated": true
-    }
+    "dateAdded": "2026-09-15T02:33:15.882Z"
   },
   {
     "brand": "UBIQ Watches",
