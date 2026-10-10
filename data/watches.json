@@ -1096,6 +1096,24 @@
       "currency": "USD"
     },
     "priceUpdatedAt": "2026-10-10T15:55:33.901Z",
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 375,
+          "currency": "USD"
+        },
+        "date": "2026-09-10T21:29:54.259Z",
+        "source": "manual"
+      },
+      {
+        "price": {
+          "amount": 300,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T15:55:33.901Z",
+        "source": "scrape"
+      }
+    ],
     "qualityFlags": {
       "sapphireBezelInsert": false,
       "microAdjustClasp": false,
@@ -1147,25 +1165,7 @@
       "diver"
     ],
     "id": "w25",
-    "dateAdded": "2026-06-22T15:08:00Z",
-    "priceHistory": [
-      {
-        "price": {
-          "amount": 375,
-          "currency": "USD"
-        },
-        "date": "2026-09-10T21:29:54.259Z",
-        "source": "manual"
-      },
-      {
-        "price": {
-          "amount": 300,
-          "currency": "USD"
-        },
-        "date": "2026-10-10T15:55:33.901Z",
-        "source": "scrape"
-      }
-    ]
+    "dateAdded": "2026-06-22T15:08:00Z"
   },
   {
     "brand": "Zelos",
@@ -3032,6 +3032,7 @@
   {
     "brand": "Naga Time Co. Orologi Shop",
     "model": "Naga Granturismo Chronograph 39 Amalfi",
+    "referenceNumber": "26ncrAM-1",
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 5,
@@ -3068,6 +3069,9 @@
         "source": "manual"
       }
     ],
+    "qualityFlags": {
+      "braceletIncluded": true
+    },
     "links": [
       {
         "url": "https://nagawatches.com/collections/granturismo-chronograph-39/products/naga-granturismo-chronograph-39-amalfi",
@@ -3114,11 +3118,7 @@
       "chronograph"
     ],
     "id": "mssxh8iem1cs9b",
-    "dateAdded": "2026-08-14T12:33:19.955Z",
-    "referenceNumber": "26ncrAM-1",
-    "qualityFlags": {
-      "braceletIncluded": true
-    }
+    "dateAdded": "2026-08-14T12:33:19.955Z"
   },
   {
     "brand": "AV86",
@@ -3982,6 +3982,7 @@
       "amount": 350,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:04.816Z",
     "priceHistory": [
       {
         "price": {
@@ -4023,8 +4024,7 @@
     },
     "tags": [],
     "id": "mtxk0llx7cj8wb",
-    "dateAdded": "2026-09-11T22:55:01.986Z",
-    "priceUpdatedAt": "2026-10-10T15:56:04.816Z"
+    "dateAdded": "2026-09-11T22:55:01.986Z"
   },
   {
     "brand": "Brew Watches",
@@ -4040,6 +4040,7 @@
       "amount": 375,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:05.355Z",
     "priceHistory": [
       {
         "price": {
@@ -4082,8 +4083,7 @@
       "chronograph"
     ],
     "id": "mtyhp9n2w3abin",
-    "dateAdded": "2026-09-12T14:38:00.203Z",
-    "priceUpdatedAt": "2026-10-10T15:56:05.355Z"
+    "dateAdded": "2026-09-12T14:38:00.203Z"
   },
   {
     "brand": "Ferro & Company",
@@ -4305,6 +4305,7 @@
       "amount": 1890,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:07.112Z",
     "priceHistory": [
       {
         "price": {
@@ -4349,8 +4350,7 @@
     "tags": [],
     "notes": "Verified 2026-09-13: NOMOS ref. 719 product page states regulation in six positions; the listed configuration includes a vegan velour strap, with metal bracelets offered at an additional price. Source: https://nomos-glashuette.com/en-us/club/club-campus-night-sky-719",
     "id": "mtz7n87ukjuhv5",
-    "dateAdded": "2026-09-13T02:44:15.066Z",
-    "priceUpdatedAt": "2026-10-10T15:56:07.112Z"
+    "dateAdded": "2026-09-13T02:44:15.066Z"
   },
   {
     "brand": "Viis",
@@ -4365,6 +4365,7 @@
       "amount": 663,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:08.146Z",
     "priceHistory": [
       {
         "price": {
@@ -4394,8 +4395,8 @@
           "amount": 663,
           "currency": "USD"
         },
-        "observedAt": "2026-10-10T15:56:07.112Z",
         "condition": "new",
+        "observedAt": "2026-10-10T15:56:07.112Z",
         "askHistory": [
           {
             "price": {
@@ -4432,8 +4433,7 @@
       "GMT"
     ],
     "id": "mu224sxacwsdrj",
-    "dateAdded": "2026-09-15T02:33:15.882Z",
-    "priceUpdatedAt": "2026-10-10T15:56:08.146Z"
+    "dateAdded": "2026-09-15T02:33:15.882Z"
   },
   {
     "brand": "UBIQ Watches",
@@ -4449,6 +4449,7 @@
       "amount": 459,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:08.756Z",
     "priceHistory": [
       {
         "price": {
@@ -4514,8 +4515,7 @@
     },
     "tags": [],
     "id": "mu22eejt4cj85b",
-    "dateAdded": "2026-09-15T02:40:43.814Z",
-    "priceUpdatedAt": "2026-10-10T15:56:08.756Z"
+    "dateAdded": "2026-09-15T02:40:43.814Z"
   },
   {
     "brand": "Humism",
@@ -4531,6 +4531,7 @@
       "amount": 428,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:09.462Z",
     "priceHistory": [
       {
         "price": {
@@ -4569,8 +4570,7 @@
     },
     "tags": [],
     "id": "mu2496sapr6jp3",
-    "dateAdded": "2026-09-15T03:32:39.703Z",
-    "priceUpdatedAt": "2026-10-10T15:56:09.462Z"
+    "dateAdded": "2026-09-15T03:32:39.703Z"
   },
   {
     "brand": "Galo",
@@ -4638,6 +4638,7 @@
       "amount": 749,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:10.511Z",
     "priceHistory": [
       {
         "price": {
@@ -4684,8 +4685,7 @@
       "chronograph"
     ],
     "id": "mu8lwyladqxrju",
-    "dateAdded": "2026-09-19T16:33:39.358Z",
-    "priceUpdatedAt": "2026-10-10T15:56:10.511Z"
+    "dateAdded": "2026-09-19T16:33:39.358Z"
   },
   {
     "brand": "Saturn Watches",
@@ -4753,6 +4753,7 @@
       "amount": 2120,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:12.203Z",
     "priceHistory": [
       {
         "price": {
@@ -4800,8 +4801,7 @@
     ],
     "notes": "- Delivery from July 2027 | Made from the X4009 Mk1a Spitfire aircraft | REC Watches",
     "id": "mu8mb7gnqx9li5",
-    "dateAdded": "2026-09-19T16:44:44.036Z",
-    "priceUpdatedAt": "2026-10-10T15:56:12.203Z"
+    "dateAdded": "2026-09-19T16:44:44.036Z"
   },
   {
     "brand": "EREBUS Watches",
@@ -4816,6 +4816,7 @@
       "amount": 449,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:12.800Z",
     "priceHistory": [
       {
         "price": {
@@ -4859,8 +4860,7 @@
       "GMT"
     ],
     "id": "mv1vuxt1izrr4k",
-    "dateAdded": "2026-10-10T04:17:20.292Z",
-    "priceUpdatedAt": "2026-10-10T15:56:12.800Z"
+    "dateAdded": "2026-10-10T04:17:20.292Z"
   },
   {
     "brand": "AV86",
@@ -4873,6 +4873,7 @@
       "amount": 599,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T15:56:13.843Z",
     "priceHistory": [
       {
         "price": {
@@ -4901,20 +4902,23 @@
     ],
     "imageUrl": "https://av86.com/cdn/shop/files/AV86_Chronodate_White_FlatLeatherShark.png?v=1781007379&width=1920",
     "specs": {
-      "caseDiameterMm": 49.2,
-      "lugWidthMm": 13,
+      "caseDiameterMm": 39,
+      "caseThicknessMm": 13,
+      "lugToLugMm": 49.2,
+      "lugWidthMm": 20,
       "caseMaterial": "316L high precision stainless steel",
       "movement": "automatic",
       "caliber": "Miyota 9120",
       "powerReserveHours": 40,
       "waterResistanceM": 50,
       "crystal": "Sapphire",
-      "dialColor": "Dial color",
+      "dialColor": "White, textured",
       "braceletStrap": "Italian leather (genuine) with Pin buckle"
     },
-    "tags": [],
+    "tags": [
+      "dress"
+    ],
     "id": "mv2jhd6f52kbt1",
-    "dateAdded": "2026-10-10T15:18:37.815Z",
-    "priceUpdatedAt": "2026-10-10T15:56:13.843Z"
+    "dateAdded": "2026-10-10T15:18:37.815Z"
   }
 ]
