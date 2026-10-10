@@ -7,8 +7,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
     "designUniqueness": 5,
-    "designPreferenceElo": 1068.31,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1037.36,
+    "designComparisonCount": 13,
     "price": {
       "amount": 7100,
       "currency": "USD"
@@ -59,8 +59,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 965.86,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 978.96,
+    "designComparisonCount": 13,
     "price": {
       "amount": 2230,
       "currency": "USD"
@@ -104,8 +104,8 @@
     "wishlistTier": "watching",
     "scoringCategory": "dress",
     "designUniqueness": 4,
-    "designPreferenceElo": 931.31,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 915.69,
+    "designComparisonCount": 13,
     "personalFit": 3,
     "price": {
       "amount": 1020,
@@ -173,8 +173,8 @@
     "status": "wishlist",
     "wishlistTier": "pass",
     "designUniqueness": 2,
-    "designPreferenceElo": 932.07,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 964.52,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1640,
       "currency": "USD"
@@ -242,8 +242,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 4,
-    "designPreferenceElo": 997.76,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 981.83,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1810,
       "currency": "USD"
@@ -309,8 +309,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 2,
-    "designPreferenceElo": 1031.18,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1047.21,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1538,
       "currency": "USD"
@@ -360,8 +360,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 5,
-    "designPreferenceElo": 1000.24,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1016.31,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1695,
       "currency": "USD"
@@ -439,8 +439,8 @@
     "status": "wishlist",
     "wishlistTier": "pass",
     "designUniqueness": 4,
-    "designPreferenceElo": 935.94,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 919.97,
+    "designComparisonCount": 13,
     "price": {
       "amount": 2450,
       "currency": "USD"
@@ -514,8 +514,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 999.2,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1015.13,
+    "designComparisonCount": 13,
     "price": {
       "amount": 2200,
       "currency": "USD"
@@ -566,8 +566,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 3,
-    "designPreferenceElo": 1059.9,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1044.1,
+    "designComparisonCount": 13,
     "price": {
       "amount": 3700,
       "currency": "USD"
@@ -612,8 +612,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 4,
-    "designPreferenceElo": 1031.98,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1047.94,
+    "designComparisonCount": 13,
     "price": {
       "amount": 3495,
       "currency": "USD"
@@ -665,8 +665,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "gmt",
     "designUniqueness": 3,
-    "designPreferenceElo": 1111.41,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1134.42,
+    "designComparisonCount": 13,
     "price": {
       "amount": 4375,
       "currency": "USD"
@@ -713,8 +713,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 1,
-    "designPreferenceElo": 979.75,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 965.61,
+    "designComparisonCount": 12,
     "price": {
       "amount": 278,
       "currency": "USD"
@@ -763,8 +763,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 2,
-    "designPreferenceElo": 999.11,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 983.23,
+    "designComparisonCount": 13,
     "price": {
       "amount": 999,
       "currency": "USD"
@@ -809,8 +809,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 5,
-    "designPreferenceElo": 849.95,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 882.23,
+    "designComparisonCount": 13,
     "price": {
       "amount": 375,
       "currency": "USD"
@@ -858,8 +858,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 2,
-    "designPreferenceElo": 953.96,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 921.51,
+    "designComparisonCount": 13,
     "price": {
       "amount": 758,
       "currency": "USD"
@@ -910,8 +910,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 3,
-    "designPreferenceElo": 1064.25,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1080.05,
+    "designComparisonCount": 13,
     "price": {
       "amount": 3495,
       "currency": "USD"
@@ -960,8 +960,8 @@
     "model": "Fitzroy Auto",
     "status": "owned",
     "designUniqueness": 3,
-    "designPreferenceElo": 951.51,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 983.57,
+    "designComparisonCount": 13,
     "price": {
       "amount": 435,
       "currency": "USD"
@@ -1039,8 +1039,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 1,
-    "designPreferenceElo": 1020.25,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1034.39,
+    "designComparisonCount": 12,
     "price": {
       "amount": 375,
       "currency": "USD"
@@ -1088,8 +1088,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 900.97,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 902.5,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1999,
       "currency": "USD"
@@ -1138,8 +1138,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 1001.13,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 985.14,
+    "designComparisonCount": 13,
     "price": {
       "amount": 3324,
       "currency": "USD"
@@ -1190,8 +1190,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 966.79,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 982.85,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1079,
       "currency": "USD"
@@ -1242,8 +1242,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 936.5,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 952.47,
+    "designComparisonCount": 13,
     "price": {
       "amount": 959,
       "currency": "USD"
@@ -1295,8 +1295,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 4,
-    "designPreferenceElo": 1031.2,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1015.24,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1875.3,
       "currency": "USD"
@@ -1349,8 +1349,8 @@
     "wishlistTier": "watching",
     "scoringCategory": "gmt",
     "designUniqueness": 3,
-    "designPreferenceElo": 997.45,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1013.55,
+    "designComparisonCount": 13,
     "price": {
       "amount": 851,
       "currency": "USD"
@@ -1394,8 +1394,8 @@
     "model": "TISSOT GENTLEMAN 38MM",
     "status": "owned",
     "designUniqueness": 4,
-    "designPreferenceElo": 969.46,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 985.43,
+    "designComparisonCount": 13,
     "price": {
       "amount": 850,
       "currency": "USD"
@@ -1446,8 +1446,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 3,
-    "designPreferenceElo": 1000,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1016,
+    "designComparisonCount": 13,
     "price": {
       "amount": 5168,
       "currency": "USD"
@@ -1495,8 +1495,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 1032,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1047.96,
+    "designComparisonCount": 13,
     "price": {
       "amount": 899,
       "currency": "USD"
@@ -1557,8 +1557,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 1001.36,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1017.35,
+    "designComparisonCount": 13,
     "price": {
       "amount": 6762,
       "currency": "USD"
@@ -1607,8 +1607,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 919.89,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 918.23,
+    "designComparisonCount": 13,
     "price": {
       "amount": 395,
       "currency": "USD"
@@ -1691,8 +1691,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 5,
-    "designPreferenceElo": 918.21,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 910.08,
+    "designComparisonCount": 12,
     "price": {
       "amount": 910,
       "currency": "USD"
@@ -1739,8 +1739,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 903.98,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 891.08,
+    "designComparisonCount": 13,
     "price": {
       "amount": 395,
       "currency": "USD"
@@ -1806,8 +1806,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 865.56,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 897.65,
+    "designComparisonCount": 13,
     "price": {
       "amount": 495,
       "currency": "USD"
@@ -1854,8 +1854,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 963.54,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 979.78,
+    "designComparisonCount": 12,
     "price": {
       "amount": 1975,
       "currency": "USD"
@@ -1900,8 +1900,8 @@
     "wishlistTier": "pass",
     "scoringCategory": "dress",
     "designUniqueness": 4,
-    "designPreferenceElo": 968.82,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 952.85,
+    "designComparisonCount": 13,
     "price": {
       "amount": 2490,
       "currency": "EUR"
@@ -1950,8 +1950,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 1095.68,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1080.78,
+    "designComparisonCount": 13,
     "price": {
       "amount": 2095,
       "currency": "USD"
@@ -2001,8 +2001,8 @@
     "status": "owned",
     "scoringCategory": "chronograph",
     "designUniqueness": 5,
-    "designPreferenceElo": 1064.28,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1079.75,
+    "designComparisonCount": 13,
     "price": {
       "amount": 800,
       "currency": "USD"
@@ -2055,8 +2055,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 2,
-    "designPreferenceElo": 1031.77,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1015.74,
+    "designComparisonCount": 13,
     "price": {
       "amount": 889,
       "currency": "USD"
@@ -2104,8 +2104,8 @@
     "status": "wishlist",
     "wishlistTier": "pass",
     "designUniqueness": 3,
-    "designPreferenceElo": 934.13,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 949.27,
+    "designComparisonCount": 13,
     "price": {
       "amount": 589,
       "currency": "USD"
@@ -2151,8 +2151,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 5,
-    "designPreferenceElo": 967.07,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 951.2,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1495,
       "currency": "USD"
@@ -2201,8 +2201,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 2,
-    "designPreferenceElo": 1068.41,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1056,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1594.7,
       "currency": "USD"
@@ -2249,8 +2249,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 968.05,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 951.99,
+    "designComparisonCount": 13,
     "price": {
       "amount": 499,
       "currency": "USD"
@@ -2302,8 +2302,8 @@
     "status": "wishlist",
     "wishlistTier": "pass",
     "designUniqueness": 3,
-    "designPreferenceElo": 967.98,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 951.96,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1850,
       "currency": "USD"
@@ -2380,8 +2380,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "sports",
     "designUniqueness": 2,
-    "designPreferenceElo": 1001.73,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1017.61,
+    "designComparisonCount": 13,
     "price": {
       "amount": 2850,
       "currency": "USD"
@@ -2449,8 +2449,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 1000.01,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 984.01,
+    "designComparisonCount": 13,
     "price": {
       "amount": 299,
       "currency": "USD"
@@ -2488,8 +2488,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "sports",
     "designUniqueness": 5,
-    "designPreferenceElo": 969.99,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 985.86,
+    "designComparisonCount": 13,
     "price": {
       "amount": 600,
       "currency": "EUR"
@@ -2558,8 +2558,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 1062.77,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1046.73,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1150,
       "currency": "USD"
@@ -2606,9 +2606,10 @@
     "referenceNumber": "DH62-38M-G1",
     "status": "wishlist",
     "wishlistTier": "watching",
+    "scoringCategory": "chronograph",
     "designUniqueness": 2,
-    "designPreferenceElo": 1147.63,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1160.04,
+    "designComparisonCount": 12,
     "price": {
       "amount": 300,
       "currency": "USD"
@@ -2663,8 +2664,7 @@
       "chronograph"
     ],
     "id": "msshvavwg41qiq",
-    "dateAdded": "2026-08-14T05:16:22.362Z",
-    "scoringCategory": "chronograph"
+    "dateAdded": "2026-08-14T05:16:22.362Z"
   },
   {
     "brand": "Henry Archer",
@@ -2674,8 +2674,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
     "designUniqueness": 5,
-    "designPreferenceElo": 986.38,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 985.67,
+    "designComparisonCount": 13,
     "price": {
       "amount": 847,
       "currency": "USD"
@@ -2735,8 +2735,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 3,
-    "designPreferenceElo": 1028.22,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1044.48,
+    "designComparisonCount": 13,
     "price": {
       "amount": 469,
       "currency": "USD"
@@ -2790,8 +2790,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 3,
-    "designPreferenceElo": 983.65,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 983.6,
+    "designComparisonCount": 13,
     "price": {
       "amount": 490,
       "currency": "EUR"
@@ -2850,8 +2850,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 5,
-    "designPreferenceElo": 1033.27,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1017.31,
+    "designComparisonCount": 13,
     "price": {
       "amount": 662,
       "currency": "USD"
@@ -2914,8 +2914,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
     "designUniqueness": 4,
-    "designPreferenceElo": 1003.62,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 987.7,
+    "designComparisonCount": 13,
     "price": {
       "amount": 499,
       "currency": "USD"
@@ -2972,8 +2972,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
     "designUniqueness": 5,
-    "designPreferenceElo": 937.9,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 922.78,
+    "designComparisonCount": 13,
     "price": {
       "amount": 425,
       "currency": "USD"
@@ -3034,8 +3034,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 1068.49,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1050.89,
+    "designComparisonCount": 13,
     "price": {
       "amount": 399,
       "currency": "GBP"
@@ -3090,8 +3090,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "gmt",
     "designUniqueness": 4,
-    "designPreferenceElo": 1061.15,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1076.6,
+    "designComparisonCount": 13,
     "price": {
       "amount": 3800,
       "currency": "EUR"
@@ -3147,8 +3147,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 1033.89,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1017.63,
+    "designComparisonCount": 13,
     "price": {
       "amount": 549,
       "currency": "USD"
@@ -3204,8 +3204,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "gmt",
     "designUniqueness": 5,
-    "designPreferenceElo": 1079.68,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1080,
+    "designComparisonCount": 13,
     "personalFit": 5,
     "price": {
       "amount": 12000,
@@ -3260,8 +3260,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
     "designUniqueness": 4,
-    "designPreferenceElo": 1062,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1078.04,
+    "designComparisonCount": 13,
     "price": {
       "amount": 655,
       "currency": "EUR"
@@ -3325,8 +3325,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
-    "designPreferenceElo": 1015.84,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1015.15,
+    "designComparisonCount": 13,
     "price": {
       "amount": 852,
       "currency": "USD"
@@ -3381,8 +3381,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
     "designUniqueness": 4,
-    "designPreferenceElo": 996.72,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1012.69,
+    "designComparisonCount": 13,
     "price": {
       "amount": 749,
       "currency": "USD"
@@ -3437,8 +3437,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "gmt",
     "designUniqueness": 4,
-    "designPreferenceElo": 1138.97,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1105.76,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1149,
       "currency": "USD"
@@ -3501,8 +3501,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
     "designUniqueness": 3,
-    "designPreferenceElo": 1043.23,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1054.39,
+    "designComparisonCount": 12,
     "price": {
       "amount": 729,
       "currency": "USD"
@@ -3567,8 +3567,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "gmt",
     "designUniqueness": 4,
-    "designPreferenceElo": 1100.05,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 1117.1,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1575,
       "currency": "USD"
@@ -3632,8 +3632,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "dress",
     "designUniqueness": 5,
-    "designPreferenceElo": 1118.23,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1134.38,
+    "designComparisonCount": 12,
     "price": {
       "amount": 1100,
       "currency": "USD"
@@ -3685,8 +3685,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "gmt",
     "designUniqueness": 5,
-    "designPreferenceElo": 1018.59,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1050.09,
+    "designComparisonCount": 13,
     "price": {
       "amount": 350,
       "currency": "USD"
@@ -3710,7 +3710,7 @@
           "currency": "USD"
         },
         "condition": "new",
-        "observedAt": "2026-09-11"
+        "observedAt": "2026-09-19"
       }
     ],
     "imageUrl": "https://us.limawatch.com/cdn/shop/files/GMTTeal_09.jpg?v=1775140818&width=1920",
@@ -3738,8 +3738,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "chronograph",
     "designUniqueness": 5,
-    "designPreferenceElo": 972.47,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 972.23,
+    "designComparisonCount": 13,
     "price": {
       "amount": 375,
       "currency": "USD"
@@ -3794,6 +3794,9 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "scoringCategory": "chronograph",
+    "designUniqueness": 5,
+    "designPreferenceElo": 992.98,
+    "designComparisonCount": 12,
     "price": {
       "amount": 485,
       "currency": "CAD"
@@ -3859,6 +3862,9 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "scoringCategory": "gmt",
+    "designUniqueness": 4,
+    "designPreferenceElo": 1051.32,
+    "designComparisonCount": 13,
     "price": {
       "amount": 5760,
       "currency": "USD"
@@ -3928,6 +3934,9 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "scoringCategory": "sports",
+    "designUniqueness": 3,
+    "designPreferenceElo": 889.02,
+    "designComparisonCount": 12,
     "price": {
       "amount": 275,
       "currency": "USD"
@@ -3993,8 +4002,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "dress",
     "designUniqueness": 4,
-    "designPreferenceElo": 981.19,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 979.99,
+    "designComparisonCount": 13,
     "price": {
       "amount": 1890,
       "currency": "USD"
@@ -4052,6 +4061,8 @@
     "wishlistTier": "watching",
     "scoringCategory": "gmt",
     "designUniqueness": 4,
+    "designPreferenceElo": 1021.25,
+    "designComparisonCount": 13,
     "price": {
       "amount": 683,
       "currency": "USD"
@@ -4098,6 +4109,8 @@
     "wishlistTier": "watching",
     "scoringCategory": "sports",
     "designUniqueness": 4,
+    "designPreferenceElo": 984.97,
+    "designComparisonCount": 13,
     "price": {
       "amount": 299,
       "currency": "USD"
@@ -4151,6 +4164,9 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "scoringCategory": "dress",
+    "designUniqueness": 5,
+    "designPreferenceElo": 837.71,
+    "designComparisonCount": 13,
     "price": {
       "amount": 428,
       "currency": "USD"
@@ -4194,5 +4210,240 @@
     "tags": [],
     "id": "mu2496sapr6jp3",
     "dateAdded": "2026-09-15T03:32:39.703Z"
+  },
+  {
+    "brand": "Galo",
+    "model": "Novo Cruisin 318",
+    "status": "wishlist",
+    "wishlistTier": "shortlist",
+    "scoringCategory": "sports",
+    "designUniqueness": 5,
+    "designPreferenceElo": 1128.63,
+    "designComparisonCount": 13,
+    "price": {
+      "amount": 528,
+      "currency": "USD"
+    },
+    "priceUpdatedAt": "2026-09-19T16:26:55.274Z",
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 528,
+          "currency": "USD"
+        },
+        "date": "2026-09-19T16:26:55.274Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "arCoated": true
+    },
+    "links": [
+      {
+        "url": "https://watchesgalo.com/pages/novo-cruisin",
+        "retailer": "watchesgalo.com"
+      }
+    ],
+    "imageUrl": "https://watchesgalo.com/cdn/shop/files/318_blackStrap_65a48066-d541-49b7-8278-5e10c8960524.webp?v=1776710758&width=1400",
+    "specs": {
+      "caseDiameterMm": 39,
+      "caseThicknessMm": 11.5,
+      "lugToLugMm": 46.5,
+      "lugWidthMm": 20,
+      "caseMaterial": "Stainless",
+      "movement": "automatic",
+      "caliber": "Miyota 9039",
+      "powerReserveHours": 42,
+      "waterResistanceM": 100,
+      "crystal": "Sapphire",
+      "dialColor": "Layered, applied sector dial, contrasting textured,  lacquered finishes",
+      "braceletStrap": "two genuine leather straps in black and brown"
+    },
+    "tags": [],
+    "id": "mu8lmupnnwgfkz",
+    "dateAdded": "2026-09-19T16:25:47.768Z"
+  },
+  {
+    "brand": "Hoffman",
+    "model": "MARINE GCC",
+    "referenceNumber": "RM-52",
+    "status": "wishlist",
+    "wishlistTier": "watching",
+    "scoringCategory": "chronograph",
+    "designUniqueness": 4,
+    "designPreferenceElo": 851.35,
+    "designComparisonCount": 13,
+    "price": {
+      "amount": 749,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 749,
+          "currency": "USD"
+        },
+        "date": "2026-09-19T16:33:39.358Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "sapphireBezelInsert": true,
+      "arCoated": true
+    },
+    "links": [
+      {
+        "url": "https://hoffmanwatches.com/products/dune-gcc-mechanical?fbclid=PAaWdkbAUYtwJwZG9mAmZkaWQWUOk8Ys6YvHMSCb3JD4o4SO9CH-yCyGV4dG4DYWVtATAAYWRpZAGrN0k73aDJc3J0YwZhcHBfaWQPMTI0MDI0NTc0Mjg3NDE0AAGncnISBR-OSq1u3GE8dKBL-x1Bd_XcAnFi32GhwHfssb6xaTeYhMkH_rCxxfw_aem_L7JPQaO9rSaqlc9DhLK_2Q&utm_source=facebook&utm_medium=paid&campaign_id=120250570550640761&ad_id=120250570550890761&utm_id=120250570550910761_v2_s11_e7782_i97937684&utm_content=120250570550890761&utm_term=120250570550910761&utm_campaign=120250570550640761",
+        "retailer": "hoffmanwatches.com",
+        "price": {
+          "amount": 749,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-09-19"
+      },
+      {
+        "url": "https://hoffmanwatches.com/products/marine-gcc-mechanical",
+        "retailer": "hoffmanwatches.com",
+        "price": {
+          "amount": 749,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-09-19"
+      }
+    ],
+    "imageUrl": "https://hoffmanwatches.com/cdn/shop/files/RM-52_1_PS.png?v=1785438960&width=1920",
+    "specs": {
+      "caseDiameterMm": 48,
+      "caseThicknessMm": 13.5,
+      "lugToLugMm": 48,
+      "movement": "manual",
+      "caliber": "Seagull ST1901",
+      "powerReserveHours": 38,
+      "waterResistanceM": 100,
+      "crystal": "Sapphire",
+      "complications": "Chronograph"
+    },
+    "tags": [
+      "chronograph"
+    ],
+    "id": "mu8lwyladqxrju",
+    "dateAdded": "2026-09-19T16:33:39.358Z"
+  },
+  {
+    "brand": "Saturn Watches",
+    "model": "Race Man",
+    "status": "wishlist",
+    "wishlistTier": "watching",
+    "scoringCategory": "chronograph",
+    "designUniqueness": 4,
+    "designPreferenceElo": 955.28,
+    "designComparisonCount": 13,
+    "price": {
+      "amount": 380,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 380,
+          "currency": "USD"
+        },
+        "date": "2026-09-19T16:38:10.368Z",
+        "source": "manual"
+      }
+    ],
+    "links": [
+      {
+        "url": "https://saturn-watches.com/products/race-man",
+        "retailer": "saturn-watches.com",
+        "price": {
+          "amount": 380,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-09-19"
+      }
+    ],
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0972/4516/7916/files/64113108-9095-4D3D-AD0A-DA561ECA3C8C.jpg?v=1780444876",
+    "specs": {
+      "caseDiameterMm": 39,
+      "caseThicknessMm": 11,
+      "lugToLugMm": 47,
+      "lugWidthMm": 20,
+      "movement": "quartz",
+      "caliber": "Seiko (TI) vk63 Meca-quartz",
+      "crystal": "K1 mineral Crystal",
+      "dialColor": "Circular brushed ocean blue dial. 3 subdials with green, orange and teal accents",
+      "braceletStrap": "Navy blue NUBBUCK leather",
+      "complications": "chronograph"
+    },
+    "tags": [],
+    "id": "mu8m2rpcmpr2hy",
+    "dateAdded": "2026-09-19T16:38:10.368Z"
+  },
+  {
+    "brand": "REC",
+    "model": "X4009 Midnight Blue",
+    "referenceNumber": "20011",
+    "status": "wishlist",
+    "wishlistTier": "watching",
+    "scoringCategory": "gmt",
+    "designUniqueness": 4,
+    "designPreferenceElo": 1151.72,
+    "designComparisonCount": 12,
+    "price": {
+      "amount": 2120,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 2120,
+          "currency": "USD"
+        },
+        "date": "2026-09-19T16:44:44.036Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "accuracySpecSpd": 7,
+      "arLayers": 3,
+      "quickRelease": true
+    },
+    "links": [
+      {
+        "url": "https://www.recwatches.com/timepieces/limited-editions/aircraft/x4009-midnight-blue/?fbclid=IwdGRleAUYCNNwZG9mBWZkaWQWUOggDMApQ_TGfe2Z2-C0GmJn5hYng2V4dG4DYWVtATAAYWRpZAAAL_n-iqeCc3J0YwZhcHBfaWQKNjYyODU2ODM3OQABHkiADn8Tuzbm0rlFuy_JLZFyReWVZxzi0MYI64A-ARSgdVLOxIcT7dIN21Eo_aem_PxqS8bGFUOc2-kpmDiAdJw&utm_source=facebook&utm_medium=paid&campaign_id=6829452635686&ad_id=52571352892890&utm_id=6829452635686&utm_content=52571352892890&utm_term=52571352895090&utm_campaign=6829452635686",
+        "retailer": "recwatches.com",
+        "price": {
+          "amount": 2120,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-09-19"
+      }
+    ],
+    "imageUrl": "https://www.recwatches.com/wp-content/uploads/2023/03/CombinationPicture_Collection_1200x1000-1.png",
+    "specs": {
+      "caseDiameterMm": 41,
+      "caseThicknessMm": 13,
+      "lugToLugMm": 48.7,
+      "caseMaterial": "316L Stainless steel",
+      "movement": "automatic",
+      "caliber": "SW461-1 SELLITA",
+      "powerReserveHours": 40,
+      "waterResistanceM": 100,
+      "crystal": "Sapphire",
+      "dialColor": "Midnight blue sunburst dial with repurposed Mk1A Spitfire X4009 fueselage aluminium integrated at 6 o’clock",
+      "braceletStrap": "Calf leather strap",
+      "complications": "GMT"
+    },
+    "tags": [
+      "GMT"
+    ],
+    "notes": "- Delivery from July 2027 | Made from the X4009 Mk1a Spitfire aircraft | REC Watches",
+    "id": "mu8mb7gnqx9li5",
+    "dateAdded": "2026-09-19T16:44:44.036Z"
   }
 ]
