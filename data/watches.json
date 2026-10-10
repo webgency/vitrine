@@ -4315,7 +4315,7 @@
     ],
     "imageUrl": "https://hoffmanwatches.com/cdn/shop/files/RM-52_1_PS.png?v=1785438960&width=1920",
     "specs": {
-      "caseDiameterMm": 48,
+      "caseDiameterMm": 40,
       "caseThicknessMm": 13.5,
       "lugToLugMm": 48,
       "movement": "manual",
@@ -4389,7 +4389,7 @@
     "referenceNumber": "20011",
     "status": "wishlist",
     "wishlistTier": "watching",
-    "scoringCategory": "gmt",
+    "scoringCategory": "sports",
     "designUniqueness": 4,
     "designPreferenceElo": 1151.72,
     "designComparisonCount": 12,
@@ -4437,10 +4437,10 @@
       "crystal": "Sapphire",
       "dialColor": "Midnight blue sunburst dial with repurposed Mk1A Spitfire X4009 fueselage aluminium integrated at 6 o’clock",
       "braceletStrap": "Calf leather strap",
-      "complications": "GMT"
+      "complications": "Date; rotating 'Office GMT' bezel (no second time zone)"
     },
     "tags": [
-      "GMT"
+      "sports"
     ],
     "notes": "- Delivery from July 2027 | Made from the X4009 Mk1a Spitfire aircraft | REC Watches",
     "id": "mu8mb7gnqx9li5",
