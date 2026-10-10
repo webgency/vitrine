@@ -1,14 +1,16 @@
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   extractSpecs,
   extractQualityFlags,
   isShopifyCollectionUrl,
   labeledBrand,
+  plainText,
   primaryProductText,
   productExtractionText,
   resolveBrand,
+  scrapeWatch,
   selectShopifyVariant,
   shopifyProductJsonUrl,
   specCoverage,
@@ -21,6 +23,7 @@ const nomosPage = readFileSync(new URL("./fixtures/nomos-club-campus.html", impo
 const viisPage = readFileSync(new URL("./fixtures/viis-flieger-gmt-42-de.html", import.meta.url), "utf8");
 const henryArcherPage = readFileSync(new URL("./fixtures/henry-archer-tidevand-kosmos.html", import.meta.url), "utf8");
 const av86Page = readFileSync(new URL("./fixtures/av86-1564-chronodate-steel-white.html", import.meta.url), "utf8");
+const malouinePage = readFileSync(new URL("./fixtures/le-forban-malouine.html", import.meta.url), "utf8");
 // Viis's real Shopify body_html: marketing only, with no calibre or dimensions table.
 const VIIS_BODY_HTML =
   "<p>The Flieger GMT 42 Adriatic is like the sea: deep blue, clear and full of vastness. It masterfully combines " +
@@ -461,5 +464,43 @@ describe("brand identity and scrape coverage", () => {
     });
     expect(specCoverage(extractSpecs(productExtractionText(VIIS_BODY_HTML, viisPage)))).toEqual({ specsFound: 12, specsPossible: 13 });
     expect(specCoverage(undefined).specsFound).toBe(0);
+  });
+});
+
+describe("plainText", () => {
+  it("turns line and block breaks into one space and drops inline tags", () => {
+    expect(plainText("Malouine<br>Onyx Black")).toBe("Malouine Onyx Black");
+    expect(plainText("Malouine<br />\n  Ocean Blue ")).toBe("Malouine Ocean Blue");
+    expect(plainText("<p>Seamaster</p><p>Diver 300M</p>")).toBe("Seamaster Diver 300M");
+    expect(plainText("Mal<em>ouine</em> <span class=\"c\">Onyx</span>")).toBe("Malouine Onyx");
+  });
+
+  it("decodes entities, including markup that arrives encoded", () => {
+    expect(plainText("Le Forban S&eacute;curit&eacute; Mer")).toBe("Le Forban Sécurité Mer");
+    expect(plainText("Malouine&lt;br&gt;Onyx Blue")).toBe("Malouine Onyx Blue");
+    expect(plainText("Tudor&rsquo;s Black&nbsp;Bay &amp; Co")).toBe("Tudor’s Black Bay & Co");
+  });
+
+  it("turns an entity it cannot decode into a space rather than guessing", () => {
+    expect(plainText("Model&zzz;X")).toBe("Model X");
+  });
+});
+
+describe("scrapeWatch identity fields", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
+  });
+
+  it("saves a model whose heading and schema name contain <br> as plain text", async () => {
+    // No API key: the legacy extractor runs, so nothing leaves the test.
+    vi.stubEnv("ANTHROPIC_API_KEY", "");
+    const url = "https://leforbansecuritemer.com/en/la-malouine/";
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, url, text: async () => malouinePage })));
+
+    const result = await scrapeWatch(url);
+    expect(result.brand).toBe("Le Forban Sécurité Mer");
+    expect(result.model).toBe("Malouine Onyx Black");
+    expect(result.price).toEqual({ amount: 490, currency: "EUR" });
   });
 });
