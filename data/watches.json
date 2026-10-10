@@ -1785,11 +1785,28 @@
         "url": "https://mreatwell.com/shop/sublime",
         "retailer": "mreatwell.com",
         "price": {
-          "amount": 395,
+          "amount": 445,
           "currency": "USD"
         },
         "condition": "new",
-        "observedAt": "2026-09-10"
+        "observedAt": "2026-10-10T04:38:13.631Z",
+        "askHistory": [
+          {
+            "price": {
+              "amount": 395,
+              "currency": "USD"
+            },
+            "date": "2026-09-10"
+          },
+          {
+            "price": {
+              "amount": 445,
+              "currency": "USD"
+            },
+            "date": "2026-10-10T04:38:13.631Z",
+            "source": "manual"
+          }
+        ]
       }
     ],
     "imageUrl": "https://mreatwell.com/_next/image?url=https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0408%2F7837%2F5065%2Ffiles%2F2025.06.20SubLimeOverheadJubileeOnCounter_258cf200-6ef9-4e38-86b3-dc2aa91a595a.png%3Fv%3D1773428909&w=2048&q=75&dpl=dpl_AEnoZeYhMXjFcyygDcXaHQo3ntpb",
@@ -2491,9 +2508,11 @@
         "url": "https://truenorthcollections.com/products/heritage-chronograph-red-blue-bezel",
         "retailer": "truenorthcollections.com",
         "price": {
-          "amount": 299,
+          "amount": 335,
           "currency": "USD"
-        }
+        },
+        "condition": "new",
+        "observedAt": "2026-10-10"
       }
     ],
     "imageUrl": "https://image6.photobiz.com/8933/15_20251201091128_11126879_xlarge.png",
