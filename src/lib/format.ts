@@ -30,6 +30,12 @@ export function formatMoney(money?: Money | null): string {
   return `${usd} (${original})`;
 }
 
+// A bare "YYYY-MM-DD" names a day, not an instant. new Date() reads it as UTC
+// midnight, which west of UTC is the evening before, so formatting it in the
+// viewer's zone showed every date-only observedAt a day early. The watch form
+// saves an untouched date back in this shape, so these are common.
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+
 export function formatDate(iso?: string): string {
   if (!iso) return "—";
   const d = new Date(iso);
@@ -38,6 +44,9 @@ export function formatDate(iso?: string): string {
     year: "numeric",
     month: "short",
     day: "numeric",
+    // Read the day back in the zone it was parsed in. Full timestamps are
+    // instants and keep the viewer's local day.
+    ...(DATE_ONLY.test(iso) ? { timeZone: "UTC" } : {}),
   });
 }
 
