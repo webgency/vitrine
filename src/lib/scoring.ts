@@ -205,6 +205,11 @@ const CALIBER_TIER_PATTERNS: Array<[pattern: string, tier: number]> = [
   // caliber number is the stable alias rather than the exact display string.
   ["7001", 0.60],
   ["miyota 9100", 0.58],
+  // Miyota 9120: the 9100 without its power-reserve indicator. Same 13 1/2'''
+  // base, 26 jewels, 4 Hz, ~40h and -10/+30 s/day (miyotamovement.com lists
+  // both), with the same day, month and 24-hour displays. Same tier: like the
+  // 8N24 below, a display is not the movement.
+  ["miyota 9120", 0.58],
   // Sellita SW461-1: an enlarged SW261-1, which is the small-seconds member of
   // the same 2824-2 architecture family as the SW200 line — so it sits with
   // the SW200-1 of its own generation rather than above it. The 46x number
