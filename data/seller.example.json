@@ -1,0 +1,7 @@
+{
+  "name": "Your name",
+  "email": "you@example.com",
+  "paymentUrl": "https://paypal.me/yourname",
+  "paymentLabel": "Pay with PayPal",
+  "terms": "Payment by PayPal Goods & Services. Ships insured within the US; buyer pays shipping. No returns on pre-owned watches."
+}

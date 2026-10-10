@@ -129,6 +129,51 @@ export interface SoldComp {
   notes?: string;
 }
 
+/** How worn a watch is, for a buyer. Definitions live in listing-shape.mjs. */
+export type ConditionGrade = "unworn" | "excellent" | "very-good" | "good" | "fair";
+
+/** Where else your own listing is posted. Never a RetailerLink: your own ask
+ * is not market evidence, so it must not reach valuation, alerts or history. */
+export interface ListingPosting {
+  platform: string;
+  url?: string;
+  askingPrice?: Money;
+  /** YYYY-MM-DD. */
+  postedAt: string;
+}
+
+/** What a listing says, shared by a private draft and a published listing. */
+export interface ListingContent {
+  askingPrice: Money;
+  grade: ConditionGrade;
+  conditionNotes?: string;
+  /** Box, papers, extra links, straps… */
+  included: string[];
+  /** Public summary only; receipts and costs stay private. */
+  serviceHistory?: string;
+  /**
+   * Your own photos. Published: paths under public/listings/<id>/. Draft (in
+   * data/private.json): data URLs, so nothing reaches git before it goes live.
+   */
+  photos: string[];
+  description?: string;
+  postings?: ListingPosting[];
+}
+
+/**
+ * A published sale listing: a layer on an owned watch, not a status. The
+ * watch stays owned — in the collection and in trade-up — until it is marked
+ * sold. Drafts are not stored here at all (see private-store.ts).
+ *
+ * Consignment would add an owner/consignor reference here; nothing reads one
+ * yet, so there is no field for it.
+ */
+export interface SaleListing extends ListingContent {
+  state: "live" | "reserved";
+  /** ISO timestamp the listing first went live. */
+  listedAt: string;
+}
+
 export type Availability = "in-stock" | "pre-order" | "sold-out" | "discontinued";
 
 export const AVAILABILITY_STATES: Availability[] = [
@@ -203,8 +248,11 @@ export interface Watch {
   // What you paid is private and lives in data/private.json (see
   // src/lib/private-store.ts), never here: this file is published twice, in
   // the public repo and in the Pages export.
-  /** Filled in when status becomes "sold". */
-  sale?: { price?: Money; date?: string };
+  /** Your published sale listing, when the watch is for sale. */
+  listing?: SaleListing;
+  /** Filled in when status becomes "sold". Public: the price is real market
+   * evidence. Fees, shipping and the buyer stay in data/private.json. */
+  sale?: { price?: Money; date?: string; channel?: string };
 }
 
 /** Shape accepted when creating a watch (id + dateAdded are assigned by the store). */

@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { Money, RetailerLink, SoldComp, Watch, WatchInput } from "./types";
+import { Money, RetailerLink, SaleListing, SoldComp, Watch, WatchInput } from "./types";
 import { recordWatchAlerts } from "./alert-store";
 import { carryAskHistories } from "./listing-history.mjs";
 import { appendSnapshot, sameMoney } from "./price-history";
@@ -130,6 +130,30 @@ export async function saveWatchTarget(id: string, target: Money | undefined, exp
       throw new TargetConflictError("This target changed elsewhere. Cancel and reopen it to review the latest value.");
     }
     return { targetPrice: target };
+  });
+}
+
+export class SaleStateError extends Error {}
+
+/** Publish, update or remove the public listing. Only sale-store.ts calls
+ * this, after it has written the photos the listing points at. */
+export async function setPublicListing(id: string, listing: SaleListing | undefined) {
+  return changeWatch(id, (existing) => {
+    if (listing && existing.status !== "owned") throw new SaleStateError("Only an owned watch can be listed for sale.");
+    return { listing };
+  });
+}
+
+/**
+ * Close a sale: the watch becomes sold, its listing closes, and the sale is
+ * appended as a SoldComp — your own sale is real evidence of what the model
+ * sells for, unlike your ask, which never enters valuation. Changing status
+ * and adding a comp fire no alert (detectAlerts compares prices and links).
+ */
+export async function recordOwnSale(id: string, sale: NonNullable<Watch["sale"]>, comp: SoldComp) {
+  return changeWatch(id, (existing) => {
+    if (existing.status !== "owned") throw new SaleStateError("Only an owned watch can be marked sold.");
+    return { status: "sold", sale, listing: undefined, soldComps: [...(existing.soldComps ?? []), comp] };
   });
 }
 

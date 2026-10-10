@@ -1,9 +1,11 @@
 import { SPEC_FIELDS } from "./specs";
 import { plausibilityIssues } from "./spec-plausibility.mjs";
+import { publishedListingErrors } from "./listing-shape.mjs";
 import {
   Availability,
   AVAILABILITY_STATES,
   Condition,
+  CURRENCIES,
   Friction,
   Money,
   MOVEMENT_TYPES,
@@ -455,6 +457,13 @@ function cleanTransaction(
   return price || date ? { ...(price ? { price } : {}), ...(date ? { date } : {}) } : undefined;
 }
 
+function cleanSale(value: unknown, errors: string[]): Watch["sale"] | undefined {
+  const base = cleanTransaction(value, "sale", errors);
+  if (!isRecord(value)) return base;
+  const channel = cleanOptionalString(value.channel, "sale.channel", errors);
+  return base || channel ? { ...base, ...(channel ? { channel } : {}) } : undefined;
+}
+
 function assignIfPresent<T extends RecordValue, K extends keyof WatchInput>(
   target: Partial<WatchInput>,
   source: T,
@@ -485,9 +494,15 @@ export function normalizeWatchPatch(body: unknown): ValidationResult<Partial<Wat
   return normalizeWatchShape(body, true);
 }
 
+/**
+ * `listing` is accepted only when reading the stored collection. Through the
+ * add/edit API it is refused: publishing writes photo files and moves a draft
+ * out of private.json, which only the Sell panel's route (sale-store.ts) does.
+ */
 function normalizeWatchShape(
   body: unknown,
-  partial: boolean
+  partial: boolean,
+  stored?: { id: string }
 ): ValidationResult<WatchInput | Partial<WatchInput>> {
   const errors: string[] = [];
   if (!isRecord(body)) return { ok: false, errors: ["body must be an object"] };
@@ -525,7 +540,20 @@ function normalizeWatchShape(
   // Private: the purchase panel writes data/private.json instead. Rejected
   // rather than dropped, so a caller learns its value went nowhere.
   if (hasOwn(body, "purchase")) errors.push("purchase is private; record it in the What you paid panel, which saves it outside watches.json");
-  assignIfPresent(output, body, "sale", cleanTransaction(body.sale, "sale", errors));
+  assignIfPresent(output, body, "sale", cleanSale(body.sale, errors));
+  if (hasOwn(body, "listing") && body.listing !== undefined && body.listing !== null) {
+    if (!stored) {
+      errors.push("listing is set from the Sell panel, which publishes its photos; it can't be edited here");
+    } else {
+      const listingErrors = publishedListingErrors(body.listing, "listing", {
+        currencies: new Set(CURRENCIES),
+        watchId: stored.id,
+        status: body.status,
+      });
+      if (listingErrors.length) errors.push(...listingErrors);
+      else output.listing = body.listing as WatchInput["listing"];
+    }
+  }
 
   if (!partial) {
     output.brand ??= "";
@@ -567,7 +595,7 @@ export function validateWatchCollection(value: unknown): Watch[] {
     }
 
     const dateAdded = cleanDateString(item.dateAdded, `${path}.dateAdded`, errors);
-    const result = normalizeWatchInput(item);
+    const result = normalizeWatchShape(item, false, { id: typeof item.id === "string" ? item.id : "" }) as ValidationResult<WatchInput>;
     if (!result.ok) {
       errors.push(...result.errors.map((error) => `${path}.${error}`));
       return;

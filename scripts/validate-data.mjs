@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
+import { publishedListingErrors } from "../src/lib/listing-shape.mjs";
+import { sellerErrors } from "../src/lib/seller-shape.mjs";
 import { alertStateErrors } from "../src/lib/alerts.mjs";
 import { SPEC_RANGES, inSpecRange } from "../src/lib/spec-ranges.mjs";
 import { plausibilityIssues } from "../src/lib/spec-plausibility.mjs";
@@ -260,6 +262,7 @@ function checkTransaction(value, path, errors) {
 const errors = [];
 const warnings = [];
 const ids = new Set();
+const listingPhotos = [];
 const watches = JSON.parse(await readFile(DATA_URL, "utf8"));
 
 if (!Array.isArray(watches)) {
@@ -327,6 +330,13 @@ if (!Array.isArray(watches)) {
       errors.push(`${path}.purchase is private; move it to data/private.json via the What you paid panel`);
     }
     checkTransaction(watch.sale, `${path}.sale`, errors);
+    checkString(watch.sale?.channel, `${path}.sale.channel`, errors);
+    if (watch.listing !== undefined) {
+      errors.push(...publishedListingErrors(watch.listing, `${path}.listing`, { currencies: KNOWN_CURRENCIES, watchId: watch.id, status: watch.status }));
+      for (const photo of Array.isArray(watch.listing?.photos) ? watch.listing.photos : []) {
+        if (typeof photo === "string") listingPhotos.push({ photo, at: `${path}.listing.photos` });
+      }
+    }
   });
 }
 
@@ -356,6 +366,26 @@ if (foreignCurrencies.size && ratesAreStale()) {
       `${foreignCurrencies.size} non-USD currenc${foreignCurrencies.size === 1 ? "y is" : "ies are"} in use (${[...foreignCurrencies].sort().join(", ")}), ` +
       `so scoring converts at rates that have had time to drift across a price band. Refresh with: curl -s "https://api.frankfurter.dev/v1/latest?base=USD"`
   );
+}
+
+// A published listing points at photo files the Sell panel wrote under
+// public/; a missing file would show a broken image on Pages.
+for (const { photo, at } of listingPhotos) {
+  try {
+    await access(new URL(`../public/${photo}`, import.meta.url));
+  } catch {
+    errors.push(`${at} references public/${photo}, which does not exist`);
+  }
+}
+
+// Seller contact is optional until something is listed.
+try {
+  errors.push(...sellerErrors(JSON.parse(await readFile(new URL("../data/seller.json", import.meta.url), "utf8"))));
+} catch (error) {
+  if (error?.code !== "ENOENT") errors.push(`data/seller.json could not be read: ${error.message}`);
+  else if (Array.isArray(watches) && watches.some((watch) => watch?.listing?.state === "live")) {
+    warnings.push("A listing is live but data/seller.json is missing, so the For-sale page has no way to contact you.");
+  }
 }
 
 // The alert log is optional until the first alert fires. When present, it gets
