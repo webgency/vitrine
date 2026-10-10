@@ -2464,6 +2464,25 @@
       "amount": 335,
       "currency": "USD"
     },
+    "priceUpdatedAt": "2026-10-10T04:21:32.483Z",
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 299,
+          "currency": "USD"
+        },
+        "date": "2026-06-29T15:01:36.047Z",
+        "source": "manual"
+      },
+      {
+        "price": {
+          "amount": 335,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T04:21:32.483Z",
+        "source": "manual"
+      }
+    ],
     "qualityFlags": {
       "braceletIncluded": true
     },
@@ -2491,26 +2510,7 @@
       "chronograph"
     ],
     "id": "mqzciq3z036pvx",
-    "dateAdded": "2026-06-29T15:01:36.047Z",
-    "priceHistory": [
-      {
-        "price": {
-          "amount": 299,
-          "currency": "USD"
-        },
-        "date": "2026-06-29T15:01:36.047Z",
-        "source": "manual"
-      },
-      {
-        "price": {
-          "amount": 335,
-          "currency": "USD"
-        },
-        "date": "2026-10-10T04:21:32.483Z",
-        "source": "manual"
-      }
-    ],
-    "priceUpdatedAt": "2026-10-10T04:21:32.483Z"
+    "dateAdded": "2026-06-29T15:01:36.047Z"
   },
   {
     "brand": "Baltic",
@@ -4487,5 +4487,60 @@
     "notes": "- Delivery from July 2027 | Made from the X4009 Mk1a Spitfire aircraft | REC Watches",
     "id": "mu8mb7gnqx9li5",
     "dateAdded": "2026-09-19T16:44:44.036Z"
+  },
+  {
+    "brand": "EREBUS Watches",
+    "model": "ORIGIN GMT Classic White",
+    "referenceNumber": "ERORGMT07 + ORIG41BLTC",
+    "status": "wishlist",
+    "wishlistTier": "watching",
+    "price": {
+      "amount": 449,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 449,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T04:17:20.292Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "quickRelease": true,
+      "arCoated": true
+    },
+    "links": [
+      {
+        "url": "https://erebuswatches.com/products/origin-gmt-classic-white",
+        "retailer": "erebuswatches.com",
+        "price": {
+          "amount": 449,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-10-10"
+      }
+    ],
+    "imageUrl": "https://erebuswatches.com/cdn/shop/files/ERORGMT07_Erebus_Origin_GMT_Classic_White.png?v=1728524437&width=1920",
+    "specs": {
+      "caseDiameterMm": 41,
+      "caseThicknessMm": 12.9,
+      "lugToLugMm": 47,
+      "lugWidthMm": 20,
+      "movement": "automatic",
+      "caliber": "Seiko Instruments NH34",
+      "waterResistanceM": 200,
+      "crystal": "Sapphire",
+      "braceletStrap": "Curved H-Link with quick release end links and tool-free adjustment",
+      "complications": "GMT"
+    },
+    "tags": [
+      "GMT"
+    ],
+    "id": "mv1vuxt1izrr4k",
+    "dateAdded": "2026-10-10T04:17:20.292Z"
   }
 ]
