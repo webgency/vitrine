@@ -3753,6 +3753,10 @@
         "source": "manual"
       }
     ],
+    "friction": {
+      "availability": "sold-out",
+      "brandLiquidity": 2
+    },
     "links": [
       {
         "url": "https://us.limawatch.com/products/gmt-transit-teal?_pos=10&_fid=f1a7c41d0&_ss=c",
@@ -4008,7 +4012,7 @@
       "braceletIncluded": true
     },
     "friction": {
-      "availability": "in-stock",
+      "availability": "sold-out",
       "brandLiquidity": 3
     },
     "links": [
@@ -4352,6 +4356,10 @@
       "sapphireBezelInsert": true,
       "arCoated": true
     },
+    "friction": {
+      "availability": "sold-out",
+      "brandLiquidity": 2
+    },
     "links": [
       {
         "url": "https://hoffmanwatches.com/products/marine-gcc-mechanical",
@@ -4380,11 +4388,7 @@
       "chronograph"
     ],
     "id": "mu8lwyladqxrju",
-    "dateAdded": "2026-09-19T16:33:39.358Z",
-    "friction": {
-      "availability": "sold-out",
-      "brandLiquidity": 2
-    }
+    "dateAdded": "2026-09-19T16:33:39.358Z"
   },
   {
     "brand": "Saturn Watches",
