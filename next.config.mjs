@@ -13,6 +13,12 @@ const repo = "vitrine";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: { unoptimized: true },
+  // The dev server is reached from a phone over Tailscale. Next blocks dev
+  // assets and the HMR socket for hosts other than localhost unless listed,
+  // which leaves the page loaded but retrying its live-reload connection
+  // forever. Tailscale hosts are its 100.64/10 addresses and MagicDNS names
+  // (machine.tailnet.ts.net — two levels, hence `**`).
+  allowedDevOrigins: ["100.*.*.*", "**.ts.net"],
   ...(isStatic
     ? { output: "export", basePath: `/${repo}`, trailingSlash: true }
     : {}),
