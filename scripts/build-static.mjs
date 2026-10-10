@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 
 const root = process.cwd();
-const tempRoot = await mkdtemp(path.join(os.tmpdir(), "watch-researcher-static-"));
+const tempRoot = await mkdtemp(path.join(os.tmpdir(), "vitrine-static-"));
 const excluded = new Set([".git", "node_modules", ".next", "out", "watch-researcher"]);
 
 function run(command, args, options = {}) {

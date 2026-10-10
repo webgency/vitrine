@@ -50,7 +50,7 @@ describe("notify-targets CLI", () => {
     const webhook = webhookTransport();
     const env = {
       WATCH_NOTIFY_WEBHOOK_URL: webhook.url,
-      WATCH_APP_BASE_URL: "https://webgency.github.io/watch-researcher",
+      WATCH_APP_BASE_URL: "https://webgency.github.io/vitrine",
     };
     const args = [`--data=${dataPath}`, `--state=${statePath}`, "--now=2026-09-10T12:00:00Z"];
 

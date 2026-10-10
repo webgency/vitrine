@@ -12,7 +12,7 @@ import {
 const DEFAULT_DATA_PATH = fileURLToPath(new URL("../data/watches.json", import.meta.url));
 const DEFAULT_STATE_PATH = fileURLToPath(new URL("../data/notify-state.json", import.meta.url));
 const ENRICH_PATH = fileURLToPath(new URL("./enrich-watches.mjs", import.meta.url));
-const DEFAULT_APP_BASE_URL = "https://webgency.github.io/watch-researcher";
+const DEFAULT_APP_BASE_URL = "https://webgency.github.io/vitrine";
 
 function parseArgs(args) {
   const options = {

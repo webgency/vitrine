@@ -1,6 +1,6 @@
 # PRD — Vitrine P1: Market intel + trade-up
 
-**Product:** Vitrine (working name for `webgency/watch-researcher`)  
+**Product:** Vitrine (`webgency/vitrine`, formerly `watch-researcher`)  
 **Owner:** Sergio  
 **Status:** Draft for implementation  
 **Depends on:** P0 UI (priority popover, quieter cards, ordinals) — can parallelize if needed  

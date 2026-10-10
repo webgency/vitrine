@@ -14,8 +14,7 @@ porcelain surfaces.
 
 Keep the aspect ratio and leave clear space around the artwork. Use the espresso
 wordmark on light backgrounds. Use `BrandLogo` in the app so public asset URLs
-include the GitHub Pages base path when needed. The product name does not change
-the repository name or its `/watch-researcher` hosting path.
+include the GitHub Pages base path (`/vitrine`) when needed.
 
 ## Typography
 

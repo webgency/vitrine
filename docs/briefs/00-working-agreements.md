@@ -1,7 +1,7 @@
 # 00 — Working agreements (read first)
 
-**Repo:** `webgency/watch-researcher`  
-**Product name in UI:** Vitrine (repo path / GitHub Pages base may still be `watch-researcher`)
+**Repo:** `webgency/vitrine` (renamed from `watch-researcher`; GitHub redirects the old URL)  
+**Product name in UI:** Vitrine; GitHub Pages base is `/vitrine`
 
 ## Always
 
@@ -23,7 +23,6 @@
 - Bulk Chrono24/eBay crawlers
 - Click-to-buy / messaging dealers as the user
 - Flip / “wealth transfer” copy
-- Renaming the git repo
 
 ## Agent output
 
