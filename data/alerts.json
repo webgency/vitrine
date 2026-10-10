@@ -50,6 +50,51 @@
         "url": "https://us.mrjoneswatches.com/products/the-silent-thief?variant=41973254619329",
         "condition": "new"
       }
+    },
+    {
+      "id": "price_drop-w25-mv2ktpy0",
+      "watchId": "w25",
+      "type": "price_drop",
+      "createdAt": "2026-10-10T15:56:13.848Z",
+      "payload": {
+        "watch": "Spinnaker Hull — Arctic Blue",
+        "price": {
+          "amount": 300,
+          "currency": "USD"
+        },
+        "priceUsd": 300,
+        "asOf": "2026-10-10T15:55:32.855Z",
+        "basis": "listed",
+        "previousPrice": {
+          "amount": 375,
+          "currency": "USD"
+        },
+        "previousAsOf": "2026-09-10T21:29:53.763Z",
+        "dropPct": 0.2,
+        "source": "spinnaker-watches.com",
+        "url": "https://spinnaker-watches.com/products/hull-arctic-blue-sp-5088-02",
+        "condition": "new"
+      }
+    },
+    {
+      "id": "target_met-mtrtsn3qwsgwws-mv2ktpy0",
+      "watchId": "mtrtsn3qwsgwws",
+      "type": "target_met",
+      "createdAt": "2026-10-10T15:56:13.848Z",
+      "payload": {
+        "watch": "Maen HUDSON 38 MK5",
+        "price": {
+          "amount": 822,
+          "currency": "USD"
+        },
+        "priceUsd": 822,
+        "asOf": "2026-10-10T15:56:00.954Z",
+        "basis": "tracked",
+        "target": {
+          "amount": 850,
+          "currency": "USD"
+        }
+      }
     }
   ]
 }
