@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { IS_STATIC } from "@/lib/config";
 import { useCollectionSearch } from "./CollectionSearchContext";
 
-export default function HeaderNav({ alerts }: { alerts?: { total: number; unread: number } }) {
+export default function HeaderNav({ alerts, forSale = 0 }: { alerts?: { total: number; unread: number }; forSale?: number }) {
   const pathname = usePathname().replace(/\/+$/, "") || "/";
   const collectionUrl = useResearchUrl("collection");
   const valueUrl = useResearchUrl("value");
@@ -52,6 +52,11 @@ export default function HeaderNav({ alerts }: { alerts?: { total: number; unread
         >
           Value
         </Link>
+        {forSale > 0 && (
+          <Link href="/for-sale" aria-current={pathname === "/for-sale" ? "page" : undefined} className={navClass(pathname === "/for-sale")}>
+            For sale
+          </Link>
+        )}
         {!IS_STATIC && (
           <Link
             href="/design"

@@ -16,7 +16,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 /** Field names that only private.json uses. Keep in sync with PrivateWatchRecord. */
-export const PRIVATE_KEYS = ["purchase", "minimumPrice", "saleClose", "serial"];
+export const PRIVATE_KEYS = ["purchase", "listingDraft", "minimumPrice", "listingFees", "saleClose", "buyer", "serial"];
 
 // Short strings ("USD", a two-letter source) would match public text by chance.
 const MIN_VALUE_LENGTH = 5;

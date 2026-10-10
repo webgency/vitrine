@@ -18,6 +18,10 @@ import TradeUpPanel from "@/components/TradeUpPanel";
 import { tradeUpModel } from "@/lib/trade-up";
 import TargetEditor from "@/components/TargetEditor";
 import PurchasePanel from "@/components/PurchasePanel";
+import SellPanel from "@/components/SellPanel";
+import ForSaleCard from "@/components/ForSaleCard";
+import { saleListingView } from "@/lib/sale-store";
+import { getSeller } from "@/lib/seller";
 import { getPrivateRecord } from "@/lib/private-store";
 import { targetStatus } from "@/lib/price-history";
 
@@ -39,12 +43,13 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
   const { id } = await params;
   // The whole collection is the peer pool, matching the collection and value
   // pages, so a watch's band and percentile read the same everywhere.
-  const [watch, watches, privateRecord, alertState] = await Promise.all([
+  const [watch, watches, privateRecord, seller, alertState] = await Promise.all([
     getWatch(id),
     getWatches(),
     // Seller-private data, read beside the watch and never merged into it.
     // The store returns nothing in the static build.
     IS_STATIC ? undefined : getPrivateRecord(id),
+    getSeller(),
     // A broken alerts file is logged and shown as unknown status rather than
     // failing the whole detail page, as the nav badge does.
     getAlertState().catch((error) => {
@@ -160,6 +165,23 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
       {tradeUp && (
         <div id="trade-up" className="scroll-mt-6">
           <TradeUpPanel model={tradeUp} />
+        </div>
+      )}
+
+      {watch.status === "owned" && watch.listing && (
+        <div id="for-sale" className="scroll-mt-6">
+          <ForSaleCard title={`${watch.brand} ${watch.model}`} listing={watch.listing} seller={seller} />
+        </div>
+      )}
+
+      {!IS_STATIC && watch.status === "owned" && (
+        <div id="sell" className="scroll-mt-6">
+          <SellPanel
+            watch={watch}
+            view={saleListingView(watch, privateRecord)}
+            purchase={privateRecord?.purchase?.price}
+            exit={tradeUp && { medianUsd: tradeUp.exit.medianUsd, lowUsd: tradeUp.exit.lowUsd, highUsd: tradeUp.exit.highUsd, sources: tradeUp.exit.observations.length }}
+          />
         </div>
       )}
 

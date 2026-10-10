@@ -11,7 +11,7 @@ const JPEG_QUALITY = 0.82;
  * disk) keeps the whole collection in the version-controlled watches.json and
  * works in the static GitHub Pages export with no server.
  */
-function fileToDataUrl(file: File): Promise<string> {
+export function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = () => reject(new Error("Could not read the file."));

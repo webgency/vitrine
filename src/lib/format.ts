@@ -1,7 +1,7 @@
 import { Money } from "./types";
 import { normalizePriceToUsd } from "./scoring";
 
-function formatNativeMoney(money?: Money | null): string {
+export function formatNativeMoney(money?: Money | null): string {
   if (!money || typeof money.amount !== "number" || Number.isNaN(money.amount)) {
     return "—";
   }
