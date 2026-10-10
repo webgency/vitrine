@@ -23,7 +23,11 @@ const serverOnlyRoutes = [
   "src/app/calibration",
 ];
 
-for (const path of serverOnlyRoutes) {
+// Seller-private data stays on the machine that owns it. build-static already
+// skips copying these; deleting them here also covers any other caller.
+const privatePaths = ["data/private.json", "data/listing-drafts"];
+
+for (const path of [...serverOnlyRoutes, ...privatePaths]) {
   await rm(path, { recursive: true, force: true });
   console.log(`prepare-pages: removed ${path}`);
 }

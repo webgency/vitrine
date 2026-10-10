@@ -522,7 +522,9 @@ function normalizeWatchShape(
   assignIfPresent(output, body, "specs", cleanSpecs(body.specs, !partial, errors));
   assignIfPresent(output, body, "tags", cleanTags(body.tags, !partial, errors));
   assignIfPresent(output, body, "notes", cleanOptionalString(body.notes, "notes", errors));
-  assignIfPresent(output, body, "purchase", cleanTransaction(body.purchase, "purchase", errors));
+  // Private: the purchase panel writes data/private.json instead. Rejected
+  // rather than dropped, so a caller learns its value went nowhere.
+  if (hasOwn(body, "purchase")) errors.push("purchase is private; record it in the What you paid panel, which saves it outside watches.json");
   assignIfPresent(output, body, "sale", cleanTransaction(body.sale, "sale", errors));
 
   if (!partial) {
