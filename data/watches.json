@@ -4354,16 +4354,6 @@
     },
     "links": [
       {
-        "url": "https://hoffmanwatches.com/products/dune-gcc-mechanical?fbclid=PAaWdkbAUYtwJwZG9mAmZkaWQWUOk8Ys6YvHMSCb3JD4o4SO9CH-yCyGV4dG4DYWVtATAAYWRpZAGrN0k73aDJc3J0YwZhcHBfaWQPMTI0MDI0NTc0Mjg3NDE0AAGncnISBR-OSq1u3GE8dKBL-x1Bd_XcAnFi32GhwHfssb6xaTeYhMkH_rCxxfw_aem_L7JPQaO9rSaqlc9DhLK_2Q&utm_source=facebook&utm_medium=paid&campaign_id=120250570550640761&ad_id=120250570550890761&utm_id=120250570550910761_v2_s11_e7782_i97937684&utm_content=120250570550890761&utm_term=120250570550910761&utm_campaign=120250570550640761",
-        "retailer": "hoffmanwatches.com",
-        "price": {
-          "amount": 749,
-          "currency": "USD"
-        },
-        "condition": "new",
-        "observedAt": "2026-09-19"
-      },
-      {
         "url": "https://hoffmanwatches.com/products/marine-gcc-mechanical",
         "retailer": "hoffmanwatches.com",
         "price": {
@@ -4390,7 +4380,11 @@
       "chronograph"
     ],
     "id": "mu8lwyladqxrju",
-    "dateAdded": "2026-09-19T16:33:39.358Z"
+    "dateAdded": "2026-09-19T16:33:39.358Z",
+    "friction": {
+      "availability": "sold-out",
+      "brandLiquidity": 2
+    }
   },
   {
     "brand": "Saturn Watches",
