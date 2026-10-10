@@ -81,6 +81,7 @@ export const CANONICAL_CALIBERS = [
   "peseux 7001",
   "7001",
   "miyota 9100",
+  "miyota 9120",
   "sw461-1",
   "sw200-1",
   "sw200",
