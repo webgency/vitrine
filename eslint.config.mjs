@@ -4,7 +4,9 @@ import nextTypeScript from "eslint-config-next/typescript";
 
 export default defineConfig([
   {
-    ignores: ["node_modules/**", ".next/**", "out/**", "watch-researcher/**"],
+    // .claude/** holds Claude Code background sessions' worktrees, which carry
+    // their own .next build output; same reason as vitest.config.ts.
+    ignores: ["node_modules/**", ".next/**", "out/**", "watch-researcher/**", ".claude/**"],
   },
   ...nextVitals,
   ...nextTypeScript,
