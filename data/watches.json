@@ -4024,7 +4024,7 @@
           "currency": "USD"
         },
         "condition": "new",
-        "observedAt": "2026-09-12T06:30:00.000Z"
+        "observedAt": "2026-09-12"
       }
     ],
     "imageUrl": "https://cdn.shopify.com/s/files/1/0704/6325/8836/files/ad72034ae635b9134e11489279ae12b3_ed43b6af-8f07-4674-9092-567f7192fc39.jpg?v=1772688846",
@@ -4046,7 +4046,7 @@
       "sports",
       "skeleton"
     ],
-    "notes": "Fetched 2026-09-12. Official US copy incorrectly listed WR as 5 meters; EU dealers for sibling DGA35005.WLW.B list 50m/5 bar, Miyota 8N24, 43x12mm, sapphire, steel bracelet. L2L unknown. 43mm near 44mm ceiling. Miyota 8N24 may need caliber table entry.",
+    "notes": "Fetched 2026-09-12. Official US copy incorrectly listed WR as 5 meters; EU dealers for sibling DGA35005.WLW.B list 50m/5 bar, Miyota 8N24, 43x12mm, sapphire, steel bracelet. L2L unknown. 43mm near 44mm ceiling. Miyota 8N24 may need caliber table entry.\nRechecked 2026-10-10: the official US store now says 100 m (10 ATM). Kept 50m: zegarek.net lists the sibling DGA35005.WLW.B at 50 m (5 bar) with matching specs, the same official page earlier read 5 ATM, and the 100m sits under a generic \"Classic Sport 3-Hand\" listing title whose Amazon twin also gives the wrong diameter (42mm).",
     "id": "m43nbqodcwbskxs",
     "dateAdded": "2026-09-12T06:30:00.000Z"
   },
