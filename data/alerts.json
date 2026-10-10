@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "settings": {
+    "types": {}
+  },
+  "muted": [],
+  "events": [
+    {
+      "id": "fresh_offer-mqzciq3z036pvx-mv1wmfyt",
+      "watchId": "mqzciq3z036pvx",
+      "type": "fresh_offer",
+      "createdAt": "2026-10-10T04:38:43.541Z",
+      "payload": {
+        "watch": "True North Heritage Chrono",
+        "price": {
+          "amount": 335,
+          "currency": "USD"
+        },
+        "priceUsd": 335,
+        "asOf": "2026-10-10",
+        "basis": "listed",
+        "kind": "new",
+        "source": "truenorthcollections.com",
+        "url": "https://truenorthcollections.com/products/heritage-chronograph-red-blue-bezel",
+        "condition": "new"
+      },
+      "read": true
+    }
+  ]
+}
