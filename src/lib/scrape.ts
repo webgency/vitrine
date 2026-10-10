@@ -133,6 +133,37 @@ function opensWith(text: string, label: string): boolean {
   return text.toLowerCase().startsWith(label.toLowerCase()) && !/[A-Za-zÀ-ÿ]/.test(text.charAt(label.length));
 }
 
+// Typography that turns up in product titles. Kept out of NAMED_ENTITIES so
+// the spec text the patterns read stays as it was; a name has no such patterns.
+const TITLE_ENTITIES: Record<string, string> = {
+  lt: "<", gt: ">", ndash: "–", mdash: "—", lsquo: "‘", rsquo: "’", ldquo: "“", rdquo: "”",
+  hellip: "…", trade: "™", copy: "©",
+};
+
+// Tags that end a line or block. In a title they separate words ("Malouine<br>
+// Onyx Black"), so they become a space; inline tags (span, em) sit inside a
+// word as often as between words, so they vanish.
+const BLOCK_BREAK =
+  /<br\s*\/?>|<\/?(?:address|article|aside|blockquote|dd|div|dl|dt|figcaption|footer|h[1-6]|header|hr|li|ol|p|section|table|td|th|tr|ul)\b[^>]*>/gi;
+
+/**
+ * A free-text identity field (brand, model, reference) as plain text. Product
+ * headings and JSON-LD names carry layout markup — a theme that breaks the
+ * model name over two lines puts a literal `<br>` in the h1 and the schema
+ * name alike — and that markup used to be saved as part of the model. Entities
+ * are decoded first so markup that arrives encoded (`&lt;br&gt;` in a meta
+ * attribute) is removed too. Unknown entities become a space, never a guess.
+ */
+export function plainText(s: string): string {
+  return decodeEntities(s.replace(/&([a-z]+);/gi, (match, name: string) => TITLE_ENTITIES[name] ?? match))
+    .replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ")
+    .replace(BLOCK_BREAK, " ")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&[a-z#0-9]+;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function stripText(html: string): string {
   return decodeEntities(
     html
@@ -220,15 +251,15 @@ function fromJsonLd(html: string, base: string): Extracted {
       const type = n["@type"];
       const isProduct = type === "Product" || (Array.isArray(type) && (type as unknown[]).includes("Product"));
       if (!isProduct) continue;
-      if (!out.name && typeof n.name === "string") out.name = clean(n.name);
+      if (!out.name && typeof n.name === "string") out.name = plainText(n.name);
       if (!out.brand) {
         const brand = n.brand as { name?: string } | string | undefined;
         const bn = typeof brand === "string" ? brand : brand?.name;
-        if (bn) out.brand = clean(bn);
+        if (bn) out.brand = plainText(bn);
       }
       if (!out.ref) {
         const ref = (n.mpn ?? n.sku) as string | number | undefined;
-        if (ref != null) out.ref = clean(String(ref));
+        if (ref != null) out.ref = plainText(String(ref));
       }
       if (!out.image) {
         let img = n.image as unknown;
@@ -264,7 +295,8 @@ function fromMeta(html: string, base: string): Extracted {
   const img = metaContent(html, ["og:image:secure_url", "og:image", "twitter:image"]);
   if (img) out.image = absolutize(img, base);
   const title = metaContent(html, ["og:title", "twitter:title"]);
-  if (title) out.name = clean(title.split(/\s[|–—-]\s/)[0]);
+  // Decode before splitting: an encoded dash ("&ndash;") is still the separator.
+  if (title) out.name = plainText(title).split(/\s[|–—-]\s/)[0].trim();
   const m = parseMoney(
     metaContent(html, ["product:price:amount", "og:price:amount", "price"]),
     metaContent(html, ["product:price:currency", "og:price:currency", "priceCurrency"])
@@ -327,10 +359,10 @@ async function fromShopify(url: string) {
   const variants = (p.variants as ShopifyVariant[]) || [];
   const v = selectShopifyVariant(url, variants);
   const out: { vendor?: string; title?: string; variantTitle?: string; ref?: string; price?: Money; image?: string; bodyHtml?: string } = {};
-  if (typeof p.vendor === "string") out.vendor = clean(p.vendor);
-  if (typeof p.title === "string") out.title = clean(p.title);
-  if (v?.title) out.variantTitle = clean(v.title);
-  if (v?.sku) out.ref = clean(v.sku);
+  if (typeof p.vendor === "string") out.vendor = plainText(p.vendor);
+  if (typeof p.title === "string") out.title = plainText(p.title);
+  if (v?.title) out.variantTitle = plainText(v.title);
+  if (v?.sku) out.ref = plainText(v.sku);
   if (v?.price != null) out.price = parseMoney(String(v.price), v.price_currency);
   const images = (p.images as { src?: string }[]) || [];
   const image = v?.featured_image?.src ?? images[0]?.src;
@@ -341,7 +373,9 @@ async function fromShopify(url: string) {
 
 function firstHeading(html: string): string | undefined {
   const match = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
-  return match ? clean(stripText(match[1])) : undefined;
+  // plainText, not stripText: a <br> in a heading is a space, not the field
+  // boundary stripText makes of it in spec text.
+  return match ? plainText(match[1]) || undefined : undefined;
 }
 
 /**
