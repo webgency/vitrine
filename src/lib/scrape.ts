@@ -115,6 +115,24 @@ function decodeEntities(s: string): string {
     .replace(/&([a-z]+);/gi, (match, name: string) => NAMED_ENTITIES[name] ?? match);
 }
 
+// A row holding a short label element and then its bare value, closing
+// together: <div><p>Lug to lug</p> 49,2 mm</div>. Only the label's close is a
+// boundary when flattened, so the value ran into the next row's label
+// ("49,2 mm Case thickness; 13 mm Lug width") and the value-before-label
+// patterns paired each value with the field below it (AV86).
+const LABELED_ROW =
+  /<(div|li)\b[^>]*>\s*<(p|span|strong|b|label)\b[^>]*>([^<]{1,40})<\/\2>\s*([^<]{1,120}?)\s*<\/\1>/gi;
+
+function labeledRowText(row: string, _tag: string, _labelTag: string, label: string, value: string): string {
+  const name = label.trim().replace(/\s*:$/, "");
+  return name && value.trim() ? ` ${name}: ${value.trim()}; ` : row;
+}
+
+/** Whether `text` opens with `label` as a whole word ("Dial color: …" opens with "Dial"). */
+function opensWith(text: string, label: string): boolean {
+  return text.toLowerCase().startsWith(label.toLowerCase()) && !/[A-Za-zÀ-ÿ]/.test(text.charAt(label.length));
+}
+
 function stripText(html: string): string {
   return decodeEntities(
     html
@@ -129,8 +147,17 @@ function stripText(html: string): string {
         const joined = value.replace(/<br\s*\/?>/gi, " ");
         const body = key.toLowerCase() === "dimensions"
           ? joined.replace(/\bheight\b/gi, "case height") : joined;
-        return ` ${names[key.toLowerCase()] ?? key}: ${stripText(body)}; `;
+        const text = stripText(body);
+        // A term over its own labelled rows ("Size" over "Case diameter",
+        // "Dial" over "Dial color") is a group heading, not a label. As a label
+        // it read "Dial color: Dial color; White" and stored the label as the
+        // colour, so it stays a heading and the rows keep their own labels.
+        const name = names[key.toLowerCase()] ?? key;
+        const hasRows = body.replace(LABELED_ROW, labeledRowText) !== body;
+        if (hasRows || opensWith(text, key) || opensWith(text, name)) return ` ${key}; ${text}; `;
+        return ` ${name}: ${text}; `;
       })
+      .replace(LABELED_ROW, labeledRowText)
       .replace(/<script[\s\S]*?<\/script>/gi, " ")
       .replace(/<style[\s\S]*?<\/style>/gi, " ")
       // Paragraph, line and heading boundaries become "; ". Without them a
@@ -464,7 +491,10 @@ export function extractSpecs(text: string): WatchSpecs {
     num(t, /(?:case\s*)?(?:diameter|case size|case width)\s*\(\s*mm\s*\)\s*[:\-]?\s*(\d{2}(?:\.\d{1,2})?)/i) ??
     num(t, /(?:case\s*)?(?:diameter|case size|case width|(?<![A-Za-zÀ-ÿ])(?:Gehäuse)?durchmesser|diamètre(?: du boîtier)?|diámetro(?: de la caja)?|diametro(?: della cassa)?)[^0-9.;,]{0,12}(\d{2}(?:\.\d{1,2})?)\s?mm/i) ??
     num(t, /Ø\s?(\d{2}(?:\.\d{1,2})?)\s?mm/i) ??
-    num(t, /\b(\d{2}(?:\.\d{1,2})?)\s?mm\b(?=[^.]{0,18}(?:case|diameter))/i);
+    // A value read before its label ("40 mm case") stops at a field boundary
+    // too, and "case" must not be the next row's label: in "49.2 mm; Case
+    // thickness" the number is the lug-to-lug above it.
+    num(t, /\b(\d{2}(?:\.\d{1,2})?)\s?mm\b(?=[^.;]{0,18}(?:case(?!\s*(?:thickness|height|depth|back))|diameter))/i);
 
   // Total height including the crystal is what most brands quote, and the
   // score compares it across brands (lower is better). A figure stated as
@@ -484,11 +514,11 @@ export function extractSpecs(text: string): WatchSpecs {
     num(th, /(?:thickness|case height|case depth|depth|thick(?:ness)?)\s*\(\s*mm\s*\)\s*[:\-]?\s*(\d{1,2}(?:\.\d{1,2})?)/i) ??
     num(th, /(?:thickness|case height|case depth|depth|thick)[^0-9.;,]{0,12}(\d{1,2}(?:\.\d{1,2})?)\s?mm/i) ??
     num(th, /(?:Gehäusehöhe|Gehäusedicke|(?<![A-Za-zÀ-ÿ])Höhe|(?<![A-Za-zÀ-ÿ])Dicke|épaisseur|hauteur du boîtier|espesor|grosor|spessore|altezza della cassa)[^0-9.;,]{0,12}(\d{1,2}(?:\.\d{1,2})?)\s?mm/i) ??
-    num(th, /\b(\d{1,2}(?:\.\d{1,2})?)\s?mm\b(?=[^.]{0,14}(?:thick|height|depth))/i);
+    num(th, /\b(\d{1,2}(?:\.\d{1,2})?)\s?mm\b(?=[^.;]{0,14}(?:thick|height|depth))/i);
 
   s.lugToLugMm =
     num(t, new RegExp(`${L2L_LABEL}[^0-9.;,]{0,16}(\\d{2}(?:\\.\\d{1,2})?)(?:\\s?mm)?`, "i")) ?? // "lug to lug (mm): 47"
-    num(t, /(\d{2}(?:\.\d{1,2})?)\s?mm[^.]{0,12}(?:from\s+)?lug[\s-]*to[\s-]*lug/i); // "measures 46mm from lug to lug"
+    num(t, /(\d{2}(?:\.\d{1,2})?)\s?mm[^.;]{0,12}(?:from\s+)?lug[\s-]*to[\s-]*lug/i); // "measures 46mm from lug to lug"
   // Buckle width ("Schließenbreite") is not lug width and is never matched.
   s.lugWidthMm =
     num(t, /(?:lug[\s-]*width|Anstoßbreite|Bandanstoßbreite|Bandbreite|Stegbreite|largeur (?:des |entre )?cornes|entre-?cornes|ancho (?:de )?(?:las )?asas|ancho (?:de )?(?:la )?correa|larghezza (?:delle )?anse|larghezza (?:del )?cinturino)[^0-9.;,]{0,14}(\d{2})\s?mm/i) ??
