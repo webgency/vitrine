@@ -20,6 +20,7 @@ import {
 const nomosPage = readFileSync(new URL("./fixtures/nomos-club-campus.html", import.meta.url), "utf8");
 const viisPage = readFileSync(new URL("./fixtures/viis-flieger-gmt-42-de.html", import.meta.url), "utf8");
 const henryArcherPage = readFileSync(new URL("./fixtures/henry-archer-tidevand-kosmos.html", import.meta.url), "utf8");
+const av86Page = readFileSync(new URL("./fixtures/av86-1564-chronodate-steel-white.html", import.meta.url), "utf8");
 // Viis's real Shopify body_html: marketing only, with no calibre or dimensions table.
 const VIIS_BODY_HTML =
   "<p>The Flieger GMT 42 Adriatic is like the sea: deep blue, clear and full of vastness. It masterfully combines " +
@@ -379,6 +380,53 @@ describe("Henry Archer Tidevand Meteorite (testimonials and other models below t
     expect(extractSpecs("• Bracelet; 316L stainless steel BoR (Beads-of-Rice) bracelet. 20 mm width.").braceletStrap)
       .toBe("316L stainless steel BoR (Beads-of-Rice) bracelet");
     expect(extractSpecs("• Strap; 20 mm; quick release").braceletStrap).toBeUndefined();
+  });
+});
+
+describe("AV86 1564 Chronodate (labelled rows grouped under a spec term)", () => {
+  it("pairs each row's label with its own value, decimal comma included", () => {
+    const text = productExtractionText(undefined, av86Page);
+    expect(text).toContain("Size; Case diameter: 39 mm; Lug to lug: 49,2 mm; Case thickness: 13 mm; Lug width: 20 mm");
+    expect(text).not.toMatch(/Dial color: Dial color/);
+
+    const specs = extractSpecs(text);
+    expect(specs).toMatchObject({
+      caseDiameterMm: 39,
+      lugToLugMm: 49.2,
+      caseThicknessMm: 13,
+      lugWidthMm: 20,
+      dialColor: "White",
+      caseMaterial: "316L high precision stainless steel",
+      caliber: "Miyota 9120",
+      movement: "automatic",
+      powerReserveHours: 40,
+      waterResistanceM: 50,
+      crystal: "Sapphire",
+      braceletStrap: "Italian leather (genuine) with Pin buckle",
+    });
+  });
+
+  it("treats a term that repeats its value's label as a heading, leaving the field blank", () => {
+    // Without labelled rows to pair, "Dial color" is a label with no value of
+    // its own; blank is right, "Dial color" as the colour is not.
+    const text = primaryProductText("<dl><dt>Dial</dt><dd><p>Dial color</p><p>White</p></dd></dl>");
+    expect(text).toBe("Dial; Dial color; White");
+    expect(extractSpecs(text).dialColor).toBeUndefined();
+  });
+
+  it("never reads a value as belonging to the next row's label", () => {
+    // Label and value on separate lines, as the page's rows read when flattened
+    // without their structure. Pairing these by position is a guess, so every
+    // field stays blank rather than shifting by one row.
+    const specs = extractSpecs("Size; Case diameter; 39 mm; Lug to lug; 49,2 mm; Case thickness; 13 mm; Lug width; 20 mm");
+    expect(specs.caseDiameterMm).toBeUndefined();
+    expect(specs.lugToLugMm).toBeUndefined();
+    expect(specs.caseThicknessMm).toBeUndefined();
+    expect(specs.lugWidthMm).toBeUndefined();
+    // The row structure lost, but no boundary either: "49.2 mm Case thickness".
+    expect(extractSpecs("Lug to lug 49,2 mm Case thickness 13 mm").caseDiameterMm).toBeUndefined();
+    // Prose that states the value first still reads.
+    expect(extractSpecs("A 40 mm case that measures 47 mm from lug to lug.")).toMatchObject({ caseDiameterMm: 40, lugToLugMm: 47 });
   });
 });
 
