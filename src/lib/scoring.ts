@@ -174,6 +174,13 @@ const CALIBER_TIER_PATTERNS: Array<[pattern: string, tier: number]> = [
   ["sw510", 0.72],
   ["l688", 0.72],
   ["st-1901b", 0.70],
+  // Seagull ST1901: the standard hand-wound column-wheel chronograph Tianjin
+  // builds on the Venus 175 tooling bought from Venus in the 1960s — the same
+  // architecture as the bespoke ST-1901B above, so it takes the same tier.
+  // Kept as its own key rather than aliased onto the B, because the B is one
+  // maker's bespoke execution: collapsing them would hide which of the two a
+  // watch actually records. The 3 Hz beat and ~38h barrel are scored elsewhere.
+  ["st1901", 0.70],
   ["soprod c125", 0.68],
   ["l888", 0.65],
   ["sw300", 0.65],
@@ -198,6 +205,14 @@ const CALIBER_TIER_PATTERNS: Array<[pattern: string, tier: number]> = [
   // caliber number is the stable alias rather than the exact display string.
   ["7001", 0.60],
   ["miyota 9100", 0.58],
+  // Sellita SW461-1: an enlarged SW261-1, which is the small-seconds member of
+  // the same 2824-2 architecture family as the SW200 line — so it sits with
+  // the SW200-1 of its own generation rather than above it. The 46x number
+  // reads like Sellita's chronographs (SW500/SW510) but this is a time, date
+  // and small-seconds automatic, not a chronograph. A tighter accuracy spec
+  // (REC quotes ±7 s/day) is regulation, which scoreDimensions already credits
+  // through accuracySpecSpd, so it must not also lift the base tier.
+  ["sw461-1", 0.58],
   ["sw200-1", 0.58],
   ["sw200", 0.55],
   ["miyota 9015", 0.55],
