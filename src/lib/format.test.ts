@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { CURRENCY_TO_USD } from "./scoring";
-import { formatMoney, formatOrdinal } from "./format";
+import { formatDate, formatMoney, formatOrdinal } from "./format";
 
 describe("formatMoney", () => {
   it("leaves USD prices concise", () => {
@@ -40,5 +40,32 @@ describe("formatOrdinal", () => {
 
   it("rounds fractional percentiles before picking a suffix", () => {
     expect(formatOrdinal(21.6)).toBe("22nd");
+  });
+});
+
+describe("formatDate", () => {
+  // West of UTC, where a bare date read as UTC midnight falls on the evening
+  // before. Node re-reads TZ when it is assigned, so this holds for the file.
+  const originalTz = process.env.TZ;
+  beforeAll(() => {
+    process.env.TZ = "America/New_York";
+  });
+  afterAll(() => {
+    process.env.TZ = originalTz;
+  });
+
+  it("shows a date-only value as the day it names", () => {
+    expect(formatDate("2026-10-10")).toBe("Oct 10, 2026");
+    expect(formatDate("2026-01-01")).toBe("Jan 1, 2026");
+  });
+
+  it("keeps a full timestamp on the viewer's local day", () => {
+    // 02:00 UTC on the 10th is still the evening of the 9th in New York.
+    expect(formatDate("2026-10-10T02:00:00.000Z")).toBe("Oct 9, 2026");
+  });
+
+  it("returns a dash for a missing or unreadable date", () => {
+    expect(formatDate(undefined)).toBe("—");
+    expect(formatDate("not a date")).toBe("—");
   });
 });
