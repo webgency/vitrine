@@ -25,6 +25,31 @@
         "condition": "new"
       },
       "read": true
+    },
+    {
+      "id": "price_drop-mtvyvp64okbj79-mv2k6875",
+      "watchId": "mtvyvp64okbj79",
+      "type": "price_drop",
+      "createdAt": "2026-10-10T15:37:57.761Z",
+      "payload": {
+        "watch": "Mr Jones Watches The Silent Thief",
+        "price": {
+          "amount": 995,
+          "currency": "USD"
+        },
+        "priceUsd": 995,
+        "asOf": "2026-10-10",
+        "basis": "listed",
+        "previousPrice": {
+          "amount": 1100,
+          "currency": "USD"
+        },
+        "previousAsOf": "2026-09-10",
+        "dropPct": 0.0955,
+        "source": "us.mrjoneswatches.com",
+        "url": "https://us.mrjoneswatches.com/products/the-silent-thief?variant=41973254619329",
+        "condition": "new"
+      }
     }
   ]
 }

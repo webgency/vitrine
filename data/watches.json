@@ -2895,18 +2895,18 @@
     "dateAdded": "2026-08-14T05:33:04.167Z"
   },
   {
-    "brand": "Naga",
-    "model": "Granturismo Chronograph 39 Amalfi",
+    "brand": "Naga Time Co. Orologi Shop",
+    "model": "Naga Granturismo Chronograph 39 Amalfi",
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 5,
     "designPreferenceElo": 1001.26,
     "designComparisonCount": 14,
     "price": {
-      "amount": 662,
+      "amount": 639,
       "currency": "USD"
     },
-    "priceUpdatedAt": "2026-09-10T21:30:19.302Z",
+    "priceUpdatedAt": "2026-10-10T15:39:35.103Z",
     "priceHistory": [
       {
         "price": {
@@ -2923,6 +2923,14 @@
         },
         "date": "2026-09-10T20:53:33.329Z",
         "source": "scrape"
+      },
+      {
+        "price": {
+          "amount": 639,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T15:39:35.103Z",
+        "source": "manual"
       }
     ],
     "links": [
@@ -2930,31 +2938,52 @@
         "url": "https://nagawatches.com/collections/granturismo-chronograph-39/products/naga-granturismo-chronograph-39-amalfi",
         "retailer": "nagawatches.com",
         "price": {
-          "amount": 662,
+          "amount": 639,
           "currency": "USD"
         },
         "condition": "new",
-        "observedAt": "2026-09-10T21:30:18.882Z"
+        "observedAt": "2026-10-10",
+        "askHistory": [
+          {
+            "price": {
+              "amount": 662,
+              "currency": "USD"
+            },
+            "date": "2026-09-10T21:30:18.882Z"
+          },
+          {
+            "price": {
+              "amount": 639,
+              "currency": "USD"
+            },
+            "date": "2026-10-10",
+            "source": "manual"
+          }
+        ]
       }
     ],
-    "imageUrl": "https://nagawatches.com/cdn/shop/files/1086525.jpg?v=1786462007&width=900",
+    "imageUrl": "https://nagawatches.com/cdn/shop/files/image00002_cec8c41f-3b84-4fc2-afe5-cfccfdb8f810.jpg?v=1786637933",
     "specs": {
       "caseDiameterMm": 39,
       "caseThicknessMm": 11,
       "caseMaterial": "Acciaio inox 316L",
       "movement": "quartz",
-      "caliber": "Seiko VK64 Meca-Quartz",
+      "caliber": "Seiko VK64",
       "waterResistanceM": 100,
       "crystal": "Sapphire",
       "dialColor": "dark counters and blue accents",
-      "braceletStrap": "Acciaio inox 316L",
-      "complications": "Ore, minuti, ora del giorno, data, secondi cronografo, minuti cronografo"
+      "braceletStrap": "Naga Steel Bracelet",
+      "complications": "Chronograph"
     },
     "tags": [
       "chronograph"
     ],
     "id": "mssxh8iem1cs9b",
-    "dateAdded": "2026-08-14T12:33:19.955Z"
+    "dateAdded": "2026-08-14T12:33:19.955Z",
+    "referenceNumber": "26ncrAM-1",
+    "qualityFlags": {
+      "braceletIncluded": true
+    }
   },
   {
     "brand": "AV86",
@@ -3679,7 +3708,7 @@
   {
     "brand": "Mr Jones Watches",
     "model": "The Silent Thief",
-    "referenceNumber": "121-V2",
+    "referenceNumber": "121-VP",
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "dress",
@@ -3687,10 +3716,10 @@
     "designPreferenceElo": 1150.12,
     "designComparisonCount": 13,
     "price": {
-      "amount": 1100,
+      "amount": 995,
       "currency": "USD"
     },
-    "priceUpdatedAt": "2026-09-10T21:30:27.539Z",
+    "priceUpdatedAt": "2026-10-10T15:37:57.751Z",
     "priceHistory": [
       {
         "price": {
@@ -3699,6 +3728,14 @@
         },
         "date": "2026-09-10T20:15:35.209Z",
         "source": "manual"
+      },
+      {
+        "price": {
+          "amount": 995,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T15:37:57.751Z",
+        "source": "manual"
       }
     ],
     "links": [
@@ -3706,14 +3743,31 @@
         "url": "https://us.mrjoneswatches.com/products/the-silent-thief?variant=41973254619329",
         "retailer": "us.mrjoneswatches.com",
         "price": {
-          "amount": 1100,
+          "amount": 995,
           "currency": "USD"
         },
         "condition": "new",
-        "observedAt": "2026-09-10"
+        "observedAt": "2026-10-10",
+        "askHistory": [
+          {
+            "price": {
+              "amount": 1100,
+              "currency": "USD"
+            },
+            "date": "2026-09-10"
+          },
+          {
+            "price": {
+              "amount": 995,
+              "currency": "USD"
+            },
+            "date": "2026-10-10",
+            "source": "manual"
+          }
+        ]
       }
     ],
-    "imageUrl": "https://us.mrjoneswatches.com/cdn/shop/products/121-V2-Web-menu.jpg?crop=center&height=1024&v=1663663760&width=1024",
+    "imageUrl": "https://us.mrjoneswatches.com/cdn/shop/files/121-VP-FrontMenu.jpg?crop=center&height=1024&v=1789483056&width=1024",
     "specs": {
       "caseDiameterMm": 45,
       "caseThicknessMm": 13.5,
@@ -4562,5 +4616,59 @@
     ],
     "id": "mv1vuxt1izrr4k",
     "dateAdded": "2026-10-10T04:17:20.292Z"
+  },
+  {
+    "brand": "AV86",
+    "model": "1564 Chronodate Automatic, Steel / White",
+    "referenceNumber": "120405",
+    "status": "wishlist",
+    "wishlistTier": "shortlist",
+    "designUniqueness": 5,
+    "price": {
+      "amount": 599,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 599,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T15:18:37.815Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "quickRelease": true,
+      "arCoated": true
+    },
+    "links": [
+      {
+        "url": "https://av86.com/products/1564-chronodate-automatic-steel-white",
+        "retailer": "av86.com",
+        "price": {
+          "amount": 599,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-10-10"
+      }
+    ],
+    "imageUrl": "https://av86.com/cdn/shop/files/AV86_Chronodate_White_FlatLeatherShark.png?v=1781007379&width=1920",
+    "specs": {
+      "caseDiameterMm": 49.2,
+      "lugWidthMm": 13,
+      "caseMaterial": "316L high precision stainless steel",
+      "movement": "automatic",
+      "caliber": "Miyota 9120",
+      "powerReserveHours": 40,
+      "waterResistanceM": 50,
+      "crystal": "Sapphire",
+      "dialColor": "Dial color",
+      "braceletStrap": "Italian leather (genuine) with Pin buckle"
+    },
+    "tags": [],
+    "id": "mv2jhd6f52kbt1",
+    "dateAdded": "2026-10-10T15:18:37.815Z"
   }
 ]
