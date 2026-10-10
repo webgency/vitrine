@@ -3030,8 +3030,8 @@
     "dateAdded": "2026-08-14T05:33:04.167Z"
   },
   {
-    "brand": "Naga Time Co. Orologi Shop",
-    "model": "Naga Granturismo Chronograph 39 Amalfi",
+    "brand": "Naga",
+    "model": "Granturismo Chronograph 39 Amalfi",
     "referenceNumber": "26ncrAM-1",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -4453,14 +4453,6 @@
     "priceHistory": [
       {
         "price": {
-          "amount": 299,
-          "currency": "USD"
-        },
-        "date": "2026-09-15T02:40:43.814Z",
-        "source": "manual"
-      },
-      {
-        "price": {
           "amount": 459,
           "currency": "USD"
         },
@@ -4486,13 +4478,6 @@
         "askHistory": [
           {
             "price": {
-              "amount": 299,
-              "currency": "USD"
-            },
-            "date": "2026-09-15"
-          },
-          {
-            "price": {
               "amount": 459,
               "currency": "USD"
             },
@@ -4515,7 +4500,8 @@
     },
     "tags": [],
     "id": "mu22eejt4cj85b",
-    "dateAdded": "2026-09-15T02:40:43.814Z"
+    "dateAdded": "2026-09-15T02:40:43.814Z",
+    "notes": "Rechecked 2026-10-10: the $299 first recorded here was the TMI VH31 meca-quartz variant (383 SGD). This record and its link are the Miyota 9039 automatic (588 SGD, $459.10 at the shop rate), so that entry was removed from the price and ask histories, which now start at the first price read for this variant."
   },
   {
     "brand": "Humism",
