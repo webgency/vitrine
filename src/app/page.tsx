@@ -8,7 +8,7 @@ import { collectionSummary } from "@/lib/collection-summary";
 
 // The README section explaining that edits happen locally and publish on push.
 const EDITING_DOCS_URL =
-  "https://github.com/webgency/watch-researcher#deploying-to-github-pages-auto-published-read-only";
+  "https://github.com/webgency/vitrine#deploying-to-github-pages-auto-published-read-only";
 
 export default async function HomePage() {
   // Stay dynamic locally so edits show immediately; allow static prerender for

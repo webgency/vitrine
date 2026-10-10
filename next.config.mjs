@@ -8,7 +8,7 @@ const isStatic = process.env.NEXT_PUBLIC_STATIC === "true";
 
 // GitHub Pages project sites are served from /<repo>, so the static build
 // needs a matching basePath. Local/dynamic builds use the root.
-const repo = "watch-researcher";
+const repo = "vitrine";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

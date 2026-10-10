@@ -189,11 +189,11 @@ One-off estimated prices for retailers whose bot protection defeats the scraper.
 
 `.github/workflows/deploy-pages.yml` builds a **static, read-only** export and deploys it on every push:
 
-**https://webgency.github.io/watch-researcher/**
+**https://webgency.github.io/vitrine/**
 
 How it works:
 
-- `npm run build:static` builds from a temporary prepared copy with `NEXT_PUBLIC_STATIC=true`, which switches Next.js to `output: 'export'` and adds the `/watch-researcher` base path (see `next.config.mjs`).
+- `npm run build:static` builds from a temporary prepared copy with `NEXT_PUBLIC_STATIC=true`, which switches Next.js to `output: 'export'` and adds the `/vitrine` base path (see `next.config.mjs`).
 - `scripts/prepare-pages.mjs` strips the server-only routes from that copy — Pages can't run a server.
 - Write actions (Add / Edit / Delete) are hidden, and `/design` shows a "needs the live app" placeholder since ranking writes to disk.
 

@@ -4,7 +4,7 @@ Paste **one brief at a time** into Cursor / Claude / ChatGPT. Do not merge multi
 
 ## How to use
 
-1. Open this repo (`webgency/watch-researcher`).
+1. Open this repo (`webgency/vitrine`).
 2. Give the agent: the brief file + permission to read linked docs (`docs/prd-p1-market-intel-trade-up.md`, `docs/branding.md`, `docs/competitive-lug2lug.md`).
 3. Require a PR to `main` with the suggested title.
 4. Merge, dogfood, then start the next brief.
