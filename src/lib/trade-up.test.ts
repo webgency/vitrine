@@ -25,8 +25,10 @@ describe("trade-up evidence and candidates", () => {
     expect(model.candidates.map((candidate) => candidate.id)).toEqual(["next"]);
   });
 
-  it("never substitutes new asks or tracked/purchase prices for pre-owned exit evidence", () => {
-    const result = exit({ ...owned, purchase: { price: { amount: 5000, currency: "USD" } }, links: [ask("a", 1000, "new"), ask("b", 1200, "new")] });
+  // A purchase price can't reach this model at all now: it lives in the private
+  // store, off the Watch type.
+  it("never substitutes new asks or tracked prices for pre-owned exit evidence", () => {
+    const result = exit({ ...owned, links: [ask("a", 1000, "new"), ask("b", 1200, "new")] });
     expect(result.confidence).toBe("insufficient");
     expect(tradeUpBridge(result, 1500)).toEqual({ status: "insufficient", reason: "exit" });
     expect(result.medianUsd).toBeUndefined();

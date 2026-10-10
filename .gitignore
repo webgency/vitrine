@@ -35,3 +35,9 @@ next-env.d.ts
 
 # local target-alert delivery history (copy the committed example to inspect the shape)
 /data/notify-state.json
+
+# Seller-private data (what you paid, minimums, buyers, fees) and draft listing
+# photos. The repo and the Pages export are public; these stay on this machine.
+/data/private.json
+/data/private.json.*.tmp
+/data/listing-drafts/

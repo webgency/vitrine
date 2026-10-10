@@ -321,7 +321,11 @@ if (!Array.isArray(watches)) {
     checkTags(watch.tags, `${path}.tags`, errors);
     checkString(watch.notes, `${path}.notes`, errors);
     checkDate(watch.dateAdded, `${path}.dateAdded`, errors, { required: true });
-    checkTransaction(watch.purchase, `${path}.purchase`, errors);
+    // What you paid is private (data/private.json, git-ignored). This file is
+    // public in the repo and the Pages export, so a purchase here is a leak.
+    if (watch.purchase !== undefined) {
+      errors.push(`${path}.purchase is private; move it to data/private.json via the What you paid panel`);
+    }
     checkTransaction(watch.sale, `${path}.sale`, errors);
   });
 }

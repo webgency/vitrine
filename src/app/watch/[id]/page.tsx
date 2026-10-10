@@ -17,6 +17,8 @@ import DecisionSummary from "@/components/DecisionSummary";
 import TradeUpPanel from "@/components/TradeUpPanel";
 import { tradeUpModel } from "@/lib/trade-up";
 import TargetEditor from "@/components/TargetEditor";
+import PurchasePanel from "@/components/PurchasePanel";
+import { getPrivateRecord } from "@/lib/private-store";
 import { targetStatus } from "@/lib/price-history";
 
 // An empty generateStaticParams result opts into on-demand static generation.
@@ -37,9 +39,12 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
   const { id } = await params;
   // The whole collection is the peer pool, matching the collection and value
   // pages, so a watch's band and percentile read the same everywhere.
-  const [watch, watches, alertState] = await Promise.all([
+  const [watch, watches, privateRecord, alertState] = await Promise.all([
     getWatch(id),
     getWatches(),
+    // Seller-private data, read beside the watch and never merged into it.
+    // The store returns nothing in the static build.
+    IS_STATIC ? undefined : getPrivateRecord(id),
     // A broken alerts file is logged and shown as unknown status rather than
     // failing the whole detail page, as the nav badge does.
     getAlertState().catch((error) => {
@@ -155,6 +160,17 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
       {tradeUp && (
         <div id="trade-up" className="scroll-mt-6">
           <TradeUpPanel model={tradeUp} />
+        </div>
+      )}
+
+      {!IS_STATIC && watch.status !== "wishlist" && (
+        <div id="purchase" className="scroll-mt-6">
+          <PurchasePanel
+            watchId={watch.id}
+            watchLabel={`${watch.brand} ${watch.model}`}
+            purchase={privateRecord?.purchase}
+            exitMedianUsd={tradeUp?.exit.medianUsd}
+          />
         </div>
       )}
 

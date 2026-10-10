@@ -1,0 +1,95 @@
+import { promises as fs } from "fs";
+import path from "path";
+import { IS_STATIC } from "./config";
+import { purchaseRecordErrors, purchaseRevision, type PrivatePurchase } from "./purchase-entry";
+
+/**
+ * Seller-private data: what you paid now, and later your minimum, buyer and
+ * fees (docs/briefs/11-selling-first-slice.md). The repo is public and the
+ * Pages export ships page data to the browser, so none of this may live in
+ * watches.json. data/private.json is git-ignored and exists only on the
+ * machine running the local server — back it up separately.
+ *
+ * Pages read it beside the watch rather than merged into it: a Watch object
+ * flows into client components and the static export, and keeping private
+ * fields off that type means they can't ride along by accident.
+ */
+export interface PrivateWatchRecord {
+  purchase?: PrivatePurchase;
+}
+
+/** Keyed by watch id. */
+export type PrivateRecords = Record<string, PrivateWatchRecord>;
+
+// Resolved per call, not at module load, so tests that mock process.cwd()
+// see their temp directory.
+function privatePath(): string {
+  return path.join(process.cwd(), "data", "private.json");
+}
+
+let writeQueue: Promise<void> = Promise.resolve();
+
+export class PurchaseConflictError extends Error {}
+
+function validate(data: unknown): PrivateRecords {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("data/private.json must contain an object keyed by watch id");
+  }
+  const errors: string[] = [];
+  for (const [id, record] of Object.entries(data as Record<string, unknown>)) {
+    if (!record || typeof record !== "object" || Array.isArray(record)) {
+      errors.push(`${id} must be an object`);
+      continue;
+    }
+    const purchase = (record as Record<string, unknown>).purchase;
+    if (purchase !== undefined) errors.push(...purchaseRecordErrors(purchase, `${id}.purchase`));
+  }
+  if (errors.length) throw new Error(`data/private.json is invalid:\n- ${errors.join("\n- ")}`);
+  return data as PrivateRecords;
+}
+
+/** A missing file is an empty store, not an error: most checkouts (CI, Pages)
+ * never have one. The static build never reads it even when it exists. */
+export async function getPrivateRecords(): Promise<PrivateRecords> {
+  if (IS_STATIC) return {};
+  try {
+    return validate(JSON.parse(await fs.readFile(privatePath(), "utf-8")));
+  } catch (error) {
+    if (error && typeof error === "object" && "code" in error && error.code === "ENOENT") return {};
+    throw error;
+  }
+}
+
+export async function getPrivateRecord(id: string): Promise<PrivateWatchRecord | undefined> {
+  return (await getPrivateRecords())[id];
+}
+
+async function saveAll(records: PrivateRecords): Promise<void> {
+  validate(records);
+  const file = privatePath();
+  await fs.mkdir(path.dirname(file), { recursive: true });
+  const tmpPath = `${file}.${process.pid}.${Date.now()}.tmp`;
+  await fs.writeFile(tmpPath, JSON.stringify(records, null, 2) + "\n", "utf-8");
+  await fs.rename(tmpPath, file);
+}
+
+/** Set or clear one watch's purchase. `undefined` clears it; a record left
+ * with nothing in it is removed so the file doesn't collect empty entries. */
+export async function savePurchase(id: string, purchase: PrivatePurchase | undefined, expectedRevision: string): Promise<PrivatePurchase | undefined> {
+  const run = writeQueue.then(async () => {
+    if (IS_STATIC) throw new Error("Private data can't be written in the static build.");
+    const records = await getPrivateRecords();
+    const current = records[id];
+    if (purchaseRevision(current?.purchase) !== expectedRevision) {
+      throw new PurchaseConflictError("This purchase changed elsewhere. Cancel and reopen it to review the latest value.");
+    }
+    const next: PrivateWatchRecord = { ...current, purchase };
+    if (!purchase) delete next.purchase;
+    if (Object.keys(next).length) records[id] = next;
+    else delete records[id];
+    await saveAll(records);
+    return purchase;
+  });
+  writeQueue = run.then(() => undefined, () => undefined);
+  return run;
+}

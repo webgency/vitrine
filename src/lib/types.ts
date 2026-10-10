@@ -200,8 +200,9 @@ export interface Watch {
   notes?: string;
   /** ISO timestamp set when the watch is first added. */
   dateAdded: string;
-  /** Filled in when status becomes "owned". */
-  purchase?: { price?: Money; date?: string };
+  // What you paid is private and lives in data/private.json (see
+  // src/lib/private-store.ts), never here: this file is published twice, in
+  // the public repo and in the Pages export.
   /** Filled in when status becomes "sold". */
   sale?: { price?: Money; date?: string };
 }
