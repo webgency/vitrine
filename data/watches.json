@@ -4104,7 +4104,8 @@
       "powerReserveHours": 42,
       "waterResistanceM": 100,
       "lugToLugMm": 49,
-      "crystal": "Double-domed sapphire, internal AR coating"
+      "crystal": "Double-domed sapphire, internal AR coating",
+      "caseThicknessMm": 13.4
     },
     "tags": [
       "GMT"
