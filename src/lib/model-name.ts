@@ -4,7 +4,8 @@
  * search engines ("GMT-Master II watch - m126710blnr-0002"), and those leaked
  * into the collection's names. Each rule removes only text the watch already
  * records elsewhere — the brand field, the reference, the diameter — or a
- * "Watch" that follows a category word, so nothing descriptive is guessed away.
+ * "Watch" that follows a category word, so nothing descriptive is guessed away,
+ * and title-cases shouted words for consistency.
  *
  * Autofill only: the form proposes the result and keeps the scraped original a
  * click away. Save never rewrites a name.
@@ -19,6 +20,19 @@ const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 /** "Baltic Watches" and "Marloe Watch Company" are written "Baltic" and "Marloe" in titles too. */
 function brandCore(brand: string): string {
   return brand.trim().replace(/\s+watch(?:es| company| co\.?)?$/i, "").trim();
+}
+
+/**
+ * Title-cases words a retailer wrote in capitals ("TRANSATLANTIQUE II GMT
+ * STEEL / BLACK"), so one shouted title doesn't make the collection read
+ * inconsistently. Only whole words of four or more capitals change: three
+ * letters or fewer are usually acronyms (GMT, GCC, USA, SCR), and anything with
+ * a digit or a dot is a code (MK5, ATC-40SVJRBL, INTER.BEZEL). Roman numerals stay.
+ */
+export function titleCaseShouting(name: string): string {
+  return name.replace(/(?<![\p{L}\p{N}.])(\p{Lu}{4,})(?![\p{L}\p{N}.])/gu, (word) =>
+    /^[IVXLC]+$/.test(word) ? word : word[0] + word.slice(1).toLowerCase()
+  );
 }
 
 export function cleanModelName(
@@ -56,7 +70,7 @@ export function cleanModelName(
   // only a category word or a model numeral before it makes "Watch" filler.
   name = name.replace(new RegExp(`(\\b${CATEGORY_WORDS}|\\b[IVX]+|\\d)\\s+watch$`, "iu"), "$1");
 
-  name = name.replace(new RegExp(`${SEPARATOR}$`, "u"), "").replace(/\s+/g, " ").trim();
+  name = titleCaseShouting(name.replace(new RegExp(`${SEPARATOR}$`, "u"), "").replace(/\s+/g, " ").trim());
   // Never propose an empty name, or one that is only the reference.
   return name && alnum(name) !== ref ? name : original;
 }
