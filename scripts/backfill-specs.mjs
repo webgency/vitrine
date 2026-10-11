@@ -28,6 +28,7 @@
 
 import { readFile, writeFile } from "node:fs/promises";
 import { inSpecRange, LUG_TO_LUG_MIN_RATIO } from "../src/lib/spec-ranges.mjs";
+import { normalizeTags } from "../src/lib/category-tags.mjs";
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
@@ -237,7 +238,8 @@ function merge(watch, result) {
   watch.specs = specs;
 
   if (!(watch.tags ?? []).length && result.tags.length) {
-    watch.tags = Array.from(new Set(result.tags));
+    // Writes watches.json directly, past the store, so it normalizes here too.
+    watch.tags = normalizeTags(result.tags);
     filled.push(`tags=${watch.tags.join(",")}`);
   }
 

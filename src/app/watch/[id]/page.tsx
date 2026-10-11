@@ -26,6 +26,7 @@ import { getPrivateRecord } from "@/lib/private-store";
 import { targetStatus } from "@/lib/price-history";
 import OwnershipSection from "@/components/OwnershipSection";
 import { ownershipItems } from "@/lib/ownership";
+import { tagLabel } from "@/lib/categories";
 
 // An empty generateStaticParams result opts into on-demand static generation.
 // Explicit dynamic rendering prevents noStore() from failing at request time;
@@ -154,7 +155,7 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
               <div className="flex flex-wrap gap-1.5">
                 {watch.tags.map((t) => (
                   <span key={t} className="rounded-full bg-cocoa-100 px-2.5 py-1 text-xs font-medium text-cocoa-600">
-                    {t}
+                    {tagLabel(t)}
                   </span>
                 ))}
               </div>

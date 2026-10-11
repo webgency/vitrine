@@ -12,6 +12,7 @@
 // Runs server-side only. Requires ANTHROPIC_API_KEY; returns null without it.
 
 import Anthropic from "@anthropic-ai/sdk";
+import { normalizeTags } from "./categories";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 import { Friction, MOVEMENT_TYPES, QualityFlags, WatchSpecs } from "./types";
@@ -159,7 +160,8 @@ export function toExtractedDetails(raw: Extraction): ExtractedDetails {
 
   const out: ExtractedDetails = {
     specs: sanitizeSpecs(specs),
-    tags: Array.from(new Set(raw.tags)),
+    // The schema enum says "GMT" for the model's benefit; stored tags are lowercase.
+    tags: normalizeTags(raw.tags),
   };
   const brand = cleanString(raw.brand);
   const model = cleanString(raw.model);

@@ -9,6 +9,7 @@ import {
   categoriesInTags,
   categoryFor,
   normalizeTags,
+  tagLabel,
   resolveCategory,
 } from "./categories";
 import { deriveCategory } from "./scoring";
@@ -138,5 +139,12 @@ describe("agreement with the shipped scoring engine", () => {
     const sports = watches.filter((w) => categoryFor(w) === "sports");
     expect(sports.length).toBeGreaterThan(0);
     expect(sports.every((w) => deriveCategory(w) === "sports")).toBe(true);
+  });
+});
+
+describe("tagLabel", () => {
+  it("restores the casing a lowercase tag loses, and leaves the rest", () => {
+    expect(tagLabel("gmt")).toBe("GMT");
+    expect(tagLabel("diver")).toBe("diver");
   });
 });
