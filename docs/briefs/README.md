@@ -25,6 +25,7 @@ Paste **one brief at a time** into Cursor / Claude / ChatGPT. Do not merge multi
 | 9 | [09-scrape-spec-coverage.md](./09-scrape-spec-coverage.md) | Multilingual spec scrape, thin Shopify body fallback, coverage note |
 | 10 | [10-qualityflags-missing-neutral.md](./10-qualityflags-missing-neutral.md) | Omitted quality flags stay neutral; review-leak fix; low-evidence hint |
 | 11 | [11-selling-first-slice.md](./11-selling-first-slice.md) | Private seller data, For-sale page, mark sold with net proceeds |
+| 12 | [12-quiet-and-decide.md](./12-quiet-and-decide.md) | Collapse empty evidence surfaces, hygiene on save, finalists + Decide view |
 
 ## Related docs (not briefs)
 

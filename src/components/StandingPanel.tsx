@@ -110,6 +110,12 @@ function DimensionMeter({
 
       <div className="col-start-2 row-start-1 flex items-baseline justify-end gap-2 sm:col-start-3">
         <span className="text-sm font-semibold tabular-nums text-cocoa-800">{pct(raw)}</span>
+        {/* The par tick carries this on the bar; in words too, because "75 ·
+            Below expected" beside "35 · As expected" read as a contradiction
+            until the reader found the tick. */}
+        {reference !== undefined && verdict !== "limited" && (
+          <span className="text-xs tabular-nums text-cocoa-400">expected {pct(reference)}</span>
+        )}
         <span className={`w-24 text-right text-xs font-medium ${style.text}`}>{style.label}</span>
       </div>
       {coverage < 1 && (

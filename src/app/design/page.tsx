@@ -14,7 +14,7 @@ export default async function DesignPage() {
         <h1 className="text-2xl font-bold tracking-tight">Design appeal</h1>
         <p className="text-sm text-cocoa-500">
           Start with an anchored 1–5 reaction to each watch, then optionally refine ties with head-to-head choices.
-          The resulting score is the vertical axis of the value matrix.
+          The resulting score sits beside rubric value on the Value page and never changes it.
         </p>
       </div>
 
@@ -28,7 +28,7 @@ export default async function DesignPage() {
 
       <p className="text-sm text-cocoa-500">
         <Link href="/value" className="font-medium text-azalea-700 hover:underline">
-          See the value matrix →
+          See design beside value →
         </Link>
       </p>
     </div>

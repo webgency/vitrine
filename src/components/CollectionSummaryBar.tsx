@@ -33,24 +33,38 @@ function Stat({
  * empty — while the space beside the heading went unused.
  */
 export default function CollectionSummaryBar({ summary }: { summary: CollectionSummary }) {
+  const wishlistValue = formatMoney({ amount: summary.wishlistValueUsd, currency: "USD" });
   return (
-    <div className="flex flex-wrap items-center gap-x-5 gap-y-3 sm:gap-x-8">
-      <Stat label="Tracked" value={String(summary.tracked)} />
-      <Stat
-        label="Wishlist value"
-        value={formatMoney({ amount: summary.wishlistValueUsd, currency: "USD" })}
-        hint="Landed USD for everything not marked owned"
-      />
-      <Stat
-        label="Fresh offers"
-        value={String(summary.freshOffers)}
-        suffix={`of ${summary.tracked}`}
-        hint="Watches whose best dated retailer offer is still inside the fresh window"
-      />
-      {/* Shown only when it fires. A target nothing has met yet is a zero with no
-          action attached, and a permanently-zero figure is precisely what made
-          the previous tile row worth replacing. */}
-      {summary.atTarget > 0 && <Stat label="At target" value={String(summary.atTarget)} tone="good" />}
-    </div>
+    <>
+      {/* On a phone the four figures were a block of their own, and with the
+          toolbar they pushed the first watch below the fold. There they read
+          as one line of text; from sm up they are the figures beside the title. */}
+      <p className="text-sm text-cocoa-500 sm:hidden">
+        <span className="font-semibold text-cocoa-800">{summary.tracked}</span> tracked ·{" "}
+        <span className="font-semibold text-cocoa-800">{wishlistValue}</span> wishlist ·{" "}
+        <span className="font-semibold text-cocoa-800">{summary.freshOffers}</span> fresh
+        {summary.atTarget > 0 && (
+          <> · <span className="font-semibold text-emerald-700">{summary.atTarget}</span> at target</>
+        )}
+      </p>
+      <div className="hidden flex-wrap items-center gap-x-5 gap-y-3 sm:flex sm:gap-x-8">
+        <Stat label="Tracked" value={String(summary.tracked)} />
+        <Stat
+          label="Wishlist value"
+          value={wishlistValue}
+          hint="Landed USD for everything not marked owned"
+        />
+        <Stat
+          label="Fresh offers"
+          value={String(summary.freshOffers)}
+          suffix={`of ${summary.tracked}`}
+          hint="Watches whose best dated retailer offer is still inside the fresh window"
+        />
+        {/* Shown only when it fires. A target nothing has met yet is a zero with no
+            action attached, and a permanently-zero figure is precisely what made
+            the previous tile row worth replacing. */}
+        {summary.atTarget > 0 && <Stat label="At target" value={String(summary.atTarget)} tone="good" />}
+      </div>
+    </>
   );
 }

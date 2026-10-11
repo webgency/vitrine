@@ -89,3 +89,27 @@ export function matchesValueFilters(row: ValueRow, filters: ValueFilters): boole
   if (filters.wishlistTier !== "all" && watch.wishlistTier !== filters.wishlistTier) return false;
   return true;
 }
+
+/**
+ * Whether any watch can show a deal at all. Until two independent dated asks
+ * exist for one watch, a Deal column, sort and filter would read
+ * "Insufficient" on every row. Decided over every row rather than the filtered
+ * ones, so the column doesn't appear and vanish as filters change.
+ */
+export function anyDealEvidence(rows: Pick<ValueRow, "deal">[]): boolean {
+  return rows.some((row) => row.deal.status === "available");
+}
+
+/**
+ * A deal sort or filter can arrive from a saved session or a shared URL when
+ * no watch has a deal. Fall back rather than sorting by a column that isn't
+ * shown, or filtering every row away.
+ */
+export function effectiveDealControls(
+  sort: ValueSortKey,
+  hasDealEvidence: boolean,
+  dealsExist: boolean
+): { sort: ValueSortKey; hasDealEvidence: boolean } {
+  if (dealsExist) return { sort, hasDealEvidence };
+  return { sort: sort === "deal" ? "value" : sort, hasDealEvidence: false };
+}

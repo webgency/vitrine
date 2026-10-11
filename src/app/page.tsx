@@ -23,10 +23,10 @@ export default async function HomePage() {
       {/* Side by side only once the toolbar below also fits one row. Below that the
           stats get the full width and stay on a single line instead of wrapping
           into a two-line block beside the heading. */}
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-2 sm:gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Your collection</h1>
-          <p className="text-sm text-cocoa-500">Track your wishlist, compare specs and prices, and grow your collection.</p>
+          <p className="hidden text-sm text-cocoa-500 sm:block">Track your wishlist, compare specs and prices, and grow your collection.</p>
           {/* A note, not a warning: nothing is wrong, this copy just can't write.
               The link answers the obvious next question. */}
           {IS_STATIC && (

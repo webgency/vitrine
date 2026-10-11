@@ -8,6 +8,7 @@ import { Watch, WishlistTier } from "@/lib/types";
 import { formatMoney, formatOrdinal } from "@/lib/format";
 import { targetStatus } from "@/lib/price-history";
 import { bestOffer, bestOfferTargetStatus } from "@/lib/valuation";
+import { offerNews } from "@/lib/offer-news";
 import EvidenceCoverage from "./EvidenceCoverage";
 import FreshnessBadge from "./FreshnessBadge";
 import StatusBadge from "./StatusBadge";
@@ -39,6 +40,7 @@ export default function WatchCard({
   const target = targetStatus(watch);
   const offer = bestOffer(watch);
   const offerTarget = bestOfferTargetStatus(watch, offer);
+  const news = offerNews(watch, offer, offerTarget, target?.met ?? false);
   const href = `/watch/${watch.id}`;
   return (
     <div className={`card group relative transition-shadow hover:shadow-md ${selected ? "ring-2 ring-cocoa-900 bg-azalea-50" : ""}`}>
@@ -108,27 +110,36 @@ export default function WatchCard({
           </span>
         </div>
 
-        {offer.status === "available" && (
+        {/* Shown only when it differs from what the card already says: another
+            price, an offer gone stale, a non-new condition, or an offer at
+            target. Restating the headline price on every card buried those. */}
+        {offer.status === "available" && news.length > 0 && (
           <div className="rounded-lg border border-cocoa-100 bg-cocoa-50 px-2.5 py-2 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-1.5">
               <p className="min-w-0 flex-1 truncate font-medium text-cocoa-700">
                 Best offer {formatMoney(offer.offer.price)} · {offer.offer.source}
               </p>
-              <FreshnessBadge tier={offer.offer.freshness} ageDays={offer.offer.ageDays} compact />
-            </div>
-            <div className="mt-1 flex flex-wrap items-center gap-1 text-cocoa-500">
-              <span className="capitalize">{offer.offer.condition ?? "condition unknown"}</span>
-              {offer.conditionMatch === "fallback" && <span>· condition fallback</span>}
-              {offer.conditionMatch === "unknown" && <span>· unverified condition</span>}
-              {offerTarget?.met && (
-                <span
-                  className="rounded-full bg-emerald-100 px-2 py-0.5 font-semibold text-emerald-800"
-                  title="Listed price only; shipping and duty are not recorded for this retailer offer"
-                >
-                  offer at target before extras
-                </span>
+              {news.includes("not-fresh") && (
+                <FreshnessBadge tier={offer.offer.freshness} ageDays={offer.offer.ageDays} compact />
               )}
             </div>
+            {(news.includes("condition") || news.includes("at-target")) && (
+              <div className="mt-1 flex flex-wrap items-center gap-1 text-cocoa-500">
+                {news.includes("condition") && (
+                  <span className="capitalize">{offer.offer.condition ?? "condition unknown"}</span>
+                )}
+                {offer.conditionMatch === "fallback" && <span>· condition fallback</span>}
+                {offer.conditionMatch === "unknown" && <span>· unverified condition</span>}
+                {news.includes("at-target") && (
+                  <span
+                    className="rounded-full bg-emerald-100 px-2 py-0.5 font-semibold text-emerald-800"
+                    title="Listed price only; shipping and duty are not recorded for this retailer offer"
+                  >
+                    offer at target before extras
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         )}
         {offer.status === "insufficient" && (

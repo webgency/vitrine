@@ -29,13 +29,6 @@ export default function DecisionSummary({ watch, standing }: { watch: Watch; sta
       title: "Composite of the rated dimensions",
     },
     {
-      key: "deal",
-      label: "Deal",
-      value: deal.status === "insufficient" ? undefined : dealVerdict(deal),
-      empty: "Needs more data",
-      title: "Tracked price against independent, dated asking prices",
-    },
-    {
       key: "design",
       label: "Design",
       value: design === null ? undefined : String(Math.round(design)),
@@ -43,6 +36,17 @@ export default function DecisionSummary({ watch, standing }: { watch: Watch; sta
       title: "Your design-appeal score",
     },
   ];
+  // Deal earns a tile only once it can be computed. With one seller per watch
+  // it read "Needs more data" on every page; Market explains what's missing.
+  if (deal.status === "available") {
+    items.splice(2, 0, {
+      key: "deal",
+      label: "Deal",
+      value: dealVerdict(deal),
+      empty: "",
+      title: "Tracked price against independent, dated asking prices",
+    });
+  }
   if (watch.personalFit) {
     items.push({ key: "fit", label: "Fit", value: `${watch.personalFit}/5`, empty: "", title: "Your personal-fit rating" });
   }

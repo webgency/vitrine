@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compareValueRows, matchesValueFilters, ValueFilters, ValueRow } from "./value-list";
+import { anyDealEvidence, compareValueRows, effectiveDealControls, matchesValueFilters, ValueFilters, ValueRow } from "./value-list";
 import { Watch } from "./types";
 
 function row(id: string, valueScore?: number, discountPct?: number): ValueRow {
@@ -124,5 +124,18 @@ describe("value list ranking", () => {
       hasDealEvidence: true,
     })).toBe(true);
     expect(candidate.summary.standing.valueScore).toBe(0.7);
+  });
+});
+
+describe("deal column visibility", () => {
+  it("hides deal controls until at least one watch has a deal", () => {
+    expect(anyDealEvidence([row("a", 0.6), row("b", 0.5)])).toBe(false);
+    expect(anyDealEvidence([row("a", 0.6), row("b", 0.5, 8)])).toBe(true);
+  });
+
+  it("falls back from a deal sort or filter restored from a URL when no deal exists", () => {
+    expect(effectiveDealControls("deal", true, false)).toEqual({ sort: "value", hasDealEvidence: false });
+    expect(effectiveDealControls("price-asc", false, false)).toEqual({ sort: "price-asc", hasDealEvidence: false });
+    expect(effectiveDealControls("deal", true, true)).toEqual({ sort: "deal", hasDealEvidence: true });
   });
 });

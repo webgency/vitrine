@@ -22,10 +22,11 @@ const STATE_LABEL: Record<SaleListingView["state"], string> = {
 
 /**
  * Sell or keep, local only. Everything a sale decision needs in one place:
- * what you paid, the exit range, recorded sales of this model, brand
+ * the exit range, recorded sales of this model, brand
  * liquidity, your minimum, and net at your ask. The suggested ask comes only
  * from the exit range — your own ask never feeds it, or the "market" would
- * just quote you back to yourself.
+ * just quote you back to yourself. What you paid has its own panel beside
+ * this one; it's passed in only for the mark-sold form.
  */
 export default function SellPanel({ watch, view, purchase, exit }: {
   watch: Pick<Watch, "id" | "brand" | "model" | "referenceNumber" | "specs" | "imageUrl" | "soldComps" | "friction">;
@@ -55,10 +56,6 @@ export default function SellPanel({ watch, view, purchase, exit }: {
       <p className="mt-1 text-xs text-cocoa-500">Only on this computer. A draft stays private; a live listing appears on the For-sale page after you commit and push.</p>
 
       <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2 lg:grid-cols-3">
-        <div>
-          <dt className="text-xs font-semibold uppercase tracking-wide text-cocoa-500">What you paid</dt>
-          <dd className="mt-1 text-cocoa-900">{purchase ? formatMoney(purchase) : <span className="text-cocoa-500">Not recorded</span>}</dd>
-        </div>
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-cocoa-500">Exit range (pre-owned asks)</dt>
           <dd className="mt-1 text-cocoa-900">
