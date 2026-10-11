@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Watch } from "./types";
 import { standingSummaries } from "./scoring";
-import { decideColumns } from "./decide";
+import { decideColumns, sellerSearchLinks } from "./decide";
 
 const NOW = new Date("2026-10-11T12:00:00Z");
 
@@ -66,5 +66,32 @@ describe("decideColumns", () => {
     expect(column.design).toBeUndefined();
     expect(column.quadrant).toBeNull();
     expect(Object.keys(column)).not.toContain("score");
+  });
+});
+
+describe("second sellers", () => {
+  it("names the condition and the sites that already count", () => {
+    const [column] = columns([watch("a", { finalist: true })]);
+    expect(column.sellers).toEqual({ condition: "new", counted: ["a.example"], needed: 1 });
+  });
+
+  it("is gone once two independent sellers count", () => {
+    const [column] = columns([
+      watch("a", {
+        finalist: true,
+        links: [
+          { url: "https://a.example/a", price: { amount: 800, currency: "USD" }, condition: "new", observedAt: "2026-10-10" },
+          { url: "https://b.example/a", price: { amount: 900, currency: "USD" }, condition: "new", observedAt: "2026-10-10" },
+        ],
+      }),
+    ]);
+    expect(column.sellers).toBeUndefined();
+  });
+
+  it("builds search links from the recorded brand and reference, preferring the reference", () => {
+    expect(sellerSearchLinks({ brand: "Rolex", model: "GMT-Master II", referenceNumber: "126710BLNR" })[0].href)
+      .toBe("https://www.chrono24.com/search/index.htm?query=Rolex%20126710BLNR");
+    expect(sellerSearchLinks({ brand: "Farer", model: "Nevada Pine" })[1].href)
+      .toBe("https://www.google.com/search?q=Farer%20Nevada%20Pine%20price");
   });
 });

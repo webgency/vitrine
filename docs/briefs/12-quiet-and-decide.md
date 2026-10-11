@@ -108,6 +108,11 @@ The deal score, ask trails and trade-up only work once a watch has a second date
 - After save, the column updates in place. Once two qualify, deal appears there and Slice A's conditionals bring it back elsewhere.
 - **Out of scope:** any crawler or bulk lookup (00: "Bulk Chrono24/eBay crawlers"). Suggesting likely sites as plain links (the brand's AD list, Chrono24 search URL for the reference) is fine. Fetching them is not.
 
+**As built:**
+- **The task:** each column's "Another {condition} seller's price" names the sites that already count and opens the shared `ListingEditor` inline, with the deal's preferred condition preselected.
+- **Search links:** Chrono24 and a web search, built from brand and reference. There's no brand AD list, because the data records none and inventing dealer URLs would break "never invent".
+- **On Pages:** it stays a link to the watch's Market section.
+
 **Acceptance:** from `/decide`, add two independent asks to one finalist without leaving the page. The deal figure appears there and on the Value table.
 
 ---

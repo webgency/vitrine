@@ -2,11 +2,12 @@ import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";
 import { getWatches } from "@/lib/store";
 import { standingSummaries } from "@/lib/scoring";
-import { decideColumns, QUADRANT_LABELS, type DecideColumn } from "@/lib/decide";
+import { decideColumns, QUADRANT_LABELS, sellerSearchLinks, type DecideColumn } from "@/lib/decide";
 import { MAX_FINALISTS } from "@/lib/finalists";
 import { formatMoney } from "@/lib/format";
 import { IS_STATIC } from "@/lib/config";
 import FinalistToggle from "@/components/FinalistToggle";
+import ListingEditor from "@/components/ListingEditor";
 
 export const metadata = { title: "Decide" };
 
@@ -103,7 +104,9 @@ function Column({ column }: { column: DecideColumn }) {
             <ul className="space-y-1 text-sm">
               {column.todos.map((todo) => (
                 <li key={todo.key}>
-                  <Link href={todo.href} className="text-azalea-700 underline-offset-4 hover:underline">{todo.text}</Link>
+                  {todo.key === "second-seller" && column.sellers && !IS_STATIC
+                    ? <SecondSeller column={column} />
+                    : <Link href={todo.href} className="text-azalea-700 underline-offset-4 hover:underline">{todo.text}</Link>}
                 </li>
               ))}
             </ul>
@@ -117,6 +120,45 @@ function Column({ column }: { column: DecideColumn }) {
         )}
       </div>
     </article>
+  );
+}
+
+/**
+ * The evidence the deal is waiting on, added without leaving Decide. The
+ * listing editor is the one Market and Trade-up use; saving refreshes the
+ * page, so the column recounts and shows the deal once two sellers count.
+ */
+function SecondSeller({ column }: { column: DecideColumn }) {
+  const { watch, sellers } = column;
+  if (!sellers) return null;
+  return (
+    <div className="space-y-1">
+      <p className="text-cocoa-800">
+        Another {sellers.condition} seller&apos;s price{" "}
+        <span className="text-cocoa-500">({sellers.counted.length} of {sellers.counted.length + sellers.needed})</span>
+      </p>
+      <p className="text-xs text-cocoa-500">
+        {sellers.counted.length
+          ? <>Counts now: {sellers.counted.join(", ")}. Another site is needed; listings from one site count once.</>
+          : <>No dated {sellers.condition} asks yet. Two sites are needed for a deal.</>}
+      </p>
+      <ListingEditor
+        watchId={watch.id}
+        watchLabel={`${watch.brand} ${watch.model}`}
+        links={watch.links}
+        condition={sellers.condition}
+        label="Add a seller's price"
+      />
+      <p className="text-xs text-cocoa-500">
+        Find one:{" "}
+        {sellerSearchLinks(watch).map((link, index) => (
+          <span key={link.label}>
+            {index > 0 && " · "}
+            <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-azalea-700 underline-offset-4 hover:underline">{link.label} ↗</a>
+          </span>
+        ))}
+      </p>
+    </div>
   );
 }
 
