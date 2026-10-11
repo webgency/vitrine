@@ -829,7 +829,7 @@
   },
   {
     "brand": "Brew Watches",
-    "model": "Retrograph - Espresso Chronograph Watch",
+    "model": "Retrograph - Espresso Chronograph",
     "referenceNumber": "RG-RTRO",
     "status": "wishlist",
     "wishlistTier": "watching",
@@ -1476,7 +1476,7 @@
   },
   {
     "brand": "Tissot",
-    "model": "TISSOT GENTLEMAN 38MM",
+    "model": "Gentleman 38",
     "status": "owned",
     "designUniqueness": 4,
     "designPreferenceElo": 969.31,
@@ -1526,7 +1526,7 @@
   },
   {
     "brand": "Laventure Watches",
-    "model": "LAVENTURE TRANSATLANTIQUE II GMT STEEL / BLACK",
+    "model": "Transatlantique II GMT Steel / Black",
     "referenceNumber": "laventure-transatlantique-ii-gmt-acier-noir",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -1637,7 +1637,7 @@
   },
   {
     "brand": "Albishorn",
-    "model": "MAXIGRAPH Albishorn x Massena LAB",
+    "model": "Maxigraph Albishorn x Massena LAB",
     "referenceNumber": "maxigraph",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -1796,7 +1796,7 @@
   },
   {
     "brand": "Out of Order Watches",
-    "model": "FORMA VENTI | AURUM NOIR",
+    "model": "Forma Venti | Aurum Noir",
     "referenceNumber": "F20BLK.850",
     "status": "wishlist",
     "wishlistTier": "watching",
@@ -2030,7 +2030,7 @@
   },
   {
     "brand": "Sơn Mài – Silver Leaf",
-    "model": "Jurassic Watch RAPTORS Edition",
+    "model": "Jurassic Watch Raptors Edition",
     "referenceNumber": "SMRA25AW",
     "status": "wishlist",
     "wishlistTier": "pass",
@@ -2186,7 +2186,7 @@
   },
   {
     "brand": "Kuoe Kyoto",
-    "model": "SOMBRERO 90-011",
+    "model": "Sombrero 90-011",
     "referenceNumber": "sm90011-gnv",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -2236,7 +2236,7 @@
   },
   {
     "brand": "OLTO-8 WATCHES",
-    "model": "OLTO-8 Chrono Gate Glacier Blue",
+    "model": "Chrono Gate Glacier Blue",
     "status": "wishlist",
     "wishlistTier": "pass",
     "designUniqueness": 3,
@@ -2282,7 +2282,7 @@
   },
   {
     "brand": "Venezianico",
-    "model": "Nereide Corallo - 4521546",
+    "model": "Nereide Corallo",
     "referenceNumber": "4521546",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -2380,7 +2380,7 @@
   },
   {
     "brand": "Phoibos",
-    "model": "Argo Bronze 200M Automatic Diver Watch PY057B Spiral Sunray Blue",
+    "model": "Argo Bronze 200M Automatic Diver Spiral Sunray Blue",
     "referenceNumber": "PY057B",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -2643,7 +2643,7 @@
   },
   {
     "brand": "Baltic",
-    "model": "Hermétique Tourer Bronze Green- Baltic Watches",
+    "model": "Hermétique Tourer Bronze Green",
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "sports",
@@ -2713,7 +2713,7 @@
   },
   {
     "brand": "Venezianico",
-    "model": "Nereide GMT 39 - 3521511S",
+    "model": "Nereide GMT 39",
     "referenceNumber": "3521511S",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -3437,7 +3437,7 @@
   },
   {
     "brand": "Rolex",
-    "model": "GMT-Master II watch - m126710blnr-0002",
+    "model": "GMT-Master II",
     "referenceNumber": "126710BLNR",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -3560,7 +3560,7 @@
   },
   {
     "brand": "Maen",
-    "model": "HUDSON 38 MK5",
+    "model": "Hudson 38 MK5",
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 3,
@@ -3754,7 +3754,7 @@
       "complications": "GMT"
     },
     "tags": [
-      "GMT"
+      "gmt"
     ],
     "id": "mttevag8jtilmy",
     "dateAdded": "2026-09-09T01:19:51.462Z"
@@ -3827,7 +3827,7 @@
   },
   {
     "brand": "Farer",
-    "model": "Nevada Pine - 40mm",
+    "model": "Nevada Pine",
     "referenceNumber": "W-NEV-40-ASV",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -3885,7 +3885,7 @@
       "complications": "GMT"
     },
     "tags": [
-      "GMT"
+      "gmt"
     ],
     "id": "mttf1yphipi49w",
     "dateAdded": "2026-09-09T01:25:02.837Z"
@@ -3971,7 +3971,7 @@
   },
   {
     "brand": "Lima Watch",
-    "model": "GMT TRANSIT TEAL",
+    "model": "GMT Transit Teal",
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "gmt",
@@ -4028,7 +4028,7 @@
   },
   {
     "brand": "Brew Watches",
-    "model": "Retrograph - Technicolor Chronograph Watch",
+    "model": "Retrograph - Technicolor Chronograph",
     "referenceNumber": "RTROTECH",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -4430,14 +4430,14 @@
       "complications": "GMT"
     },
     "tags": [
-      "GMT"
+      "gmt"
     ],
     "id": "mu224sxacwsdrj",
     "dateAdded": "2026-09-15T02:33:15.882Z"
   },
   {
     "brand": "UBIQ Watches",
-    "model": "TREK - AQUALIGHT",
+    "model": "Trek - Aqualight",
     "referenceNumber": "TREKAL9039",
     "status": "wishlist",
     "wishlistTier": "shortlist",
@@ -4505,7 +4505,7 @@
   },
   {
     "brand": "Humism",
-    "model": "Rhizome / HELIOS 39mm",
+    "model": "Rhizome / Helios",
     "referenceNumber": "WA-RHZ-YLW",
     "status": "wishlist",
     "wishlistTier": "watching",
@@ -4612,7 +4612,7 @@
   },
   {
     "brand": "Hoffman",
-    "model": "MARINE GCC",
+    "model": "Marine GCC",
     "referenceNumber": "RM-52",
     "status": "wishlist",
     "wishlistTier": "watching",
@@ -4791,7 +4791,7 @@
   },
   {
     "brand": "EREBUS Watches",
-    "model": "ORIGIN GMT Classic White",
+    "model": "Origin GMT Classic White",
     "referenceNumber": "ERORGMT07 + ORIG41BLTC",
     "status": "wishlist",
     "wishlistTier": "watching",
@@ -4843,7 +4843,7 @@
       "complications": "GMT"
     },
     "tags": [
-      "GMT"
+      "gmt"
     ],
     "id": "mv1vuxt1izrr4k",
     "dateAdded": "2026-10-10T04:17:20.292Z"
