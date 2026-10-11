@@ -200,3 +200,24 @@ describe("recordDesignComparison", () => {
     ]);
   });
 });
+
+describe("tag normalization on save", () => {
+  it("stores added and edited tags lowercase and de-duplicated", async () => {
+    const { addWatch, updateWatch } = await import("./store");
+    await seed([]);
+
+    const added = await addWatch({ ...baseWatch, tags: ["GMT", " Diver ", "gmt"] });
+    expect((await readStored())[0].tags).toEqual(["gmt", "diver"]);
+
+    await updateWatch(added.id, { tags: ["Chronograph", "GMT"] });
+    expect((await readStored())[0].tags).toEqual(["chronograph", "gmt"]);
+  });
+
+  it("leaves tags alone on an edit that doesn't send them", async () => {
+    const { updateWatch } = await import("./store");
+    await seed([{ ...baseWatch, tags: ["GMT"] }]);
+
+    await updateWatch("w1", { notes: "checked" });
+    expect((await readStored())[0].tags).toEqual(["GMT"]);
+  });
+});

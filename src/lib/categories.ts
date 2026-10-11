@@ -65,6 +65,14 @@ export function normalizeTags(tags: string[] = []): string[] {
   return normalizeTagsJs(tags);
 }
 
+/** Tags that read wrong in lowercase. Everything else displays as stored. */
+const TAG_LABELS: Readonly<Record<string, string>> = { gmt: "GMT" };
+
+/** How a stored (lowercase) tag is shown. */
+export function tagLabel(tag: string): string {
+  return TAG_LABELS[tag.toLowerCase().trim()] ?? tag;
+}
+
 /** Every distinct category the tags resolve to. More than one means a hybrid. */
 export function categoriesInTags(tags: string[] = []): Category[] {
   return categoriesInTagsJs(tags);

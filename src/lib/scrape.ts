@@ -9,6 +9,7 @@
 // page — it just returns whatever it managed to extract.
 
 import { extractWatchDetails, sanitizeSpecs } from "./extract";
+import { normalizeTags } from "./categories";
 import { extractRetailOffer, inferRetailCondition } from "./retailer-offer.mjs";
 import { SPEC_FIELDS } from "./specs";
 import { Condition, Friction, Money, MovementType, QualityFlags, WatchInput, WatchSpecs } from "./types";
@@ -803,7 +804,7 @@ export async function scrapeWatch(url: string): Promise<ScrapeResult> {
     if (!out.model && extracted.model) out.model = extracted.model;
     if (!out.referenceNumber && extracted.referenceNumber) out.referenceNumber = extracted.referenceNumber;
     if (Object.keys(extracted.specs).length) out.specs = extracted.specs;
-    if (extracted.tags.length) out.tags = extracted.tags;
+    if (extracted.tags.length) out.tags = normalizeTags(extracted.tags);
     if (extracted.qualityFlags) out.qualityFlags = extracted.qualityFlags;
     if (extracted.friction) out.friction = extracted.friction;
   } else {
@@ -812,7 +813,7 @@ export async function scrapeWatch(url: string): Promise<ScrapeResult> {
     if (strap) specs.braceletStrap = strap;
     if (Object.keys(specs).length) out.specs = specs;
     const tags = fallbackTags(specText, specs);
-    if (tags.length) out.tags = tags;
+    if (tags.length) out.tags = normalizeTags(tags);
     const qualityFlags = extractQualityFlags(specText, shop?.variantTitle);
     if (Object.keys(qualityFlags).length) out.qualityFlags = qualityFlags;
   }

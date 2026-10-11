@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import { normalizeTags } from "./categories";
 import path from "path";
 import { Money, RetailerLink, SaleListing, SoldComp, Watch, WatchInput } from "./types";
 import { recordWatchAlerts } from "./alert-store";
@@ -56,6 +57,7 @@ export async function addWatch(input: WatchInput): Promise<Watch> {
     const now = new Date().toISOString();
     const watch: Watch = withCrystalArInference({
       ...input,
+      tags: normalizeTags(input.tags),
       id: generateId(),
       dateAdded: now,
     });
@@ -166,6 +168,9 @@ async function changeWatch(id: string, makePatch: (watch: Watch) => Partial<Watc
     const existing = watches[idx];
     const patch = makePatch(existing);
     const next: Watch = withCrystalArInference({ ...existing, ...patch, id: existing.id, dateAdded: existing.dateAdded });
+    // Tags are stored lowercase, so "GMT" and "gmt" can't become two chips
+    // and two filter entries again. Display casing comes from tagLabel().
+    if (patch.tags) next.tags = normalizeTags(patch.tags);
 
     // Listing trails get the same treatment for the same reason: the form
     // rebuilds links without askHistory, so the store is the one place that

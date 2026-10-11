@@ -14,6 +14,7 @@ import FreshnessBadge from "./FreshnessBadge";
 import StatusBadge from "./StatusBadge";
 import WishlistTierBadge from "./WishlistTierBadge";
 import PriorityMenu from "./PriorityMenu";
+import { tagLabel } from "@/lib/categories";
 
 function initials(watch: Watch): string {
   const a = watch.brand?.trim()?.[0] ?? "?";
@@ -154,7 +155,7 @@ export default function WatchCard({
           <div className="flex flex-wrap gap-1">
             {watch.tags.slice(0, 4).map((tag) => (
               <span key={tag} className="rounded bg-cocoa-100 px-1.5 py-0.5 text-xs text-cocoa-600">
-                {tag}
+                {tagLabel(tag)}
               </span>
             ))}
           </div>

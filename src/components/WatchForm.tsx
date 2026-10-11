@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CURRENCIES,
@@ -27,6 +27,8 @@ import {
 } from "@/lib/specs";
 import { DIMENSION_LABELS } from "@/lib/rubrics";
 import { hostname } from "@/lib/format";
+import { cleanModelName } from "@/lib/model-name";
+import { findDuplicates, type TrackedWatchKey } from "@/lib/duplicates";
 import ImageDropzone from "./ImageDropzone";
 
 interface LinkRow {
@@ -96,7 +98,11 @@ interface AutofillResult {
   coverageNote?: string;
 }
 
-export default function WatchForm({ initial }: { initial?: Watch }) {
+export default function WatchForm({ initial, tracked }: {
+  initial?: Watch;
+  /** Watches already in the collection, for the duplicate warning when adding. */
+  tracked?: TrackedWatchKey[];
+}) {
   const router = useRouter();
   const isEdit = Boolean(initial);
 
@@ -137,6 +143,14 @@ export default function WatchForm({ initial }: { initial?: Watch }) {
   const [fetchUrl, setFetchUrl] = useState("");
   const [fetching, setFetching] = useState(false);
   const [fetchMsg, setFetchMsg] = useState<string | null>(null);
+  // The page title autofill shortened, kept so the original is one click away.
+  const [scrapedModel, setScrapedModel] = useState<string | null>(null);
+  const [duplicateAck, setDuplicateAck] = useState(false);
+  const duplicateRef = useRef<HTMLDivElement>(null);
+  const duplicates = useMemo(
+    () => isEdit || !tracked ? [] : findDuplicates({ brand, referenceNumber, urls: [fetchUrl, ...links.map((link) => link.url)] }, tracked),
+    [isEdit, tracked, brand, referenceNumber, fetchUrl, links]
+  );
   const [specsOpen, setSpecsOpen] = useState(
     Boolean(initial && Object.values(initial.specs).some((value) => value !== undefined && value !== ""))
   );
@@ -173,7 +187,16 @@ export default function WatchForm({ initial }: { initial?: Watch }) {
         filled.push("brand");
       }
       if (data.model) {
-        setModel(data.model);
+        // Propose a name without the brand, reference, size or "Watch" the
+        // title carried for search engines; the original stays one click away.
+        const diameter = Number(data.specs?.caseDiameterMm);
+        const cleaned = cleanModelName(data.model, {
+          brand: data.brand || brand,
+          referenceNumber: data.referenceNumber || referenceNumber,
+          caseDiameterMm: Number.isFinite(diameter) && diameter > 0 ? diameter : undefined,
+        });
+        setModel(cleaned);
+        setScrapedModel(cleaned === data.model.trim() ? null : data.model);
         filled.push("model");
       }
       if (data.referenceNumber) {
@@ -324,6 +347,12 @@ export default function WatchForm({ initial }: { initial?: Watch }) {
       setError("Brand and model are required.");
       return;
     }
+    // A warning, not a block: one confirmation and the watch is added anyway.
+    if (duplicates.length > 0 && !duplicateAck) {
+      duplicateRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      duplicateRef.current?.focus();
+      return;
+    }
     setSubmitting(true);
     try {
       const payload = buildPayload();
@@ -397,20 +426,50 @@ export default function WatchForm({ initial }: { initial?: Watch }) {
           {fetchMsg && <p className="text-xs text-cocoa-600" role="status">{fetchMsg}</p>}
         </section>
       )}
+      {duplicates.length > 0 && (
+        <div ref={duplicateRef} tabIndex={-1} role="status" className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 outline-none">
+          <p className="font-semibold">Already tracked?</p>
+          <ul className="mt-1 space-y-1">
+            {duplicates.map((match) => (
+              <li key={match.id}>
+                <a href={`/watch/${match.id}`} target="_blank" rel="noopener noreferrer" className="font-medium underline-offset-4 hover:underline">
+                  {match.label} ↗
+                </a>{" "}
+                <span className="text-amber-800">· {match.reason === "same-page" ? "same product page" : "same brand and reference"}</span>
+              </li>
+            ))}
+          </ul>
+          {duplicateAck ? (
+            <p className="mt-2 text-amber-800">It will be added as a separate watch.</p>
+          ) : (
+            <button type="button" className="mt-2 font-medium text-amber-900 underline underline-offset-4" onClick={() => setDuplicateAck(true)}>
+              Add anyway
+            </button>
+          )}
+        </div>
+      )}
       <section className="card space-y-4 p-5">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-cocoa-500">Basics</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="label">Brand *</label>
-            <input className="input" value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="Omega" />
+            <input className="input" value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="As written on the dial" />
           </div>
           <div>
             <label className="label">Model *</label>
-            <input className="input" value={model} onChange={(e) => setModel(e.target.value)} placeholder="Seamaster Diver 300M" />
+            <input className="input" value={model} onChange={(e) => setModel(e.target.value)} placeholder="Model name, without the brand" />
+            {scrapedModel && model !== scrapedModel && (
+              <p className="mt-1 text-xs text-cocoa-500">
+                Shortened from the page title &ldquo;{scrapedModel}&rdquo;.{" "}
+                <button type="button" className="font-medium text-azalea-700 hover:underline" onClick={() => setModel(scrapedModel)}>
+                  Use original
+                </button>
+              </p>
+            )}
           </div>
           <div>
             <label className="label">Reference number</label>
-            <input className="input" value={referenceNumber} onChange={(e) => setReferenceNumber(e.target.value)} placeholder="210.30.42.20.03.003" />
+            <input className="input" value={referenceNumber} onChange={(e) => setReferenceNumber(e.target.value)} placeholder="Optional" />
           </div>
           <div>
             <label className="label">Status</label>

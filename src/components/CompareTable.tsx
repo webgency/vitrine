@@ -7,6 +7,7 @@ import WishlistTierBadge from "./WishlistTierBadge";
 import { landedPriceUsd } from "@/lib/scoring";
 import { bestOffer } from "@/lib/valuation";
 import FreshnessBadge from "./FreshnessBadge";
+import { tagLabel } from "@/lib/categories";
 
 /** Indexes of the "best" cells in a row, for highlighting. */
 function bestIndexes(values: (number | undefined)[], prefer: "higher" | "lower"): Set<number> {
@@ -144,7 +145,7 @@ export default function CompareTable({ watches }: { watches: Watch[] }) {
                   {w.tags.length ? (
                     w.tags.map((t) => (
                       <span key={t} className="rounded bg-cocoa-100 px-1.5 py-0.5 text-xs text-cocoa-600">
-                        {t}
+                        {tagLabel(t)}
                       </span>
                     ))
                   ) : (
