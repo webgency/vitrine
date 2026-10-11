@@ -1,10 +1,11 @@
 import { assignQuadrant, isProvisional, landedPriceUsd, medianScore, toDisplayScore, type Quadrant, type StandingSummary } from "./scoring";
 import { DIMENSION_LABELS } from "./rubrics";
 import { targetStatus } from "./price-history";
-import { dealScore, MIN_INDEPENDENT_SOURCES } from "./valuation";
+import { dealScore, marketSourceKey, MIN_INDEPENDENT_SOURCES } from "./valuation";
+import { listingEligibility } from "./listing-entry";
 import { finalists } from "./finalists";
 import { dealVerdict } from "./market-copy";
-import type { Watch } from "./types";
+import type { Condition, Watch } from "./types";
 
 /** Worded relative to the median, which is all the quadrant knows. */
 export const QUADRANT_LABELS: Record<Quadrant, string> = {
@@ -21,6 +22,27 @@ export interface DecideTodo {
   href: string;
 }
 
+/** What adding a second seller needs: the condition the deal compares, and
+ * the sites that already count, so the same site isn't added twice. */
+export interface SellerEvidence {
+  condition: Condition;
+  counted: string[];
+  needed: number;
+}
+
+/**
+ * Plain search links for finding another seller. Built only from what the
+ * watch records — nothing is fetched, and no dealer URL is guessed. Bulk
+ * crawling is out of scope (00-working-agreements).
+ */
+export function sellerSearchLinks(watch: Pick<Watch, "brand" | "model" | "referenceNumber">): { label: string; href: string }[] {
+  const query = [watch.brand, watch.referenceNumber || watch.model].join(" ").trim();
+  return [
+    { label: "Chrono24", href: `https://www.chrono24.com/search/index.htm?query=${encodeURIComponent(query)}` },
+    { label: "Web search", href: `https://www.google.com/search?q=${encodeURIComponent(`${query} price`)}` },
+  ];
+}
+
 export interface DecideColumn {
   watch: Watch;
   priceUsd?: number;
@@ -35,6 +57,8 @@ export interface DecideColumn {
   frictions: string[];
   quadrant: Quadrant | null;
   deal?: string;
+  /** Present until two independent sellers count; the deal needs them. */
+  sellers?: SellerEvidence;
   todos: DecideTodo[];
 }
 
@@ -64,7 +88,12 @@ export function decideColumns(watches: Watch[], summaries: Record<string, Standi
       const target = targetStatus(watch);
       const deal = dealScore(watch, undefined, now);
       const todos: DecideTodo[] = [];
+      let sellers: SellerEvidence | undefined;
       if (deal.status !== "available") {
+        const counted = listingEligibility(watch.links, deal.preferredCondition, now)
+          .filter((row) => !row.reasons.length)
+          .map((row) => row.link.retailer?.trim() || marketSourceKey(row.link));
+        sellers = { condition: deal.preferredCondition, counted, needed: Math.max(0, MIN_INDEPENDENT_SOURCES - counted.length) };
         const sources = Math.min(deal.observationCount, MIN_INDEPENDENT_SOURCES);
         todos.push({
           key: "second-seller",
@@ -95,6 +124,7 @@ export function decideColumns(watches: Watch[], summaries: Record<string, Standi
         frictions: standing.frictions,
         quadrant: assignQuadrant(value, summary.designScore, thresholds),
         deal: deal.status === "available" ? dealVerdict(deal) : undefined,
+        sellers,
         todos,
       };
     })
