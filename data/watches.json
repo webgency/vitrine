@@ -3185,6 +3185,7 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
+    "finalist": true,
     "designUniqueness": 5,
     "designPreferenceElo": 942.51,
     "designComparisonCount": 14,
@@ -3556,7 +3557,8 @@
       "diver"
     ],
     "id": "mtorvl6lg0fc15",
-    "dateAdded": "2026-09-05T19:25:09.498Z"
+    "dateAdded": "2026-09-05T19:25:09.498Z",
+    "finalist": true
   },
   {
     "brand": "Maen",
@@ -3646,6 +3648,7 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
+    "finalist": true,
     "designUniqueness": 4,
     "designPreferenceElo": 1012.69,
     "designComparisonCount": 13,
@@ -4442,6 +4445,7 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "sports",
+    "finalist": true,
     "designUniqueness": 4,
     "designPreferenceElo": 1000.98,
     "designComparisonCount": 14,
@@ -4501,8 +4505,7 @@
     "tags": [],
     "notes": "I also like the orange version. Rechecked 2026-10-10: the $299 first recorded here was the TMI VH31 meca-quartz variant (383 SGD). This record and its link are the Miyota 9039 automatic (588 SGD, $459.10 at the shop rate), so that entry was removed from the price and ask histories, which now start at the first price read for this variant.",
     "id": "mu22eejt4cj85b",
-    "dateAdded": "2026-09-15T02:40:43.814Z",
-    "finalist": true
+    "dateAdded": "2026-09-15T02:40:43.814Z"
   },
   {
     "brand": "Humism",
