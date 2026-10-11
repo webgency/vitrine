@@ -18,9 +18,15 @@ import {
   normalizePriceToUsd,
   unratedReason,
   updateDesignElo,
+  waterResistanceScore,
+  isSapphireCrystal,
+  isChronographCaliber,
+  CHRONOGRAPH_CREDIT,
+  VALUE_DIMENSIONS,
+  valueFromEvidence,
 } from "./scoring";
 import { CANONICAL_CALIBERS, isQuartzCaliber, isQuartzMovement, QUARTZ_MOVEMENTS } from "./calibers";
-import { DIMENSIONS } from "./rubrics";
+import { DIMENSIONS, dimensionPar, PAR } from "./rubrics";
 import { CURRENCIES } from "./types";
 import {
   RATES_AS_OF,
@@ -230,10 +236,14 @@ describe("scoreDimensions", () => {
       specs: { waterResistanceM: 200, crystal: "Sapphire" },
     });
     const durability = scoreDimensionEvidence(watch).durability!;
-    expect(durability.raw).toBe(0.75);
+    expect(durability.raw).toBe(1);
     expect(durability.knownInputs).toBe(2);
-    expect(durability.totalInputs).toBe(3);
-    expect(durability.coverage).toBeCloseTo(2 / 3);
+    expect(durability.totalInputs).toBe(2);
+    expect(durability.coverage).toBe(1);
+
+    const wrOnly = scoreDimensionEvidence(makeWatch({ specs: { waterResistanceM: 200 } })).durability!;
+    expect(wrOnly.raw).toBe(0.75);
+    expect(wrOnly.coverage).toBe(0.5);
   });
 
   it("excludes an unrated bracelet from the composite rather than scoring it 0", () => {
@@ -248,10 +258,30 @@ describe("scoreDimensions", () => {
     expect(standing.dimensions.bracelet).toBeUndefined();
   });
 
-  it("judges water resistance against the category expectation, not raw maximums", () => {
+  it("scores water resistance on one scale for every category", () => {
     const dress = makeWatch({ specs: { waterResistanceM: 50, crystal: "Sapphire" }, tags: ["dress"] });
     const diver = makeWatch({ specs: { waterResistanceM: 50, crystal: "Sapphire" }, tags: ["diver"] });
-    expect(scoreDimensions(dress).durability!).toBeGreaterThan(scoreDimensions(diver).durability!);
+    expect(scoreDimensions(dress).durability).toBe(scoreDimensions(diver).durability);
+  });
+
+  it("gives full water-resistance marks at 100m and nothing at 30m", () => {
+    expect(waterResistanceScore(30)).toBe(0);
+    expect(waterResistanceScore(50)).toBeCloseTo(0.42, 2);
+    expect(waterResistanceScore(100)).toBe(1);
+    expect(waterResistanceScore(300)).toBe(1);
+  });
+
+  it("does not take a sapphire-coated mineral crystal for sapphire", () => {
+    expect(isSapphireCrystal("Double-domed sapphire, internal AR coating")).toBe(true);
+    expect(isSapphireCrystal("Sapphire-coated mineral crystal (domed)")).toBe(false);
+    expect(isSapphireCrystal("K1 mineral Crystal")).toBe(false);
+  });
+
+  it("credits a chronograph caliber, read from the caliber rather than the category", () => {
+    const chrono = makeWatch({ specs: { caliber: "Sellita SW510 BH M", movement: "manual" }, scoringCategory: "gmt" });
+    expect(isChronographCaliber("Sellita SW510 BH M", "manual")).toBe(true);
+    expect(isChronographCaliber("Miyota 9075", "automatic")).toBe(false);
+    expect(scoreDimensions(chrono).movement).toBeCloseTo(caliberTier("SW510")! + CHRONOGRAPH_CREDIT);
   });
 });
 
@@ -653,5 +683,53 @@ describe("rate staleness", () => {
   it("reports a negative age rather than throwing if the date is in the future", () => {
     expect(ratesAgeDays(daysAfter(-10))).toBe(-10);
     expect(ratesAreStale(daysAfter(-10))).toBe(false);
+  });
+});
+
+describe("value for money", () => {
+  const complete = (overrides: Partial<Watch> = {}) =>
+    makeWatch({
+      scoringCategory: "diver",
+      price: { amount: 800, currency: "USD" },
+      specs: { caliber: "Sellita SW200-1", movement: "automatic", caseDiameterMm: 39, caseThicknessMm: 12, waterResistanceM: 200, crystal: "Sapphire" },
+      ...overrides,
+    });
+
+  it("costs 10 points when the same specs cost twice as much", () => {
+    const cheap = computeStanding(complete(), []).valueScore!;
+    const dear = computeStanding(complete({ price: { amount: 1600, currency: "USD" } }), []).valueScore!;
+    expect(cheap - dear).toBeCloseTo(0.1, 10);
+    const coreSlope = VALUE_DIMENSIONS.reduce((sum, d) => sum + PAR[d].perDoubling, 0) / VALUE_DIMENSIONS.length;
+    expect(coreSlope).toBeCloseTo(0.1, 10);
+  });
+
+  it("values identical specs at an identical price the same in every category", () => {
+    const diver = computeStanding(complete(), []).valueScore;
+    const dress = computeStanding(complete({ scoringCategory: "dress", tags: ["dress"] }), []).valueScore;
+    expect(dress).toBe(diver);
+  });
+
+  it("leaves a quartz watch's value unrated rather than valuing it on case and durability alone", () => {
+    const quartz = complete({ specs: { ...complete().specs, caliber: "Seiko VK64", movement: "quartz" } });
+    const standing = computeStanding(quartz, []);
+    expect(standing.dimensions.wearability).toBeDefined();
+    expect(standing.dimensions.durability).toBeDefined();
+    expect(standing.valueScore).toBeUndefined();
+  });
+
+  it("needs both durability inputs before valuing a watch", () => {
+    const noCrystal = complete({ specs: { ...complete().specs, crystal: undefined } });
+    expect(computeStanding(noCrystal, []).valueScore).toBeUndefined();
+  });
+
+  it("does not let durability par rise past what a watch can score", () => {
+    for (const price of [100, 1000, 10000, 50000]) expect(dimensionPar("durability", price)).toBeLessThanOrEqual(1);
+  });
+
+  it("keeps caseCraft and bracelet out of value", () => {
+    const bare = complete();
+    const flagged = complete({ qualityFlags: { hardenedCoatingHv: 1200, drilledLugs: true, braceletIncluded: true, microAdjustClasp: true } });
+    expect(computeStanding(flagged, []).valueScore).toBe(computeStanding(bare, []).valueScore);
+    expect(valueFromEvidence({}, 800)).toBeUndefined();
   });
 });

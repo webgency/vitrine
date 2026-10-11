@@ -14,17 +14,17 @@ const nomos: Watch = {
 };
 
 describe("evidence coverage explanations", () => {
-  it("recognizes DUW 4001 and reaches two-thirds coverage with sourced evidence", () => {
+  it("recognizes DUW 4001 and reaches three-quarters coverage with sourced evidence", () => {
     expect(caliberTier("NOMOS DUW 4001", "manual")).toBe(0.8);
     expect(caliberTier("DUW 4999", "manual")).toBeUndefined();
     const standing = computeStanding(nomos, [nomos]);
-    expect(standing.evidenceCoverage).toBeCloseTo(2 / 3);
+    expect(standing.evidenceCoverage).toBeCloseTo(3 / 4);
     expect(standing.confidence).toBe("medium");
     expect(standing.dimensions.bracelet).toBeUndefined();
     const rows = evidenceBreakdown(nomos);
     expect(rows.find(r => r.dimension === "movement")).toMatchObject({ coverage: 1, missing: [] });
     expect(rows.find(r => r.dimension === "bracelet")).toMatchObject({ applicable: false });
-    expect(rows.find(r => r.dimension === "durability")?.missing).toEqual(["Antimagnetic rating"]);
+    expect(rows.find(r => r.dimension === "durability")?.missing).toEqual([]);
     const applicable = rows.filter(r => r.applicable);
     expect(applicable.reduce((sum, r) => sum + r.coverage, 0) / applicable.length).toBeCloseTo(standing.evidenceCoverage);
   });

@@ -1,8 +1,6 @@
-import { continuousReference, DIMENSIONS, RubricCategory } from "./rubrics";
-import { caseProfileEvidence, deriveCategory, landedPriceUsd, MIN_REFERENCE_COVERAGE, scoreDimensionEvidence } from "./scoring";
+import { DIMENSIONS, RubricCategory } from "./rubrics";
+import { caseProfileEvidence, deriveCategory, landedPriceUsd, scoreDimensionEvidence, valueFromEvidence } from "./scoring";
 import { Watch } from "./types";
-
-export { continuousReference } from "./rubrics";
 
 /** Experimental allowance for the extra case stack associated with each category. */
 export const CATEGORY_THICKNESS_ALLOWANCE_MM: Record<RubricCategory, number> = {
@@ -15,21 +13,18 @@ export const CATEGORY_THICKNESS_ALLOWANCE_MM: Record<RubricCategory, number> = {
   sports: 0.15,
 };
 
-function clamp01(value: number): number {
-  return Math.max(0, Math.min(1, value));
-}
-
 export interface CalibrationResult {
   qualityScore?: number;
   valueScore?: number;
   wearabilityScore?: number;
-  referenceQuality?: number;
 }
 
 /**
- * Comparison report for the remaining category-thickness experiment. Production
- * now uses the same continuous references, but deliberately keeps the established
- * wearability formula until the allowance has stronger calibration coverage.
+ * Comparison report for the remaining category-thickness experiment. It uses
+ * production's value rule unchanged; production deliberately keeps the
+ * established wearability formula until the allowance has stronger calibration
+ * coverage. Value is now compared across categories, so an allowance would also
+ * hand thick categories value they did not earn — weigh that before adopting it.
  */
 export function calibrationScore(watch: Watch): CalibrationResult {
   const category = deriveCategory(watch);
@@ -48,26 +43,11 @@ export function calibrationScore(watch: Watch): CalibrationResult {
     0
   ) / totalWeight;
 
-  if (!category || priceUsd === undefined) {
-    return { qualityScore, wearabilityScore: evidence.wearability?.raw };
-  }
-
-  const comparable = rated.filter((dimension) => evidence[dimension]!.coverage >= MIN_REFERENCE_COVERAGE[dimension]);
-  if (!comparable.length) return { qualityScore, wearabilityScore: evidence.wearability?.raw };
-  const comparisonWeight = comparable.reduce((sum, dimension) => sum + evidence[dimension]!.coverage, 0);
-  const comparableQuality = comparable.reduce(
-    (sum, dimension) => sum + evidence[dimension]!.raw * evidence[dimension]!.coverage,
-    0
-  ) / comparisonWeight;
-  const referenceQuality = comparable.reduce(
-    (sum, dimension) => sum + continuousReference(category, dimension, priceUsd) * evidence[dimension]!.coverage,
-    0
-  ) / comparisonWeight;
-
   return {
     qualityScore,
-    valueScore: clamp01(0.5 + comparableQuality - referenceQuality),
+    // Same value rule as production, so the only difference the report shows
+    // is the thickness allowance.
+    valueScore: valueFromEvidence(evidence, priceUsd),
     wearabilityScore: evidence.wearability?.raw,
-    referenceQuality,
   };
 }

@@ -171,7 +171,7 @@ export default function StandingPanel({ watch, standing }: { watch: Watch; stand
       <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-sm font-semibold uppercase tracking-wide text-cocoa-500">Specification standing</h2>
-          <p className="mt-1 text-sm text-cocoa-500">Rubric comparison with what this exact price should buy for {standing.peerLabel}.</p>
+          <p className="mt-1 text-sm text-cocoa-500">Compared with what this exact price should buy, the same for every category.</p>
         </div>
         <p className="text-xs text-cocoa-400 sm:text-right">
           Rated on {ratedCount} of {DIMENSIONS.length} dimensions
@@ -196,10 +196,10 @@ export default function StandingPanel({ watch, standing }: { watch: Watch; stand
               value={standing.valueScore}
               caption={
                 standing.valueScore === undefined
-                  ? standing.peerLabel.startsWith("category unrated")
-                    ? "Needs a category"
-                    : "Needs a price"
-                  : "Value vs continuous price expectation"
+                  ? standing.peerLabel.endsWith("unpriced")
+                    ? "Needs a price"
+                    : "Needs a rated movement, case size, water resistance and crystal"
+                  : "Movement, case profile and durability vs par at this price"
               }
             />
             <div className="col-span-2 min-w-0 sm:col-span-1">
@@ -234,7 +234,7 @@ export default function StandingPanel({ watch, standing }: { watch: Watch; stand
           {banded ? (
             <p className="mt-3 flex items-center gap-2 text-xs text-cocoa-400">
               <span className="inline-block h-3 w-0.5 bg-cocoa-900/70" />
-              Continuous expectation at this price · peer label {standing.peerLabel}
+              Par at this price · peer label {standing.peerLabel}
             </p>
           ) : (
             <p className="mt-3 text-xs text-cocoa-400">

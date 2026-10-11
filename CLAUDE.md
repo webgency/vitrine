@@ -30,7 +30,9 @@ npm run notify:targets     # target-met webhook notifications; use --dry first
 
 1. **Missing data is never a zero.** A dimension without source data returns `undefined` and is excluded from the composite. `unratedReason()` explains which input is missing. Never substitute a neutral or mid value to "fill in" a gap — a fabricated score reads as a measured failure.
 2. **Friction is never numeric.** `friction` (availability, bracelet upcharge, brand liquidity) renders as text chips via `frictionChips()`. It must not enter any score.
-3. **Par is absolute.** A watch at its band's rubric reference scores 0.5. Peer groups range from a single watch to about ten, so they supply only the label and count; percentile ranking is gated behind `n >= 6`.
+3. **Par is absolute.** A watch at par for its price scores 0.5. Par is a fixed line per dimension (`PAR` in `rubrics.ts`), the same for every category, so value compares across categories; its anchors are frozen constants, never refitted as watches are added. Peer groups range from a single watch to about ten, so they supply only the label and count; percentile ranking is gated behind `n >= 6`.
+
+**Value is built from three core dimensions** — movement, case profile, durability (`VALUE_DIMENSIONS`) — and is unrated unless all three are rated, so a quartz watch has no value score. Par rises 10 points per price doubling across them. caseCraft and bracelet show on the standing panel but stay out of value, because their inputs are recorded only when a brand publishes them.
 
 `unratedReason()` mirrors the gates in `scoreDimensions()`. Change one and the other must follow.
 
