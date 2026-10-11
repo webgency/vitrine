@@ -520,6 +520,13 @@ function normalizeWatchShape(
   assignIfPresent(output, body, "status", cleanStatus(body.status, !partial, errors));
   assignIfPresent(output, body, "wishlistTier", cleanWishlistTier(body.wishlistTier, errors));
   assignIfPresent(output, body, "scoringCategory", cleanScoringCategory(body.scoringCategory, errors));
+  // Like listing: kept when reading the stored file, refused through the
+  // add/edit API, because only the finalist route enforces the cap.
+  if (hasOwn(body, "finalist") && body.finalist !== undefined && body.finalist !== null) {
+    if (!stored) errors.push("finalist is set from the Finalist toggle, which enforces the limit; it can't be edited here");
+    else if (body.finalist !== true) errors.push("finalist must be true when present");
+    else output.finalist = true;
+  }
   assignIfPresent(output, body, "designUniqueness", cleanIntegerRange(body.designUniqueness, "designUniqueness", errors, 1, 5));
   assignIfPresent(output, body, "designPreferenceElo", cleanNonNegativeNumber(body.designPreferenceElo, "designPreferenceElo", errors));
   assignIfPresent(output, body, "designComparisonCount", cleanIntegerRange(body.designComparisonCount, "designComparisonCount", errors, 0, Number.MAX_SAFE_INTEGER));

@@ -6,9 +6,10 @@ import { formatMoney, titleCase } from "@/lib/format";
 import { caliberTier, deriveCategory, landedPriceUsd, StandingSummary, toDisplayScore } from "@/lib/scoring";
 import { SCORING_CATEGORIES, Watch, WatchStatus, WISHLIST_TIERS, WISHLIST_TIER_LABELS, WishlistTier } from "@/lib/types";
 import { bestOffer, bestOfferTargetStatus, dealScore } from "@/lib/valuation";
-import { anyDealEvidence, compareValueRows, effectiveDealControls, matchesValueFilters, ValueFilters, ValueRow, ValueSortKey } from "@/lib/value-list";
+import { anyDealEvidence, compareValueRows, effectiveDealControls, matchesValueFilters, splitProvisional, ValueFilters, ValueRow, ValueSortKey } from "@/lib/value-list";
 import { matchesWatchSearch } from "@/lib/watch-search";
 import { useValueFilters } from "@/hooks/useResearchSession";
+import { IS_STATIC } from "@/lib/config";
 import EvidenceCoverage from "./EvidenceCoverage";
 import FreshnessBadge from "./FreshnessBadge";
 
@@ -79,6 +80,8 @@ export default function ValueList({
     wishlistTier,
   };
   const visible = rows.filter((row) => matchesValueFilters(row, filters) && matchesWatchSearch(row.watch, query)).sort((a, b) => compareValueRows(a, b, sort));
+
+  const ranking = sort === "value" ? splitProvisional(visible) : { ranked: visible, provisional: [], wouldRankTop: [] };
 
   function resetFilters() {
     update({ query: "", status: "wishlist", category: "all", minPrice: "", maxPrice: "", minDesign: "", confidence: "all", hasDealEvidence: false, wishlistTier: "all" });
@@ -163,27 +166,59 @@ export default function ValueList({
         </section>
       ) : (
         <>
-        {/* Both layouts consume the same filtered, sorted rows. CSS chooses
-            the presentation without client-only viewport state or a flash
-            of the desktop table during static-page hydration. */}
-        <ol aria-label="Watch results" className="grid gap-3 md:grid-cols-2 lg:hidden">
-          {visible.map((row, index) => <li key={row.watch.id} className="min-w-0"><ValueCard row={row} rank={sort === "value" ? index + 1 : undefined} showDeal={dealsExist} /></li>)}
-        </ol>
-        <section aria-label="Watch results" className="card hidden overflow-hidden lg:block">
-        <div className="overflow-x-auto" role="region" aria-label="Watch value comparison table" tabIndex={0}>
-          <table className="min-w-[1120px] w-full text-left text-sm">
-            <thead className="border-b border-cocoa-200 bg-cocoa-50 text-xs uppercase tracking-wide text-cocoa-500">
-              <tr><th scope="col" className="px-4 py-3">Watch</th><th scope="col" className="px-3 py-3">Rubric value</th>{dealsExist && <th scope="col" className="px-3 py-3">Deal vs fair asks</th>}<th scope="col" className="px-3 py-3">Price</th><th scope="col" className="px-3 py-3">Best dated offer</th><th scope="col" className="px-3 py-3">Specs</th><th scope="col" className="px-3 py-3">Design</th><th scope="col" className="px-3 py-3">Target</th></tr>
-            </thead>
-            <tbody className="divide-y divide-cocoa-100">
-              {visible.map((row, index) => <ValueTableRow key={row.watch.id} row={row} rank={sort === "value" ? index + 1 : undefined} showDeal={dealsExist} />)}
-            </tbody>
-          </table>
-        </div>
-        </section>
+        {/* Ranked by value, low-evidence rows go in their own group below the
+            ranking rather than among it; other sorts list everything. */}
+        <ResultRows rows={ranking.ranked} ranked={sort === "value"} showDeal={dealsExist} />
+        {ranking.provisional.length > 0 && (
+          <details className="group space-y-3">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-sm font-medium text-cocoa-700 [&::-webkit-details-marker]:hidden">
+              <span aria-hidden className="transition-transform group-open:rotate-90">&#9656;</span>
+              Provisional · under half the evidence recorded ({ranking.provisional.length})
+            </summary>
+            <p className="text-sm text-cocoa-500">
+              Scores shown as computed. With few inputs recorded they can move a long way either way, so they aren&apos;t ranked.
+            </p>
+            {!IS_STATIC && ranking.wouldRankTop.length > 0 && (
+              <div className="rounded-lg bg-cocoa-50 p-3 text-sm text-cocoa-600">
+                <p>
+                  {ranking.wouldRankTop.length} of these would otherwise rank in the top ten. Research their missing specs, reporting only, with:
+                </p>
+                <code className="mt-2 block overflow-x-auto whitespace-nowrap rounded bg-white px-2 py-1 text-xs text-cocoa-800">
+                  node scripts/backfill-specs.mjs --dry {ranking.wouldRankTop.map((row) => `--id=${row.watch.id}`).join(" ")}
+                </code>
+              </div>
+            )}
+            <ResultRows rows={ranking.provisional} ranked={false} showDeal={dealsExist} />
+          </details>
+        )}
         </>
       )}
     </div>
+  );
+}
+
+function ResultRows({ rows, ranked, showDeal }: { rows: ValueRow[]; ranked: boolean; showDeal: boolean }) {
+  return (
+    <>
+      {/* Both layouts consume the same filtered, sorted rows. CSS chooses
+          the presentation without client-only viewport state or a flash
+          of the desktop table during static-page hydration. */}
+      <ol aria-label="Watch results" className="grid gap-3 md:grid-cols-2 lg:hidden">
+        {rows.map((row, index) => <li key={row.watch.id} className="min-w-0"><ValueCard row={row} rank={ranked ? index + 1 : undefined} showDeal={showDeal} /></li>)}
+      </ol>
+      <section aria-label="Watch results" className="card hidden overflow-hidden lg:block">
+        <div className="overflow-x-auto" role="region" aria-label="Watch value comparison table" tabIndex={0}>
+          <table className="min-w-[1120px] w-full text-left text-sm">
+            <thead className="border-b border-cocoa-200 bg-cocoa-50 text-xs uppercase tracking-wide text-cocoa-500">
+              <tr><th scope="col" className="px-4 py-3">Watch</th><th scope="col" className="px-3 py-3">Rubric value</th>{showDeal && <th scope="col" className="px-3 py-3">Deal vs fair asks</th>}<th scope="col" className="px-3 py-3">Price</th><th scope="col" className="px-3 py-3">Best dated offer</th><th scope="col" className="px-3 py-3">Specs</th><th scope="col" className="px-3 py-3">Design</th><th scope="col" className="px-3 py-3">Target</th></tr>
+            </thead>
+            <tbody className="divide-y divide-cocoa-100">
+              {rows.map((row, index) => <ValueTableRow key={row.watch.id} row={row} rank={ranked ? index + 1 : undefined} showDeal={showDeal} />)}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </>
   );
 }
 

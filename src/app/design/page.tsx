@@ -14,7 +14,7 @@ export default async function DesignPage() {
         <h1 className="text-2xl font-bold tracking-tight">Design appeal</h1>
         <p className="text-sm text-cocoa-500">
           Start with an anchored 1–5 reaction to each watch, then optionally refine ties with head-to-head choices.
-          The resulting score sits beside rubric value on the Value page and never changes it.
+          The resulting score sits beside rubric value and never changes it; Decide places your finalists on both against the collection.
         </p>
       </div>
 
@@ -27,8 +27,8 @@ export default async function DesignPage() {
       )}
 
       <p className="text-sm text-cocoa-500">
-        <Link href="/value" className="font-medium text-azalea-700 hover:underline">
-          See design beside value →
+        <Link href="/decide" className="font-medium text-azalea-700 hover:underline">
+          See your finalists on value and design →
         </Link>
       </p>
     </div>

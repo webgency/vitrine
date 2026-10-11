@@ -83,6 +83,12 @@ These carry over from CLAUDE.md, and every slice must preserve them:
   Empty state: "Pin up to five finalists from the collection." Nav pill appears only once a finalist exists (same pattern as Alerts).
 - **C3 Provisional evidence in Value.** On 2026-10-11, 5 of the top 10 by rubric value had under 45% evidence coverage. The Riley FlyRacer ranked #6 rated on two dimensions at 20%. Group means barely differ (0.618 vs 0.584), but with fewer rated dimensions scores spread to the extremes. Mark these rows **provisional**. The open question 2 below decides how. Offer "Fill specs" for the provisional rows in the top 10. Locally this can trigger `scripts/backfill-specs.mjs --dry` for those ids; on Pages it's hidden.
 
+**As built (PR for slice C):**
+- **Provisional threshold:** reuses the existing "low" confidence line (coverage under 50%) via `isProvisional()` beside `confidenceFor()`, the same line the Value page's "Low evidence" hint already used, rather than a second threshold.
+- **Fill specs:** shown as the exact `backfill-specs.mjs --dry --id=…` command for the provisional watches that would otherwise rank in the top ten, local only. Running the script from a server request would spend API calls and write `watches.json` outside a terminal.
+- **Cap enforcement:** in the store under the write lock, not only the UI. The generic edit API refuses `finalist`.
+- **Auto-unpin:** a finalist is unpinned when it leaves the wishlist or is marked Pass.
+
 **Acceptance:**
 - Pinning a sixth finalist explains the cap.
 - Decide renders with 0, 1 and 5 finalists.

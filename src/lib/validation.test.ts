@@ -86,3 +86,10 @@ describe("market observation validation", () => {
     expect(result.ok).toBe(false);
   });
 });
+
+describe("finalist through the edit API", () => {
+  it("is refused, so the cap can't be bypassed", () => {
+    const result = normalizeWatchPatch({ finalist: true });
+    expect(result.ok).toBe(false);
+  });
+});

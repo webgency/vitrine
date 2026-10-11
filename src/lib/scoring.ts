@@ -576,6 +576,17 @@ export function confidenceFor(coverage: number): Standing["confidence"] {
   return "low";
 }
 
+/**
+ * A rubric value resting on low evidence (under half the inputs recorded).
+ * With few rated dimensions a score swings further either way, so on
+ * 2026-10-11 five of the Value top ten were low-evidence watches. They are
+ * grouped apart in rankings rather than adjusted: pulling them toward par
+ * would be a fabricated score (invariant 1).
+ */
+export function isProvisional(standing: Pick<Standing, "valueScore" | "confidence">): boolean {
+  return standing.valueScore !== undefined && standing.confidence === "low";
+}
+
 function frictionChips(watch: Watch): string[] {
   const friction = watch.friction;
   if (!friction) return [];

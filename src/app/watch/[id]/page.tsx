@@ -25,6 +25,8 @@ import { getSeller } from "@/lib/seller";
 import { getPrivateRecord } from "@/lib/private-store";
 import { targetStatus } from "@/lib/price-history";
 import OwnershipSection from "@/components/OwnershipSection";
+import FinalistToggle from "@/components/FinalistToggle";
+import { canBeFinalist } from "@/lib/finalists";
 import { ownershipItems } from "@/lib/ownership";
 import { tagLabel } from "@/lib/categories";
 
@@ -117,6 +119,9 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <WishlistTierBadge tier={watch.wishlistTier} />
                 <StatusBadge status={watch.status} />
+                {canBeFinalist(watch) && (IS_STATIC
+                  ? watch.finalist && <span className="rounded-full bg-azalea px-2 py-1 text-xs font-medium text-cocoa-950">★ Finalist</span>
+                  : <FinalistToggle watchId={watch.id} watchName={`${watch.brand} ${watch.model}`} finalist={Boolean(watch.finalist)} />)}
               </div>
             )}
           </div>
