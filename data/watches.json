@@ -4501,7 +4501,8 @@
     "tags": [],
     "notes": "I also like the orange version. Rechecked 2026-10-10: the $299 first recorded here was the TMI VH31 meca-quartz variant (383 SGD). This record and its link are the Miyota 9039 automatic (588 SGD, $459.10 at the shop rate), so that entry was removed from the price and ask histories, which now start at the first price read for this variant.",
     "id": "mu22eejt4cj85b",
-    "dateAdded": "2026-09-15T02:40:43.814Z"
+    "dateAdded": "2026-09-15T02:40:43.814Z",
+    "finalist": true
   },
   {
     "brand": "Humism",
@@ -4944,13 +4945,13 @@
     ],
     "imageUrl": "https://www.rileywatchco.com/cdn/shop/files/Screenshot2026-02-10at18.17.12.png?v=1770747983&width=2048",
     "specs": {
+      "caseDiameterMm": 40,
       "lugWidthMm": 21,
       "movement": "quartz",
       "waterResistanceM": 50,
       "crystal": "Sapphire",
       "braceletStrap": "Genuine leather with dial-matching stitching and quick-release spring bars — comf",
-      "complications": "Chronograph, Tachymeter",
-      "caseDiameterMm": 40
+      "complications": "Chronograph, Tachymeter"
     },
     "tags": [
       "chronograph"
@@ -4963,6 +4964,7 @@
     "model": "Porto Covo Ice Blue",
     "status": "wishlist",
     "wishlistTier": "watching",
+    "scoringCategory": "dress",
     "price": {
       "amount": 550,
       "currency": "USD"
@@ -5001,7 +5003,6 @@
     },
     "tags": [],
     "id": "mv2to452dpzm9l",
-    "dateAdded": "2026-10-10T20:03:48.854Z",
-    "scoringCategory": "dress"
+    "dateAdded": "2026-10-10T20:03:48.854Z"
   }
 ]
