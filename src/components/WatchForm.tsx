@@ -30,15 +30,8 @@ import { hostname } from "@/lib/format";
 import { cleanModelName } from "@/lib/model-name";
 import { findDuplicates, type TrackedWatchKey } from "@/lib/duplicates";
 import ImageDropzone from "./ImageDropzone";
+import { emptyLinkRow, observedAtForSave, toLinkRow, type LinkRow } from "@/lib/link-rows";
 
-interface LinkRow {
-  url: string;
-  retailer: string;
-  priceAmount: string;
-  priceCurrency: string;
-  condition: "" | Condition;
-  observedAt: string;
-}
 
 // Derived from the field declarations so a flag added in specs.ts lands in the
 // right group here without touching this file.
@@ -60,17 +53,6 @@ const SCORING_CATEGORY_LABELS: Record<ScoringCategory, string> = {
   dress: "Dress / everyday",
   sports: "Sports / field",
 };
-
-function toLinkRow(link: RetailerLink): LinkRow {
-  return {
-    url: link.url,
-    retailer: link.retailer ?? "",
-    priceAmount: link.price?.amount != null ? String(link.price.amount) : "",
-    priceCurrency: link.price?.currency ?? "USD",
-    condition: link.condition ?? "",
-    observedAt: link.observedAt?.slice(0, 10) ?? "",
-  };
-}
 
 function parseNum(value: string): number | undefined {
   if (value.trim() === "") return undefined;
@@ -136,7 +118,7 @@ export default function WatchForm({ initial, tracked }: {
   // is unit-tested.
   const [flags, setFlags] = useState<Record<string, string>>(() => qualityFlagsToForm(initial?.qualityFlags));
   const [links, setLinks] = useState<LinkRow[]>(
-    initial?.links?.length ? initial.links.map(toLinkRow) : [{ url: "", retailer: "", priceAmount: "", priceCurrency: "USD", condition: "", observedAt: "" }]
+    initial?.links?.length ? initial.links.map(toLinkRow) : [emptyLinkRow()]
   );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -246,6 +228,8 @@ export default function WatchForm({ initial, tracked }: {
             priceCurrency: data.price?.currency || row.priceCurrency,
             condition: data.condition || row.condition,
             observedAt: observedAt || row.observedAt,
+            // A fresh price from the page is a new observation, not the stored one.
+            ...(observedAt ? { storedObservedAt: undefined } : {}),
           } : row);
         }
         const row: LinkRow = {
@@ -298,7 +282,8 @@ export default function WatchForm({ initial, tracked }: {
         const amount = parseNum(l.priceAmount);
         if (amount !== undefined) link.price = { amount, currency: l.priceCurrency };
         if (l.condition) link.condition = l.condition;
-        if (l.observedAt) link.observedAt = l.observedAt;
+        const observedAt = observedAtForSave(l);
+        if (observedAt) link.observedAt = observedAt;
         return link;
       });
 
@@ -678,7 +663,7 @@ export default function WatchForm({ initial, tracked }: {
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => setLinks((rows) => [...rows, { url: "", retailer: "", priceAmount: "", priceCurrency: "USD", condition: "", observedAt: "" }])}
+              onClick={() => setLinks((rows) => [...rows, emptyLinkRow()])}
             >
               + Add link
             </button>

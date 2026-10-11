@@ -255,3 +255,52 @@ describe("setFinalist", () => {
     expect((await readStored())[0].finalist).toBe(true);
   });
 });
+
+describe("edit form link round trip", () => {
+  const stored = {
+    url: "https://shop.example/w",
+    retailer: "shop.example",
+    price: { amount: 459, currency: "USD" },
+    condition: "new" as const,
+    observedAt: "2026-10-10T15:56:08.146Z",
+    askHistory: [{ price: { amount: 459, currency: "USD" }, date: "2026-10-10T15:56:08.146Z", source: "scrape" as const }],
+  };
+
+  // What WatchForm's buildPayload sends for an untouched row.
+  async function formLink(row: ReturnType<typeof import("./link-rows").toLinkRow>) {
+    const { observedAtForSave } = await import("./link-rows");
+    return {
+      url: row.url,
+      retailer: row.retailer,
+      price: { amount: Number(row.priceAmount), currency: row.priceCurrency },
+      condition: row.condition || undefined,
+      observedAt: observedAtForSave(row),
+    };
+  }
+
+  it("keeps a link's timestamp when only the notes change", async () => {
+    const { updateWatch } = await import("./store");
+    const { toLinkRow } = await import("./link-rows");
+    await seed([{ ...baseWatch, links: [stored] }]);
+
+    await updateWatch("w1", { notes: "I also like the orange version.", links: [await formLink(toLinkRow(stored))] });
+
+    const [link] = (await readStored())[0].links;
+    expect(link.observedAt).toBe("2026-10-10T15:56:08.146Z");
+    expect(link.askHistory).toEqual(stored.askHistory);
+  });
+
+  it("still re-dates a changed ask whose date was left as it was", async () => {
+    const { updateWatch } = await import("./store");
+    const { toLinkRow } = await import("./link-rows");
+    await seed([{ ...baseWatch, links: [stored] }]);
+
+    const row = { ...toLinkRow(stored), priceAmount: "429" };
+    await updateWatch("w1", { links: [await formLink(row)] });
+
+    const [link] = (await readStored())[0].links;
+    expect(link.price?.amount).toBe(429);
+    expect(link.observedAt).not.toBe(stored.observedAt);
+    expect(new Date(link.observedAt!).getTime()).toBeGreaterThan(new Date(stored.observedAt).getTime());
+  });
+});
