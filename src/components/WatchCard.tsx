@@ -235,7 +235,7 @@ function StandingBlock({ summary, watch }: { summary: StandingSummary; watch: Wa
           <span
             title={
               hero.key === "value"
-                ? `Rubric value against the continuous expectation at this price. Peer label: ${standing.peerLabel}. 50 is expected.`
+                ? `Rubric value: movement, case profile and durability against par at this price, the same for every category. 50 is par. Peer label: ${standing.peerLabel}.`
                 : "Your design-appeal score"
             }
             className="inline-block rounded-full bg-cocoa-900 px-2.5 py-1 font-semibold text-white"

@@ -2,9 +2,8 @@ import { TAG_TO_CATEGORY } from "./categories";
 import { isQuartzMovement, normalizeCaliber } from "./calibers";
 import { Money, MovementType, QualityFlags, Watch } from "./types";
 import {
-  CATEGORY_EXPECTATION,
-  continuousReference,
   Dimension,
+  dimensionPar,
   DIMENSIONS,
   PriceBand,
   priceBandFor,
@@ -252,6 +251,27 @@ export function caliberTier(
   return CALIBER_TIER_PATTERNS.find(([pattern]) => key.includes(pattern))?.[1];
 }
 
+// Calibers with a mechanical chronograph. A chronograph costs roughly twice what
+// the same maker's three-hander does, and the tier table alone repaid only
+// half of that: the SW510's step over the SW200-1 is 0.14 of movement, about
+// half a price doubling of value. CHRONOGRAPH_CREDIT adds the other half, so a
+// chronograph priced at the usual premium lands where its three-hand sibling
+// would. Read from the caliber, not the category or the complications text:
+// a GMT-category watch can carry a chronograph caliber, and the free text says
+// things like "rotating 'Office GMT' bezel (no second time zone)". GMT calibers
+// get no extra credit — their tiers already sit a step above the base caliber
+// (9075 over 9015, SW330 over SW200-1), which is about what a GMT costs.
+// Meca-quartz chronographs never reach this: quartz is unrated.
+const CHRONOGRAPH_CALIBER_PATTERNS = [
+  "sw500", "sw510", "mu 9419", "alb01", "st-1901", "st1901", "ne86", "ne88", "l688", "7750",
+];
+export const CHRONOGRAPH_CREDIT = 0.15;
+
+export function isChronographCaliber(caliber: string | undefined, movement?: MovementType | string): boolean {
+  const key = normalizeCaliber(caliber, movement);
+  return !!key && CHRONOGRAPH_CALIBER_PATTERNS.some((pattern) => key.includes(pattern));
+}
+
 /**
  * Explicit category wins. Legacy tags are accepted only when they resolve to
  * one category; ordering must never decide which rubric a hybrid watch gets.
@@ -344,20 +364,36 @@ export function caseProfileEvidence(
   return evidence(raw, hasLugToLug ? 3 : 2, 3);
 }
 
+// Water resistance on a log scale from 30m (a splash, 0) to 100m (swimming,
+// full marks). One scale for every category: past 100m the extra depth buys
+// nothing an everyday wearer uses, and the old per-category bars meant a 30m
+// dress watch scored as well as a 200m diver. Log because each step up — 30 to
+// 50, 50 to 100 — is a similar jump in what the watch survives.
+const WR_FLOOR_M = 30;
+const WR_FULL_M = 100;
+export function waterResistanceScore(meters: number): number {
+  if (meters <= WR_FLOOR_M) return 0;
+  return clamp01(Math.log(meters / WR_FLOOR_M) / Math.log(WR_FULL_M / WR_FLOOR_M));
+}
+
+// "Sapphire-coated mineral" and "sapphire display caseback" both contain the
+// word; only the first is a mineral crystal, so a coating or a softer glass
+// named alongside it disqualifies.
+export function isSapphireCrystal(crystal: string): boolean {
+  return /sapphire/i.test(crystal) && !/coated|mineral|hesalite|acrylic|plexi/i.test(crystal);
+}
+
 /**
  * Raw dimension scores against fixed anchors. Any dimension lacking source
  * data returns undefined, not a number:
  * - movement needs a recognized caliber
  * - wearability needs both diameter and thickness
  * - caseCraft and bracelet each need one of their own qualityFlags recorded
- * - durability needs at least one recorded durability input
+ * - durability needs water resistance or the crystal
  */
 export function scoreDimensionEvidence(watch: Watch): Partial<Record<Dimension, DimensionEvidence>> {
   const s = watch.specs ?? {};
   const f = watch.qualityFlags ?? {};
-  const category = deriveCategory(watch);
-  const expectation = category ? CATEGORY_EXPECTATION[category] : undefined;
-
   const out: Partial<Record<Dimension, DimensionEvidence>> = {};
 
   const caliberBase = caliberTier(s.caliber, s.movement);
@@ -366,8 +402,9 @@ export function scoreDimensionEvidence(watch: Watch): Partial<Record<Dimension, 
     const regBonus = f.regulatedPositions ? Math.min(0.2, f.regulatedPositions * 0.05) : 0;
     const prBonus =
       s.powerReserveHours !== undefined ? clamp01((s.powerReserveHours - 38) / 42) * 0.1 : 0;
+    const chronoCredit = isChronographCaliber(s.caliber, s.movement) ? CHRONOGRAPH_CREDIT : 0;
     const knownInputs = 1 + Number(f.regulatedPositions !== undefined) + Number(s.powerReserveHours !== undefined);
-    out.movement = evidence(caliberBase + regBonus + prBonus, knownInputs, 3);
+    out.movement = evidence(caliberBase + chronoCredit + regBonus + prBonus, knownInputs, 3);
   }
 
   const profile = caseProfileEvidence(s);
@@ -437,24 +474,21 @@ export function scoreDimensionEvidence(watch: Watch): Partial<Record<Dimension, 
     out.bracelet = evidence(achieved, known.length, parts.length);
   }
 
-  if ((s.waterResistanceM !== undefined && expectation) || s.crystal !== undefined || f.antimagneticAm !== undefined) {
+  // Two inputs, scored the same for every category. The antimagnetic rating
+  // used to be a third, but it is recorded on 4 watches of 82, and an unknown
+  // input adds nothing — so it capped nearly every watch at 0.75 and charged
+  // that cap to whichever category had the highest bar.
+  if (s.waterResistanceM !== undefined || s.crystal !== undefined) {
     const parts: Array<{ known: boolean; weight: number; score: number }> = [
       {
-        known: s.waterResistanceM !== undefined && expectation !== undefined,
-        weight: 0.5,
-        score: s.waterResistanceM !== undefined && expectation
-          ? clamp01(s.waterResistanceM / expectation.wrM)
-          : 0,
+        known: s.waterResistanceM !== undefined,
+        weight: 0.75,
+        score: s.waterResistanceM !== undefined ? waterResistanceScore(s.waterResistanceM) : 0,
       },
       {
         known: s.crystal !== undefined,
         weight: 0.25,
-        score: (s.crystal ?? "").toLowerCase().includes("sapphire") ? 1 : 0,
-      },
-      {
-        known: f.antimagneticAm !== undefined,
-        weight: 0.25,
-        score: clamp01((f.antimagneticAm ?? 0) / 25000),
+        score: s.crystal !== undefined && isSapphireCrystal(s.crystal) ? 1 : 0,
       },
     ];
     const known = parts.filter((part) => part.known);
@@ -529,23 +563,54 @@ export const MIN_REFERENCE_COVERAGE: Record<Dimension, number> = {
   movement: 1 / 3,
   caseCraft: 0.5,
   wearability: 2 / 3,
-  durability: 1 / 3,
+  // Both inputs: water resistance alone scores as though the crystal were not
+  // sapphire, which is nearly every watch's gap rather than its spec.
+  durability: 1,
   bracelet: 0.5,
 };
+
+/**
+ * What value is built from: the specs every watch has and every buyer pays
+ * for. caseCraft and bracelet stay on the standing panel but out of value.
+ * Their inputs (hardness in HV, drilled lugs, a micro-adjust clasp) are
+ * recorded only when a brand happens to publish them, so including them meant
+ * each watch was valued on a different set of dimensions, and value measured
+ * how much had been written down as much as what the watch is.
+ */
+export const VALUE_DIMENSIONS: Dimension[] = ["movement", "wearability", "durability"];
+
+/**
+ * Value for money: 0.5 at par, plus how far the core specs sit above or below
+ * what the price should buy. Undefined unless every core dimension clears its
+ * coverage bar — a quartz watch has no movement score, and valuing it on case
+ * and durability alone put four of them at the top of the list (invariant 1:
+ * the missing dimension is excluded, never filled, so the value is unrated).
+ */
+export function valueFromEvidence(
+  raw: Partial<Record<Dimension, DimensionEvidence>>,
+  priceUsd: number | undefined
+): number | undefined {
+  if (priceUsd === undefined || priceUsd <= 0) return undefined;
+  if (!VALUE_DIMENSIONS.every((d) => raw[d] !== undefined && raw[d]!.coverage >= MIN_REFERENCE_COVERAGE[d])) {
+    return undefined;
+  }
+  const gap = VALUE_DIMENSIONS.reduce((sum, d) => sum + raw[d]!.raw - dimensionPar(d, priceUsd), 0) / VALUE_DIMENSIONS.length;
+  return clamp01(PAR_SCORE + gap);
+}
 
 export interface Standing {
   peerLabel: string;
   peerCount: number;
   /**
-   * Per rated dimension: the score, display band, and continuous price
-   * reference. `reference` is undefined only when price/category is missing.
+   * Per rated dimension: the score, display band, and par at this price.
+   * `reference` is undefined only when the price is missing.
    */
   dimensions: Partial<Record<Dimension, { raw: number; coverage: number; knownInputs: number; totalInputs: number; rubricBand: string; reference?: number }>>;
   /** Dimensions with missing source data — display "unrated", never 0. */
   unrated: Dimension[];
   /** Composite of rated dimensions only. Undefined when nothing is rated. */
   qualityScore?: number;
-  /** Quality relative to the continuous landed-price expectation. */
+  /** Core specs relative to par at the landed price; see valueFromEvidence. */
   valueScore?: number;
   /** How much applicable source evidence is recorded, from 0-1. */
   evidenceCoverage: number;
@@ -622,7 +687,6 @@ export function computeStanding(watch: Watch, allWatches: Watch[]): Standing {
   const raw = scoreDimensionEvidence(watch);
   const usd = landedPriceUsd(watch);
   const band = peerGroup.band;
-  const category = peerGroup.category;
 
   const dimensions: Standing["dimensions"] = {};
   const beats: Dimension[] = [];
@@ -630,9 +694,7 @@ export function computeStanding(watch: Watch, allWatches: Watch[]): Standing {
   for (const dimension of DIMENSIONS) {
     const value = raw[dimension];
     if (value === undefined) continue;
-    const reference = category !== undefined && usd !== undefined
-      ? continuousReference(category, dimension, usd)
-      : undefined;
+    const reference = usd !== undefined ? dimensionPar(dimension, usd) : undefined;
     dimensions[dimension] = {
       raw: value.raw,
       coverage: value.coverage,
@@ -649,33 +711,7 @@ export function computeStanding(watch: Watch, allWatches: Watch[]): Standing {
 
   const qualityScore = compositeQuality(raw);
 
-  // Par quality at every price scores 0.5: beating the continuously interpolated
-  // reference on the rated dimensions raises it. This removes the old boundary
-  // cliff without adding a second within-band price adjustment.
-  // Price-relative value uses only dimensions with enough evidence to support
-  // a comparison. Tentative scores can still inform Quality at reduced weight,
-  // but cannot manufacture an above/below expectation verdict.
-  let valueScore: number | undefined;
-  if (qualityScore !== undefined && category !== undefined && usd !== undefined) {
-    const ratedDimensions = DIMENSIONS.filter(
-      (dimension) => raw[dimension] !== undefined && raw[dimension]!.coverage >= MIN_REFERENCE_COVERAGE[dimension]
-    );
-    if (ratedDimensions.length === 0) {
-      valueScore = undefined;
-    } else {
-      const evidenceWeight = ratedDimensions.reduce((sum, dimension) => sum + raw[dimension]!.coverage, 0);
-      const comparableQuality =
-        ratedDimensions.reduce((sum, dimension) => sum + raw[dimension]!.raw * raw[dimension]!.coverage, 0) /
-        evidenceWeight;
-      const referenceQuality =
-        ratedDimensions.reduce(
-          (sum, dimension) => sum + continuousReference(category, dimension, usd) * raw[dimension]!.coverage,
-          0
-        ) /
-        evidenceWeight;
-      valueScore = clamp01(0.5 + comparableQuality - referenceQuality);
-    }
-  }
+  const valueScore = valueFromEvidence(raw, usd);
 
   // Optional peer-relative rank, only meaningful once the group is big enough.
   let qualityPercentile: number | undefined;

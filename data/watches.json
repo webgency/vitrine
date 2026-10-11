@@ -3185,6 +3185,7 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
+    "finalist": true,
     "designUniqueness": 5,
     "designPreferenceElo": 942.51,
     "designComparisonCount": 14,
@@ -3556,7 +3557,8 @@
       "diver"
     ],
     "id": "mtorvl6lg0fc15",
-    "dateAdded": "2026-09-05T19:25:09.498Z"
+    "dateAdded": "2026-09-05T19:25:09.498Z",
+    "finalist": true
   },
   {
     "brand": "Maen",
@@ -3646,6 +3648,7 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
+    "finalist": true,
     "designUniqueness": 4,
     "designPreferenceElo": 1012.69,
     "designComparisonCount": 13,
@@ -4442,6 +4445,7 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "sports",
+    "finalist": true,
     "designUniqueness": 4,
     "designPreferenceElo": 1000.98,
     "designComparisonCount": 14,
@@ -4944,13 +4948,13 @@
     ],
     "imageUrl": "https://www.rileywatchco.com/cdn/shop/files/Screenshot2026-02-10at18.17.12.png?v=1770747983&width=2048",
     "specs": {
+      "caseDiameterMm": 40,
       "lugWidthMm": 21,
       "movement": "quartz",
       "waterResistanceM": 50,
       "crystal": "Sapphire",
       "braceletStrap": "Genuine leather with dial-matching stitching and quick-release spring bars — comf",
-      "complications": "Chronograph, Tachymeter",
-      "caseDiameterMm": 40
+      "complications": "Chronograph, Tachymeter"
     },
     "tags": [
       "chronograph"
@@ -4963,6 +4967,7 @@
     "model": "Porto Covo Ice Blue",
     "status": "wishlist",
     "wishlistTier": "watching",
+    "scoringCategory": "dress",
     "price": {
       "amount": 550,
       "currency": "USD"
@@ -5001,7 +5006,6 @@
     },
     "tags": [],
     "id": "mv2to452dpzm9l",
-    "dateAdded": "2026-10-10T20:03:48.854Z",
-    "scoringCategory": "dress"
+    "dateAdded": "2026-10-10T20:03:48.854Z"
   }
 ]

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { RUBRIC_CATEGORIES, RUBRICS } from "./rubrics";
+import { RUBRIC_CATEGORIES } from "./rubrics";
 import {
   CATEGORIES,
   CATEGORY_EXPECTATION,
@@ -74,15 +74,9 @@ describe("normalizeTags", () => {
 });
 
 describe("RUBRIC_CATEGORIES", () => {
-  it("matches the columns RUBRICS actually has", () => {
-    // The list is cast from a .mjs file so the audit can read it under bare
-    // Node, and a cast hides a mismatch from the typechecker. This does not.
-    expect([...RUBRIC_CATEGORIES].sort()).toEqual(Object.keys(RUBRICS).sort());
-  });
-
   it("covers every category a tag can resolve to", () => {
-    // A tag resolving to a category with no rubric column costs that watch its
-    // whole value score, not just a dimension, so this must stay exhaustive.
+    // A tag resolving to a category outside the list leaves the watch with no
+    // peer label and fails audit:data, so this must stay exhaustive.
     const resolvable = new Set(Object.values(TAG_TO_CATEGORY));
     expect([...resolvable].filter((c) => !RUBRIC_CATEGORIES.includes(c))).toEqual([]);
   });
