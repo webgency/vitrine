@@ -620,10 +620,12 @@
       "caseMaterial": "Stainless steel",
       "movement": "automatic",
       "caliber": "L688",
-      "powerReserveHours": 60,
+      "powerReserveHours": 66,
       "waterResistanceM": 100,
       "crystal": "Sapphire",
-      "dialColor": "Sunray blue"
+      "dialColor": "Sunray blue",
+      "caseThicknessMm": 16.5,
+      "lugToLugMm": 51.4
     },
     "tags": [
       "chronograph"
@@ -3485,7 +3487,8 @@
       "crystal": "sapphire",
       "dialColor": "Black",
       "braceletStrap": "Jubilee, five-piece links Material Oystersteel",
-      "complications": "date"
+      "complications": "date",
+      "caseThicknessMm": 12
     },
     "tags": [
       "gmt"
@@ -4984,7 +4987,7 @@
     ],
     "links": [
       {
-        "url": "https://www.borealiswatch.com/collections/diver-watches/products/porto-covo-ice-blue?variant=54201113805147",
+        "url": "https://www.borealiswatch.com/collections/diver-watches/products/porto-covo-ice-blue?variant=54201113837915",
         "retailer": "borealiswatch.com",
         "price": {
           "amount": 550,
@@ -5002,7 +5005,8 @@
       "movement": "automatic",
       "caliber": "Sellita SW200",
       "crystal": "Sapphire",
-      "braceletStrap": "Porto Covo Ice Blue PT5000 Date"
+      "braceletStrap": "316L stainless steel bracelet, tapering 24 mm to 18 mm",
+      "waterResistanceM": 300
     },
     "tags": [],
     "id": "mv2to452dpzm9l",
