@@ -101,7 +101,7 @@
     "brand": "Dennison",
     "model": "Malachite & Green Sunray (Gold)",
     "status": "wishlist",
-    "wishlistTier": "watching",
+    "wishlistTier": "pass",
     "scoringCategory": "dress",
     "designUniqueness": 4,
     "designPreferenceElo": 899.47,
@@ -4499,7 +4499,7 @@
       "braceletStrap": "Miyota 9039 Automatic"
     },
     "tags": [],
-    "notes": "Rechecked 2026-10-10: the $299 first recorded here was the TMI VH31 meca-quartz variant (383 SGD). This record and its link are the Miyota 9039 automatic (588 SGD, $459.10 at the shop rate), so that entry was removed from the price and ask histories, which now start at the first price read for this variant.",
+    "notes": "I also like the orange version. Rechecked 2026-10-10: the $299 first recorded here was the TMI VH31 meca-quartz variant (383 SGD). This record and its link are the Miyota 9039 automatic (588 SGD, $459.10 at the shop rate), so that entry was removed from the price and ask histories, which now start at the first price read for this variant.",
     "id": "mu22eejt4cj85b",
     "dateAdded": "2026-09-15T02:40:43.814Z"
   },
@@ -4906,5 +4906,102 @@
     ],
     "id": "mv2jhd6f52kbt1",
     "dateAdded": "2026-10-10T15:18:37.815Z"
+  },
+  {
+    "brand": "Riley Watch Co",
+    "model": "Howard Hughes FlyRacer Chronograph",
+    "status": "wishlist",
+    "wishlistTier": "watching",
+    "designUniqueness": 5,
+    "price": {
+      "amount": 249,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 249,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T20:01:46.362Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "quickRelease": true
+    },
+    "links": [
+      {
+        "url": "https://www.rileywatchco.com/products/howard-hughes-chronograph-hh02?variant=52212594344215",
+        "retailer": "rileywatchco.com",
+        "price": {
+          "amount": 249,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-10-10"
+      }
+    ],
+    "imageUrl": "https://www.rileywatchco.com/cdn/shop/files/Screenshot2026-02-10at18.17.12.png?v=1770747983&width=2048",
+    "specs": {
+      "lugWidthMm": 21,
+      "movement": "quartz",
+      "waterResistanceM": 50,
+      "crystal": "Sapphire",
+      "braceletStrap": "Genuine leather with dial-matching stitching and quick-release spring bars — comf",
+      "complications": "Chronograph, Tachymeter",
+      "caseDiameterMm": 40
+    },
+    "tags": [
+      "chronograph"
+    ],
+    "id": "mv2tlhmi18j99e",
+    "dateAdded": "2026-10-10T20:01:46.362Z"
+  },
+  {
+    "brand": "Borealis Watch Company",
+    "model": "Porto Covo Ice Blue",
+    "status": "wishlist",
+    "wishlistTier": "watching",
+    "price": {
+      "amount": 550,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 550,
+          "currency": "USD"
+        },
+        "date": "2026-10-10T20:03:48.854Z",
+        "source": "manual"
+      }
+    ],
+    "links": [
+      {
+        "url": "https://www.borealiswatch.com/collections/diver-watches/products/porto-covo-ice-blue?variant=54201113805147",
+        "retailer": "borealiswatch.com",
+        "price": {
+          "amount": 550,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-10-10"
+      }
+    ],
+    "imageUrl": "https://www.borealiswatch.com/cdn/shop/files/I_1024x1024.png?v=1790279506",
+    "specs": {
+      "caseDiameterMm": 40,
+      "caseThicknessMm": 12.3,
+      "lugToLugMm": 42.5,
+      "movement": "automatic",
+      "caliber": "Sellita SW200",
+      "crystal": "Sapphire",
+      "braceletStrap": "Porto Covo Ice Blue PT5000 Date"
+    },
+    "tags": [],
+    "id": "mv2to452dpzm9l",
+    "dateAdded": "2026-10-10T20:03:48.854Z",
+    "scoringCategory": "dress"
   }
 ]
