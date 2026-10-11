@@ -287,6 +287,12 @@ if (!Array.isArray(watches)) {
     if (watch.wishlistTier !== undefined && !WISHLIST_TIERS.has(watch.wishlistTier)) {
       errors.push(`${path}.wishlistTier must be one of ${Array.from(WISHLIST_TIERS).join(", ")}`);
     }
+    if (watch.finalist !== undefined) {
+      if (watch.finalist !== true) errors.push(`${path}.finalist must be true when present; unpinning removes it`);
+      else if (watch.status !== "wishlist" || watch.wishlistTier === "pass") {
+        errors.push(`${path}.finalist is only for wishlist watches not marked Pass`);
+      }
+    }
     if (watch.scoringCategory !== undefined && !SCORING_CATEGORIES.has(watch.scoringCategory)) {
       errors.push(`${path}.scoringCategory must be one of ${Array.from(SCORING_CATEGORIES).join(", ")}`);
     }
@@ -344,6 +350,12 @@ if (!Array.isArray(watches)) {
 // priced entirely in USD is unaffected by drift, so staying quiet there keeps
 // the warning meaningful when it does appear.
 const foreignCurrencies = new Set();
+// Same cap as MAX_FINALISTS in src/lib/finalists.ts (finalists.test.ts checks
+// they agree); this script runs under bare Node and can't import the .ts.
+const MAX_FINALISTS = 5;
+const finalistCount = Array.isArray(watches) ? watches.filter((watch) => watch?.finalist === true).length : 0;
+if (finalistCount > MAX_FINALISTS) errors.push(`${finalistCount} finalists; at most ${MAX_FINALISTS} are allowed`);
+
 for (const watch of watches) {
   const monies = [
     watch.price,

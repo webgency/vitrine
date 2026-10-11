@@ -221,3 +221,37 @@ describe("tag normalization on save", () => {
     expect((await readStored())[0].tags).toEqual(["GMT"]);
   });
 });
+
+describe("setFinalist", () => {
+  it("pins up to the cap and refuses the next, under the write lock", async () => {
+    const { setFinalist, FinalistError } = await import("./store");
+    await seed(Array.from({ length: 6 }, (_, i) => ({ ...baseWatch, id: `w${i}` })));
+
+    for (let i = 0; i < 5; i++) await setFinalist(`w${i}`, true);
+    await expect(setFinalist("w5", true)).rejects.toBeInstanceOf(FinalistError);
+
+    await setFinalist("w0", false);
+    await setFinalist("w5", true);
+    const stored = await readStored();
+    expect(stored.filter((w) => w.finalist).map((w) => w.id)).toEqual(["w1", "w2", "w3", "w4", "w5"]);
+    // Unpinning removes the key rather than storing false.
+    expect("finalist" in stored[0]).toBe(false);
+  });
+
+  it("unpins a finalist that is bought or passed on", async () => {
+    const { updateWatch } = await import("./store");
+    await seed([{ ...baseWatch, finalist: true }, { ...baseWatch, id: "w2", finalist: true }]);
+
+    await updateWatch("w1", { status: "owned" });
+    await updateWatch("w2", { wishlistTier: "pass" });
+    expect((await readStored()).some((w) => w.finalist)).toBe(false);
+  });
+
+  it("keeps a finalist through an ordinary edit, which never sends the field", async () => {
+    const { updateWatch } = await import("./store");
+    await seed([{ ...baseWatch, finalist: true }]);
+
+    await updateWatch("w1", { notes: "checked the bracelet" });
+    expect((await readStored())[0].finalist).toBe(true);
+  });
+});

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { IS_STATIC } from "@/lib/config";
 import { useCollectionSearch } from "./CollectionSearchContext";
 
-export default function HeaderNav({ alerts, forSale = 0 }: { alerts?: { total: number; unread: number }; forSale?: number }) {
+export default function HeaderNav({ alerts, forSale = 0, finalists = 0 }: { alerts?: { total: number; unread: number }; forSale?: number; finalists?: number }) {
   const pathname = usePathname().replace(/\/+$/, "") || "/";
   const collectionUrl = useResearchUrl("collection");
   const valueUrl = useResearchUrl("value");
@@ -52,6 +52,13 @@ export default function HeaderNav({ alerts, forSale = 0 }: { alerts?: { total: n
         >
           Value
         </Link>
+        {/* Only once something is pinned: an empty Decide is a page that says
+            "pin some finalists", which the cards already offer. */}
+        {finalists > 0 && (
+          <Link href="/decide" aria-current={pathname === "/decide" ? "page" : undefined} className={navClass(pathname === "/decide")}>
+            Decide
+          </Link>
+        )}
         {forSale > 0 && (
           <Link href="/for-sale" aria-current={pathname === "/for-sale" ? "page" : undefined} className={navClass(pathname === "/for-sale")}>
             For sale

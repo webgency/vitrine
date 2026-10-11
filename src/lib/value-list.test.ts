@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { anyDealEvidence, compareValueRows, effectiveDealControls, matchesValueFilters, ValueFilters, ValueRow } from "./value-list";
+import { anyDealEvidence, compareValueRows, effectiveDealControls, splitProvisional, matchesValueFilters, ValueFilters, ValueRow } from "./value-list";
 import { Watch } from "./types";
 
 function row(id: string, valueScore?: number, discountPct?: number): ValueRow {
@@ -137,5 +137,25 @@ describe("deal column visibility", () => {
     expect(effectiveDealControls("deal", true, false)).toEqual({ sort: "value", hasDealEvidence: false });
     expect(effectiveDealControls("price-asc", false, false)).toEqual({ sort: "price-asc", hasDealEvidence: false });
     expect(effectiveDealControls("deal", true, true)).toEqual({ sort: "deal", hasDealEvidence: true });
+  });
+});
+
+describe("provisional rows", () => {
+  function withConfidence(id: string, value: number, confidence: "low" | "medium" | "high") {
+    const base = row(id, value);
+    return { ...base, summary: { ...base.summary, standing: { ...base.summary.standing, confidence } } };
+  }
+
+  it("sets low-evidence rows apart without changing their scores", () => {
+    const rows = [withConfidence("thin", 0.93, "low"), withConfidence("solid", 0.8, "medium"), withConfidence("ok", 0.6, "high")];
+    const { ranked, provisional } = splitProvisional(rows);
+    expect(ranked.map((r) => r.watch.id)).toEqual(["solid", "ok"]);
+    expect(provisional.map((r) => r.watch.id)).toEqual(["thin"]);
+    expect(provisional[0].summary.standing.valueScore).toBe(0.93);
+  });
+
+  it("names the provisional rows that would otherwise reach the top", () => {
+    const rows = [withConfidence("a", 0.9, "low"), withConfidence("b", 0.7, "high"), withConfidence("c", 0.5, "high"), withConfidence("d", 0.3, "low")];
+    expect(splitProvisional(rows, 2).wouldRankTop.map((r) => r.watch.id)).toEqual(["a"]);
   });
 });

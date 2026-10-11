@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import { normalizeTags } from "./categories";
+import { canBeFinalist, finalistBlocker } from "./finalists";
 import path from "path";
 import { Money, RetailerLink, SaleListing, SoldComp, Watch, WatchInput } from "./types";
 import { recordWatchAlerts } from "./alert-store";
@@ -135,6 +136,20 @@ export async function saveWatchTarget(id: string, target: Money | undefined, exp
   });
 }
 
+export class FinalistError extends Error {}
+
+/** Pin or unpin a finalist. The cap is checked against the whole collection
+ * inside the write lock, so two tabs can't both pin a fifth. */
+export async function setFinalist(id: string, finalist: boolean) {
+  return changeWatch(id, (existing, watches) => {
+    if (finalist) {
+      const blocker = finalistBlocker(existing, watches);
+      if (blocker) throw new FinalistError(blocker);
+    }
+    return { finalist: finalist || undefined };
+  });
+}
+
 export class SaleStateError extends Error {}
 
 /** Publish, update or remove the public listing. Only sale-store.ts calls
@@ -159,18 +174,23 @@ export async function recordOwnSale(id: string, sale: NonNullable<Watch["sale"]>
   });
 }
 
-async function changeWatch(id: string, makePatch: (watch: Watch) => Partial<WatchInput>): Promise<Watch | undefined> {
+async function changeWatch(
+  id: string,
+  makePatch: (watch: Watch, watches: Watch[]) => Partial<WatchInput>
+): Promise<Watch | undefined> {
   return withWriteLock(async () => {
     const watches = await getWatches();
     const idx = watches.findIndex((w) => w.id === id);
     if (idx === -1) return undefined;
     // id and dateAdded are immutable.
     const existing = watches[idx];
-    const patch = makePatch(existing);
+    const patch = makePatch(existing, watches);
     const next: Watch = withCrystalArInference({ ...existing, ...patch, id: existing.id, dateAdded: existing.dateAdded });
     // Tags are stored lowercase, so "GMT" and "gmt" can't become two chips
     // and two filter entries again. Display casing comes from tagLabel().
     if (patch.tags) next.tags = normalizeTags(patch.tags);
+    // A watch you bought, sold or passed on is no longer one you're choosing.
+    if (next.finalist && !canBeFinalist(next)) delete next.finalist;
 
     // Listing trails get the same treatment for the same reason: the form
     // rebuilds links without askHistory, so the store is the one place that

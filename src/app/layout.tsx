@@ -8,6 +8,7 @@ import HeaderNav from "@/components/HeaderNav";
 import { getAlertSummary } from "@/lib/alert-store";
 import { getWatches } from "@/lib/store";
 import "./globals.css";
+import { finalists } from "@/lib/finalists";
 
 const manrope = localFont({
   src: "../../public/fonts/manrope-variable.ttf",
@@ -37,6 +38,8 @@ export default async function RootLayout({
   const [alerts, watches] = await Promise.all([getAlertSummary(), getWatches()]);
   // The For-sale tab exists only while something is listed.
   const forSale = watches.filter((watch) => watch.status === "owned" && watch.listing).length;
+  // Decide appears once there is something to decide between.
+  const finalistCount = finalists(watches).length;
   return (
     <html lang="en" className={manrope.variable}>
       <body>
@@ -47,7 +50,7 @@ export default async function RootLayout({
                 <CollectionLink aria-label="Vitrine home" className="shrink-0 rounded-sm">
                   <BrandLogo />
                 </CollectionLink>
-                <HeaderNav alerts={alerts} forSale={forSale} />
+                <HeaderNav alerts={alerts} forSale={forSale} finalists={finalistCount} />
               </div>
             </header>
             <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>

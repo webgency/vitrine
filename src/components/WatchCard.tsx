@@ -14,6 +14,9 @@ import FreshnessBadge from "./FreshnessBadge";
 import StatusBadge from "./StatusBadge";
 import WishlistTierBadge from "./WishlistTierBadge";
 import PriorityMenu from "./PriorityMenu";
+import FinalistToggle from "./FinalistToggle";
+import { canBeFinalist } from "@/lib/finalists";
+import { IS_STATIC } from "@/lib/config";
 import { tagLabel } from "@/lib/categories";
 
 function initials(watch: Watch): string {
@@ -59,6 +62,16 @@ export default function WatchCard({
             </span>
           )}
         </Link>
+        {/* Opposite Compare: both act on the card, neither navigates. */}
+        {canBeFinalist(watch) && (IS_STATIC ? (
+          watch.finalist && (
+            <span className="absolute left-2 top-2 rounded-full bg-azalea px-2 py-1 text-xs font-medium text-cocoa-950 shadow-sm">★ Finalist</span>
+          )
+        ) : (
+          <div className="absolute left-2 top-2">
+            <FinalistToggle watchId={watch.id} watchName={`${watch.brand} ${watch.model}`} finalist={Boolean(watch.finalist)} />
+          </div>
+        ))}
         <label className="absolute right-2 top-2 flex cursor-pointer items-center gap-1 rounded-full bg-white/95 px-2 py-1 text-xs font-medium shadow-sm">
           <input
             type="checkbox"

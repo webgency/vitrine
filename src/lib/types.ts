@@ -205,6 +205,12 @@ export interface Watch {
   status: WatchStatus;
   /** Personal wishlist priority bucket for planning. */
   wishlistTier?: WishlistTier;
+  /**
+   * One of the few watches you're actually choosing between (at most
+   * MAX_FINALISTS). Personal, never scored; set only through the finalist
+   * endpoint, which enforces the cap.
+   */
+  finalist?: boolean;
   /** Rubric category for value scoring; inferred from an unambiguous legacy tag when absent. */
   scoringCategory?: ScoringCategory;
   /** User-rated visual appeal, 1-5. Kept under its original key for data compatibility. */

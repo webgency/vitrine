@@ -1,4 +1,4 @@
-import { StandingSummary } from "./scoring";
+import { isProvisional, StandingSummary } from "./scoring";
 import { ScoringCategory, Watch, WatchStatus, WishlistTier } from "./types";
 import { BestOffer, DealScore } from "./valuation";
 
@@ -112,4 +112,22 @@ export function effectiveDealControls(
 ): { sort: ValueSortKey; hasDealEvidence: boolean } {
   if (dealsExist) return { sort, hasDealEvidence };
   return { sort: sort === "deal" ? "value" : sort, hasDealEvidence: false };
+}
+
+/**
+ * The value ranking with low-evidence rows set apart. Thin evidence swings a
+ * score both ways, so ranked among the rest those rows took five of the top
+ * ten. They are grouped, not adjusted: their scores are shown as computed.
+ * `wouldRankTop` names the provisional rows that would otherwise place in the
+ * top `top`, the ones most worth filling in.
+ */
+export function splitProvisional<T extends Pick<ValueRow, "summary">>(
+  rows: T[],
+  top = 10
+): { ranked: T[]; provisional: T[]; wouldRankTop: T[] } {
+  const ranked = rows.filter((row) => !isProvisional(row.summary.standing));
+  const provisional = rows.filter((row) => isProvisional(row.summary.standing));
+  const cutoff = ranked[Math.min(top, ranked.length) - 1]?.summary.standing.valueScore ?? -Infinity;
+  const wouldRankTop = provisional.filter((row) => (row.summary.standing.valueScore ?? -Infinity) > cutoff).slice(0, top);
+  return { ranked, provisional, wouldRankTop };
 }
