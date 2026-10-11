@@ -6,7 +6,7 @@ import { formatMoney, titleCase } from "@/lib/format";
 import { caliberTier, deriveCategory, landedPriceUsd, StandingSummary, toDisplayScore } from "@/lib/scoring";
 import { SCORING_CATEGORIES, Watch, WatchStatus, WISHLIST_TIERS, WISHLIST_TIER_LABELS, WishlistTier } from "@/lib/types";
 import { bestOffer, bestOfferTargetStatus, dealScore } from "@/lib/valuation";
-import { compareValueRows, matchesValueFilters, ValueFilters, ValueRow, ValueSortKey } from "@/lib/value-list";
+import { anyDealEvidence, compareValueRows, effectiveDealControls, matchesValueFilters, ValueFilters, ValueRow, ValueSortKey } from "@/lib/value-list";
 import { matchesWatchSearch } from "@/lib/watch-search";
 import { useValueFilters } from "@/hooks/useResearchSession";
 import EvidenceCoverage from "./EvidenceCoverage";
@@ -39,10 +39,9 @@ export default function ValueList({
   nowIso: string;
 }) {
   const { filters: session, update } = useValueFilters();
-  const { query, sort, status, category, minPrice, maxPrice, minDesign, confidence, hasDealEvidence, wishlistTier } = session;
+  const { query, status, category, minPrice, maxPrice, minDesign, confidence, wishlistTier } = session;
   const [filtersOpen, setFiltersOpen] = useState(false);
   const filterPanelId = useId();
-  const activeFilterCount = [status !== "wishlist", category !== "all", minPrice !== "" || maxPrice !== "", minDesign !== "", confidence !== "all", hasDealEvidence, wishlistTier !== "all"].filter(Boolean).length;
 
   const rows = useMemo(() => {
     const now = new Date(nowIso);
@@ -61,6 +60,13 @@ export default function ValueList({
         };
       });
   }, [watches, summaries, nowIso]);
+
+  // Deal controls exist only once some watch has a deal; until then every
+  // row would read "Insufficient". A saved deal sort or filter falls back.
+  const dealsExist = anyDealEvidence(rows);
+  const { sort, hasDealEvidence } = effectiveDealControls(session.sort, session.hasDealEvidence, dealsExist);
+  const sorts = dealsExist ? SORTS : SORTS.filter((option) => option.value !== "deal");
+  const activeFilterCount = [status !== "wishlist", category !== "all", minPrice !== "" || maxPrice !== "", minDesign !== "", confidence !== "all", hasDealEvidence, wishlistTier !== "all"].filter(Boolean).length;
 
   const filters: ValueFilters = {
     status,
@@ -91,7 +97,7 @@ export default function ValueList({
           </label>
           <Filter label="Sort by">
             <select className="input" value={sort} onChange={(event) => update({ sort: event.target.value as ValueSortKey })}>
-              {SORTS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              {sorts.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
             </select>
           </Filter>
         </div>
@@ -137,10 +143,12 @@ export default function ValueList({
             </Filter>
           </div>
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-            <label className="flex min-h-11 items-center gap-2 text-sm text-cocoa-600">
-              <input type="checkbox" checked={hasDealEvidence} onChange={(event) => update({ hasDealEvidence: event.target.checked })} />
-              Has sufficient deal evidence
-            </label>
+            {dealsExist ? (
+              <label className="flex min-h-11 items-center gap-2 text-sm text-cocoa-600">
+                <input type="checkbox" checked={hasDealEvidence} onChange={(event) => update({ hasDealEvidence: event.target.checked })} />
+                Has sufficient deal evidence
+              </label>
+            ) : <span />}
             <button type="button" onClick={resetFilters} className="min-h-11 text-sm font-medium text-azalea-700 hover:underline">Reset filters</button>
           </div>
         </div>
@@ -159,16 +167,16 @@ export default function ValueList({
             the presentation without client-only viewport state or a flash
             of the desktop table during static-page hydration. */}
         <ol aria-label="Watch results" className="grid gap-3 md:grid-cols-2 lg:hidden">
-          {visible.map((row, index) => <li key={row.watch.id} className="min-w-0"><ValueCard row={row} rank={sort === "value" ? index + 1 : undefined} /></li>)}
+          {visible.map((row, index) => <li key={row.watch.id} className="min-w-0"><ValueCard row={row} rank={sort === "value" ? index + 1 : undefined} showDeal={dealsExist} /></li>)}
         </ol>
         <section aria-label="Watch results" className="card hidden overflow-hidden lg:block">
         <div className="overflow-x-auto" role="region" aria-label="Watch value comparison table" tabIndex={0}>
           <table className="min-w-[1120px] w-full text-left text-sm">
             <thead className="border-b border-cocoa-200 bg-cocoa-50 text-xs uppercase tracking-wide text-cocoa-500">
-              <tr><th scope="col" className="px-4 py-3">Watch</th><th scope="col" className="px-3 py-3">Rubric value</th><th scope="col" className="px-3 py-3">Deal vs fair asks</th><th scope="col" className="px-3 py-3">Price</th><th scope="col" className="px-3 py-3">Best dated offer</th><th scope="col" className="px-3 py-3">Specs</th><th scope="col" className="px-3 py-3">Design</th><th scope="col" className="px-3 py-3">Target</th></tr>
+              <tr><th scope="col" className="px-4 py-3">Watch</th><th scope="col" className="px-3 py-3">Rubric value</th>{dealsExist && <th scope="col" className="px-3 py-3">Deal vs fair asks</th>}<th scope="col" className="px-3 py-3">Price</th><th scope="col" className="px-3 py-3">Best dated offer</th><th scope="col" className="px-3 py-3">Specs</th><th scope="col" className="px-3 py-3">Design</th><th scope="col" className="px-3 py-3">Target</th></tr>
             </thead>
             <tbody className="divide-y divide-cocoa-100">
-              {visible.map((row, index) => <ValueTableRow key={row.watch.id} row={row} rank={sort === "value" ? index + 1 : undefined} />)}
+              {visible.map((row, index) => <ValueTableRow key={row.watch.id} row={row} rank={sort === "value" ? index + 1 : undefined} showDeal={dealsExist} />)}
             </tbody>
           </table>
         </div>
@@ -197,7 +205,7 @@ function LowEvidenceHint({ standing }: { standing: ValueRow["summary"]["standing
   );
 }
 
-function ValueCard({ row, rank }: { row: ValueRow; rank?: number }) {
+function ValueCard({ row, rank, showDeal }: { row: ValueRow; rank?: number; showDeal: boolean }) {
   const { watch, summary, deal, offer } = row;
   const standing = summary.standing;
   const movementTier = caliberTier(watch.specs.caliber, watch.specs.movement);
@@ -221,10 +229,10 @@ function ValueCard({ row, rank }: { row: ValueRow; rank?: number }) {
       </dl>
       <LowEvidenceHint standing={standing} />
       <div className="[&_summary]:min-h-11 [&_summary]:py-3"><EvidenceCoverage watch={watch} standing={standing} /></div>
-      <div className="border-t border-cocoa-100 pt-3 text-sm">
+      {showDeal && <div className="border-t border-cocoa-100 pt-3 text-sm">
         <p className="mb-1 text-xs text-cocoa-500">Deal vs fair asks</p>
         {deal.status === "available" ? <><p className="font-semibold">{formatDiscount(deal.discountPct)}</p><p className="text-xs text-cocoa-500">Fair {formatMoney({ amount: deal.fairLowUsd, currency: "USD" })}–{formatMoney({ amount: deal.fairHighUsd, currency: "USD" })}</p></> : <p className="text-cocoa-500">Insufficient evidence · no discount calculated</p>}
-      </div>
+      </div>}
       {watch.targetPrice && <p className="mt-3 text-xs text-cocoa-500">{row.targetMet ? <span className="inline-block rounded-full bg-emerald-100 px-2 py-1 font-semibold text-emerald-800">Target met</span> : <>Target {formatMoney(watch.targetPrice)}</>}</p>}
       <details className="mt-3 border-t border-cocoa-100 text-sm">
         <summary className="min-h-11 cursor-pointer rounded py-3 font-medium text-cocoa-700">Offer, specs &amp; design</summary>
@@ -247,7 +255,7 @@ function ValueCard({ row, rank }: { row: ValueRow; rank?: number }) {
   );
 }
 
-function ValueTableRow({ row, rank }: { row: ValueRow; rank?: number }) {
+function ValueTableRow({ row, rank, showDeal }: { row: ValueRow; rank?: number; showDeal: boolean }) {
   const { watch, summary, deal, offer } = row;
   const standing = summary.standing;
   const movementTier = caliberTier(watch.specs.caliber, watch.specs.movement);
@@ -263,9 +271,9 @@ function ValueTableRow({ row, rank }: { row: ValueRow; rank?: number }) {
         <LowEvidenceHint standing={standing} />
         <EvidenceCoverage watch={watch} standing={standing} />
       </td>
-      <td className="px-3 py-4">
+      {showDeal && <td className="px-3 py-4">
         {deal.status === "available" ? <><p className="font-semibold">{formatDiscount(deal.discountPct)}</p><p className="text-xs text-cocoa-500">Fair {formatMoney({ amount: deal.fairLowUsd, currency: "USD" })}–{formatMoney({ amount: deal.fairHighUsd, currency: "USD" })}</p></> : <><p className="font-semibold text-cocoa-500">Insufficient</p><p className="text-xs text-cocoa-400">No discount calculated</p></>}
-      </td>
+      </td>}
       <td className="px-3 py-4"><p className="font-semibold">{formatMoney(watch.landedPrice ?? watch.price)}</p><p className="text-xs text-cocoa-500">{watch.landedPrice ? "Landed" : watch.price ? "Tracked" : "No price"}</p></td>
       <td className="px-3 py-4">
         {offer.status === "available" ? <><a href={offer.offer.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-azalea-700 hover:underline">{formatMoney(offer.offer.price)} ↗</a><p className="mt-1 text-xs text-cocoa-500">{offer.offer.source}</p><div className="mt-1"><FreshnessBadge tier={offer.offer.freshness} ageDays={offer.offer.ageDays} compact /></div></> : <p className="text-cocoa-500">No dated offer</p>}

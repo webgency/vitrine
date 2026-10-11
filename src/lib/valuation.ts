@@ -131,6 +131,9 @@ export interface BestOfferTargetStatus {
   basis: "listed";
 }
 
+/** Independent dated sources needed before any asking-price estimate exists. */
+export const MIN_INDEPENDENT_SOURCES = 2;
+
 export function marketSourceKey(link: RetailerLink): string {
   try {
     return new URL(link.url).hostname.replace(/^www\./, "").toLowerCase();
@@ -214,7 +217,7 @@ export function marketValueSummary(
 
   const observations = [...bySource.values()].sort((a, b) => a.priceUsd - b.priceUsd);
   const freshness = freshnessForAges(observations.map((observation) => observation.ageDays));
-  if (observations.length < 2) return { condition, observations, confidence: "insufficient", freshness };
+  if (observations.length < MIN_INDEPENDENT_SOURCES) return { condition, observations, confidence: "insufficient", freshness };
 
   const prices = observations.map((observation) => observation.priceUsd);
   const recent90 = observations.filter((observation) => observation.ageDays <= 90).length;

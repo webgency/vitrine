@@ -69,6 +69,9 @@ export default function CollectionView({
   const { status, wishlistTiers, freshOffersOnly, sort } = filters;
   const [view, setView] = useCollectionView();
   const [priorityOpen, setPriorityOpen] = useState(false);
+  // Phone only: priority, fresh-only and sort fold behind one button so the
+  // first watch is on the first screen. From sm up the row is always shown.
+  const [toolsOpen, setToolsOpen] = useState(false);
   const [selected, setSelected] = useComparisonSelection(watches.map(watch => watch.id));
   const [selectionMessage, setSelectionMessage] = useState<string | null>(null);
   const selectedTierSet = useMemo(() => new Set(wishlistTiers), [wishlistTiers]);
@@ -221,6 +224,8 @@ export default function CollectionView({
   }
 
   const hasActiveFilters = status !== "all" || wishlistTiers.length > 0 || freshOffersOnly || query.trim() !== "";
+  // Counted on the folded phone button so a hidden filter is never a silent one.
+  const toolFilterCount = (wishlistTiers.length > 0 ? 1 : 0) + (freshOffersOnly ? 1 : 0);
 
   if (watches.length === 0) {
     return (
@@ -261,7 +266,20 @@ export default function CollectionView({
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-2 items-center gap-2 border-t border-cocoa-100 pt-3 sm:flex sm:flex-wrap">
+        <button
+          type="button"
+          aria-expanded={toolsOpen}
+          aria-controls="collection-tools"
+          onClick={() => setToolsOpen((current) => !current)}
+          className="flex h-9 w-full items-center justify-between rounded-full bg-white px-4 text-sm text-cocoa-700 ring-1 ring-inset ring-cocoa-200 sm:hidden"
+        >
+          <span>Filters and sort{toolFilterCount > 0 ? ` (${toolFilterCount})` : ""}</span>
+          <span aria-hidden>{toolsOpen ? "−" : "+"}</span>
+        </button>
+        <div
+          id="collection-tools"
+          className={`${toolsOpen ? "grid" : "hidden"} grid-cols-2 items-center gap-2 border-t border-cocoa-100 pt-3 sm:flex sm:flex-wrap`}
+        >
           <div ref={priorityRef} className="relative min-w-0 sm:w-52">
             <button
               type="button"

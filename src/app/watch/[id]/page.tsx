@@ -24,6 +24,8 @@ import { saleListingView } from "@/lib/sale-store";
 import { getSeller } from "@/lib/seller";
 import { getPrivateRecord } from "@/lib/private-store";
 import { targetStatus } from "@/lib/price-history";
+import OwnershipSection from "@/components/OwnershipSection";
+import { ownershipItems } from "@/lib/ownership";
 
 // An empty generateStaticParams result opts into on-demand static generation.
 // Explicit dynamic rendering prevents noStore() from failing at request time;
@@ -61,6 +63,17 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
   const standing = computeStanding(watch, watches);
   const tradeUp = tradeUpModel(watch, watches);
   const target = targetStatus(watch);
+  const owned = watch.status === "owned";
+  const listingView = owned && !IS_STATIC ? saleListingView(watch, privateRecord) : undefined;
+  // Purchase and sale panels are local-only, so on the static export they are
+  // left out of the list rather than shown collapsed with nothing behind them.
+  const ownership = owned
+    ? ownershipItems({
+        purchaseRecorded: IS_STATIC ? undefined : Boolean(privateRecord?.purchase?.price),
+        exitSources: tradeUp?.exit.observations.length,
+        listingState: listingView?.state,
+      })
+    : [];
 
   // Page order is the reading order: what it is, what it is made of, then what
   // to do about it. Each chapter owns a fixed position so later chapters
@@ -148,6 +161,17 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
             )}
             <p className="text-xs text-cocoa-400">Added {formatDate(watch.dateAdded)}</p>
           </div>
+
+          {/* Notes are your own context, so they sit with the headline rather
+              than below every evidence panel. Long ones clamp until opened. */}
+          {watch.notes && (
+            <details className="group rounded-lg border border-cocoa-100 bg-cocoa-50 px-3 py-2">
+              <summary className="cursor-pointer list-none text-sm text-cocoa-700 [&::-webkit-details-marker]:hidden">
+                <span className="block text-xs font-semibold uppercase tracking-wide text-cocoa-500">Notes</span>
+                <span className="mt-1 line-clamp-3 whitespace-pre-wrap group-open:line-clamp-none">{watch.notes}</span>
+              </summary>
+            </details>
+          )}
         </div>
       </section>
 
@@ -162,30 +186,39 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
         <MarketChapter watch={watch} alertState={alertState} />
       </div>
 
-      {tradeUp && (
-        <div id="trade-up" className="scroll-mt-6">
-          <TradeUpPanel model={tradeUp} />
-        </div>
-      )}
-
       {watch.status === "owned" && watch.listing && (
         <div id="for-sale" className="scroll-mt-6">
           <ForSaleCard title={`${watch.brand} ${watch.model}`} listing={watch.listing} seller={seller} />
         </div>
       )}
 
-      {!IS_STATIC && watch.status === "owned" && (
-        <div id="sell" className="scroll-mt-6">
-          <SellPanel
-            watch={watch}
-            view={saleListingView(watch, privateRecord)}
-            purchase={privateRecord?.purchase?.price}
-            exit={tradeUp && { medianUsd: tradeUp.exit.medianUsd, lowUsd: tradeUp.exit.lowUsd, highUsd: tradeUp.exit.highUsd, sources: tradeUp.exit.observations.length }}
-          />
-        </div>
+      {owned && (
+        <OwnershipSection
+          items={ownership}
+          panels={{
+            purchase: !IS_STATIC && (
+              <PurchasePanel
+                watchId={watch.id}
+                watchLabel={`${watch.brand} ${watch.model}`}
+                purchase={privateRecord?.purchase}
+                exitMedianUsd={tradeUp?.exit.medianUsd}
+              />
+            ),
+            "trade-up": tradeUp && <TradeUpPanel model={tradeUp} />,
+            sell: listingView && (
+              <SellPanel
+                watch={watch}
+                view={listingView}
+                purchase={privateRecord?.purchase?.price}
+                exit={tradeUp && { medianUsd: tradeUp.exit.medianUsd, lowUsd: tradeUp.exit.lowUsd, highUsd: tradeUp.exit.highUsd, sources: tradeUp.exit.observations.length }}
+              />
+            ),
+          }}
+        />
       )}
 
-      {!IS_STATIC && watch.status !== "wishlist" && (
+      {/* A sold watch keeps its purchase record, outside the ownership tasks. */}
+      {!IS_STATIC && watch.status === "sold" && (
         <div id="purchase" className="scroll-mt-6">
           <PurchasePanel
             watchId={watch.id}
@@ -194,13 +227,6 @@ export default async function WatchDetailPage({ params }: { params: Promise<{ id
             exitMedianUsd={tradeUp?.exit.medianUsd}
           />
         </div>
-      )}
-
-      {watch.notes && (
-        <section className="card p-5">
-          <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-cocoa-500">Notes</h2>
-          <p className="whitespace-pre-wrap text-sm text-cocoa-700">{watch.notes}</p>
-        </section>
       )}
     </div>
   );
