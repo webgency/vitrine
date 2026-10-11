@@ -623,7 +623,9 @@
       "powerReserveHours": 60,
       "waterResistanceM": 100,
       "crystal": "Sapphire",
-      "dialColor": "Sunray blue"
+      "dialColor": "Sunray blue",
+      "caseThicknessMm": 16.5,
+      "lugToLugMm": 51.4
     },
     "tags": [
       "chronograph"
@@ -5002,7 +5004,8 @@
       "movement": "automatic",
       "caliber": "Sellita SW200",
       "crystal": "Sapphire",
-      "braceletStrap": "Porto Covo Ice Blue PT5000 Date"
+      "braceletStrap": "Porto Covo Ice Blue PT5000 Date",
+      "waterResistanceM": 300
     },
     "tags": [],
     "id": "mv2to452dpzm9l",
