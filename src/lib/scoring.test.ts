@@ -283,6 +283,23 @@ describe("scoreDimensions", () => {
     expect(isChronographCaliber("Miyota 9075", "automatic")).toBe(false);
     expect(scoreDimensions(chrono).movement).toBeCloseTo(caliberTier("SW510")! + CHRONOGRAPH_CREDIT);
   });
+
+  it("never credits a meca-quartz chronograph, even one recorded as mechanical", () => {
+    // Two guards hold this: quartz never reaches the tier table, and no VK
+    // caliber is on the chronograph list. The mislabelled rows check the first
+    // does not lean on the movement field, which scraped records get wrong.
+    for (const [caliber, movement] of [
+      ["Seiko VK64", "quartz"],
+      ["Seiko VK64", "automatic"],
+      ["Seiko VK64", undefined],
+      ["TMI VK64 Meca-Quartz", "automatic"],
+      ["Meca-quartz Seiko VK63", "manual"],
+    ] as const) {
+      const watch = makeWatch({ specs: { caliber, movement }, scoringCategory: "chronograph" });
+      expect(isChronographCaliber(caliber, movement)).toBe(false);
+      expect(scoreDimensions(watch).movement).toBeUndefined();
+    }
+  });
 });
 
 describe("category and peer group derivation", () => {
