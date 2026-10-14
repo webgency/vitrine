@@ -242,8 +242,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 4,
-    "designPreferenceElo": 995.99,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 1010.2,
+    "designComparisonCount": 15,
     "price": {
       "amount": 1810,
       "currency": "USD"
@@ -1225,8 +1225,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 969.13,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 984.55,
+    "designComparisonCount": 15,
     "price": {
       "amount": 3324,
       "currency": "USD"
@@ -2417,8 +2417,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 935.55,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 919.81,
+    "designComparisonCount": 15,
     "price": {
       "amount": 499,
       "currency": "USD"
@@ -3934,8 +3934,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "dress",
     "designUniqueness": 5,
-    "designPreferenceElo": 1150.12,
-    "designComparisonCount": 13,
+    "designPreferenceElo": 1163.4,
+    "designComparisonCount": 14,
     "price": {
       "amount": 995,
       "currency": "USD"
@@ -4547,8 +4547,8 @@
     "wishlistTier": "watching",
     "scoringCategory": "dress",
     "designUniqueness": 5,
-    "designPreferenceElo": 837.71,
-    "designComparisonCount": 13,
+    "designPreferenceElo": 831.76,
+    "designComparisonCount": 14,
     "price": {
       "amount": 428,
       "currency": "USD"
@@ -4891,8 +4891,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 5,
-    "designPreferenceElo": 1128.88,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 1103.96,
+    "designComparisonCount": 15,
     "price": {
       "amount": 599,
       "currency": "USD"
@@ -4951,8 +4951,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 5,
-    "designPreferenceElo": 1043.76,
-    "designComparisonCount": 11,
+    "designPreferenceElo": 997.42,
+    "designComparisonCount": 14,
     "price": {
       "amount": 249,
       "currency": "USD"
@@ -5005,8 +5005,8 @@
     "wishlistTier": "watching",
     "scoringCategory": "dress",
     "designUniqueness": 4,
-    "designPreferenceElo": 956.62,
-    "designComparisonCount": 9,
+    "designPreferenceElo": 942.73,
+    "designComparisonCount": 12,
     "price": {
       "amount": 550,
       "currency": "USD"
@@ -5055,8 +5055,8 @@
     "status": "owned",
     "scoringCategory": "sports",
     "designUniqueness": 5,
-    "designPreferenceElo": 968.4,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 945.73,
+    "designComparisonCount": 14,
     "price": {
       "amount": 339,
       "currency": "USD"
@@ -5124,8 +5124,8 @@
     "status": "owned",
     "scoringCategory": "sports",
     "designUniqueness": 5,
-    "designPreferenceElo": 858.96,
-    "designComparisonCount": 12,
+    "designPreferenceElo": 845.06,
+    "designComparisonCount": 14,
     "price": {
       "amount": 359,
       "currency": "USD"
@@ -5177,5 +5177,59 @@
     ],
     "id": "mv7fpf4iytjbz3",
     "dateAdded": "2026-10-14T01:31:46.000Z"
+  },
+  {
+    "brand": "Monchard watches",
+    "model": "Regatta Blue on Strap",
+    "referenceNumber": "Regatta-blue",
+    "status": "wishlist",
+    "wishlistTier": "shortlist",
+    "designUniqueness": 5,
+    "designPreferenceElo": 1100.5,
+    "designComparisonCount": 13,
+    "price": {
+      "amount": 673,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 673,
+          "currency": "USD"
+        },
+        "date": "2026-10-14T02:27:48.775Z",
+        "source": "manual"
+      }
+    ],
+    "links": [
+      {
+        "url": "https://monchardwatches.com/products/regatta-blue-on-strap?variant=57504123257205",
+        "retailer": "monchardwatches.com",
+        "price": {
+          "amount": 673,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-10-14"
+      }
+    ],
+    "imageUrl": "https://monchardwatches.com/cdn/shop/files/Regatta_Blue_canvas.jpg?v=1786892336",
+    "specs": {
+      "caseDiameterMm": 38,
+      "caseThicknessMm": 10.8,
+      "lugToLugMm": 46,
+      "lugWidthMm": 20,
+      "caseMaterial": "316L stainless steel",
+      "movement": "quartz",
+      "caliber": "Seiko VK64",
+      "waterResistanceM": 50,
+      "crystal": "Sapphire",
+      "braceletStrap": "Canvas",
+      "complications": "Chronograph"
+    },
+    "tags": [],
+    "id": "mv7hphuwkgbljl",
+    "dateAdded": "2026-10-14T02:27:48.775Z",
+    "scoringCategory": "chronograph"
   }
 ]
