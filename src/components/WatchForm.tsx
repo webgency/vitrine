@@ -389,6 +389,16 @@ export default function WatchForm({ initial, tracked, purchase }: {
     }
   }
 
+  // Priority (watching / shortlist / pass) ranks what to buy next, so it has
+  // no meaning once a watch is owned or sold. Leaving it set when the status
+  // changed meant a bought watch kept the add form's "watching" default, or its
+  // old shortlist slot, and turned up beside unbought watches in those filters.
+  function changeStatus(next: WatchStatus) {
+    setStatus(next);
+    if (next === "wishlist") setWishlistTier((tier) => tier || "watching");
+    else setWishlistTier("");
+  }
+
   function changePurchase(key: keyof PurchaseFields, value: string) {
     setPurchaseFields((current) => ({ ...current, [key]: value }));
     setPurchaseErrors((current) => ({ ...current, [key]: undefined }));
@@ -507,7 +517,7 @@ export default function WatchForm({ initial, tracked, purchase }: {
           </div>
           <div>
             <label className="label">Status</label>
-            <select className="input" value={status} onChange={(e) => setStatus(e.target.value as WatchStatus)}>
+            <select className="input" value={status} onChange={(e) => changeStatus(e.target.value as WatchStatus)}>
               {WATCH_STATUSES.map((s) => (
                 <option key={s} value={s} className="capitalize">
                   {s}
