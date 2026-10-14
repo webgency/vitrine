@@ -616,6 +616,8 @@
     "imageUrl": "https://api.ecom.longines.com/media/catalog/product/w/a/watch-collection-longines-spirit-chronograph-l3-820-4-93-0-8c1449-hero.png",
     "specs": {
       "caseDiameterMm": 42,
+      "caseThicknessMm": 16.5,
+      "lugToLugMm": 51.4,
       "lugWidthMm": 22,
       "caseMaterial": "Stainless steel",
       "movement": "automatic",
@@ -623,9 +625,7 @@
       "powerReserveHours": 66,
       "waterResistanceM": 100,
       "crystal": "Sapphire",
-      "dialColor": "Sunray blue",
-      "caseThicknessMm": 16.5,
-      "lugToLugMm": 51.4
+      "dialColor": "Sunray blue"
     },
     "tags": [
       "chronograph"
@@ -3479,6 +3479,7 @@
     "imageUrl": "https://media.rolex.com/image/upload/q_auto/f_auto/t_v7-cover-majesty-landscape/c_limit,w_1920/v1/a677b2c664f6/catalogue/2026/upright-c/m126710blnr-0002",
     "specs": {
       "caseDiameterMm": 40,
+      "caseThicknessMm": 12,
       "caseMaterial": "Oystersteel",
       "movement": "automatic",
       "caliber": "3285, Manufacture Rolex",
@@ -3487,8 +3488,7 @@
       "crystal": "sapphire",
       "dialColor": "Black",
       "braceletStrap": "Jubilee, five-piece links Material Oystersteel",
-      "complications": "date",
-      "caseThicknessMm": 12
+      "complications": "date"
     },
     "tags": [
       "gmt"
@@ -3502,6 +3502,7 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
+    "finalist": true,
     "designUniqueness": 4,
     "designPreferenceElo": 1061.97,
     "designComparisonCount": 14,
@@ -3560,8 +3561,7 @@
       "diver"
     ],
     "id": "mtorvl6lg0fc15",
-    "dateAdded": "2026-09-05T19:25:09.498Z",
-    "finalist": true
+    "dateAdded": "2026-09-05T19:25:09.498Z"
   },
   {
     "brand": "Maen",
@@ -4448,7 +4448,6 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "sports",
-    "finalist": true,
     "designUniqueness": 4,
     "designPreferenceElo": 1000.98,
     "designComparisonCount": 14,
@@ -5004,9 +5003,9 @@
       "lugToLugMm": 42.5,
       "movement": "automatic",
       "caliber": "Sellita SW200",
+      "waterResistanceM": 300,
       "crystal": "Sapphire",
-      "braceletStrap": "316L stainless steel bracelet, tapering 24 mm to 18 mm",
-      "waterResistanceM": 300
+      "braceletStrap": "316L stainless steel bracelet, tapering 24 mm to 18 mm"
     },
     "tags": [],
     "id": "mv2to452dpzm9l",
