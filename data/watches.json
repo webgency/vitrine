@@ -2181,6 +2181,16 @@
         },
         "condition": "pre-owned",
         "observedAt": "2026-10-13T12:00:00.000Z"
+      },
+      {
+        "url": "https://www.ebay.com/itm/366700850224",
+        "retailer": "ebay.com",
+        "price": {
+          "amount": 520,
+          "currency": "GBP"
+        },
+        "condition": "pre-owned",
+        "observedAt": "2026-10-13T12:00:00.000Z"
       }
     ],
     "imageUrl": "https://underd0g.com/cdn/shop/files/01MCBR_Product_Card_52168231-a0b0-4495-9049-ce5e2e103119.png?v=1783351280",
