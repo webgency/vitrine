@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CURRENCIES,
@@ -30,6 +30,7 @@ import { hostname } from "@/lib/format";
 import { cleanModelName } from "@/lib/model-name";
 import { findDuplicates, type TrackedWatchKey } from "@/lib/duplicates";
 import ImageDropzone from "./ImageDropzone";
+import { purchaseFieldsFor, purchaseFormIntent, purchaseRevision, type PrivatePurchase, type PurchaseErrors, type PurchaseFields } from "@/lib/purchase-entry";
 import { emptyLinkRow, observedAtForSave, toLinkRow, type LinkRow } from "@/lib/link-rows";
 
 
@@ -80,10 +81,13 @@ interface AutofillResult {
   coverageNote?: string;
 }
 
-export default function WatchForm({ initial, tracked }: {
+export default function WatchForm({ initial, tracked, purchase }: {
   initial?: Watch;
   /** Watches already in the collection, for the duplicate warning when adding. */
   tracked?: TrackedWatchKey[];
+  /** What you paid, from data/private.json. Saved through the purchase route,
+   * never in the watch payload, which refuses it. */
+  purchase?: PrivatePurchase;
 }) {
   const router = useRouter();
   const isEdit = Boolean(initial);
@@ -121,6 +125,12 @@ export default function WatchForm({ initial, tracked }: {
     initial?.links?.length ? initial.links.map(toLinkRow) : [emptyLinkRow()]
   );
   const [submitting, setSubmitting] = useState(false);
+  const purchaseId = useId();
+  const [purchaseFields, setPurchaseFields] = useState<PurchaseFields>(() => purchaseFieldsFor(purchase));
+  const [purchaseErrors, setPurchaseErrors] = useState<PurchaseErrors>({});
+  // Set when the watch saved but what you paid didn't. The form stays locked
+  // so a retry can't add the watch a second time.
+  const [savedWithoutPurchase, setSavedWithoutPurchase] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [fetchUrl, setFetchUrl] = useState("");
   const [fetching, setFetching] = useState(false);
@@ -338,6 +348,15 @@ export default function WatchForm({ initial, tracked }: {
       duplicateRef.current?.focus();
       return;
     }
+    // Checked before anything is written, so a bad price can't leave a watch
+    // saved without the purchase you typed. Wishlist watches have none.
+    const purchaseIntent = status === "wishlist" ? { kind: "skip" as const } : purchaseFormIntent(purchaseFields, purchase);
+    if (purchaseIntent.kind === "invalid") {
+      setPurchaseErrors(purchaseIntent.errors);
+      const first = Object.keys(purchaseIntent.errors)[0];
+      document.getElementById(`${purchaseId}-${first}`)?.focus();
+      return;
+    }
     setSubmitting(true);
     try {
       const payload = buildPayload();
@@ -348,13 +367,43 @@ export default function WatchForm({ initial, tracked }: {
       });
       if (!res.ok) throw new Error(`Request failed (${res.status})`);
       const saved = (await res.json()) as Watch;
-      router.push(`/watch/${saved.id ?? initial!.id}`);
+      const id = saved.id ?? initial!.id;
+      if (purchaseIntent.kind === "save") {
+        const purchaseRes = await fetch(`/api/watches/${encodeURIComponent(id)}/purchase`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: purchaseFields, revision: purchaseRevision(purchase) }),
+        });
+        if (!purchaseRes.ok) {
+          const result = await purchaseRes.json().catch(() => ({}));
+          setSavedWithoutPurchase(id);
+          setError(`The watch was saved, but what you paid wasn't: ${result.error ?? `request failed (${purchaseRes.status})`}`);
+          return;
+        }
+      }
+      router.push(`/watch/${id}`);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
       setSubmitting(false);
     }
   }
+
+  function changePurchase(key: keyof PurchaseFields, value: string) {
+    setPurchaseFields((current) => ({ ...current, [key]: value }));
+    setPurchaseErrors((current) => ({ ...current, [key]: undefined }));
+  }
+  const purchaseDescribed = (key: keyof PurchaseFields) => ({
+    "aria-invalid": Boolean(purchaseErrors[key]),
+    "aria-describedby": purchaseErrors[key] ? `${purchaseId}-${key}-error` : undefined,
+  });
+  const purchaseField = (key: keyof PurchaseFields, label: string, input: React.ReactNode) => (
+    <div>
+      <label htmlFor={`${purchaseId}-${key}`} className="label">{label}</label>
+      {input}
+      {purchaseErrors[key] && <p id={`${purchaseId}-${key}-error`} className="mt-1 text-sm text-red-700">{purchaseErrors[key]}</p>}
+    </div>
+  );
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -554,6 +603,37 @@ export default function WatchForm({ initial, tracked }: {
         </div>
       </section>
 
+      {status !== "wishlist" && (
+        <section className="card space-y-4 p-5" aria-labelledby={`${purchaseId}-heading`}>
+          <div>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <h2 id={`${purchaseId}-heading`} className="text-sm font-semibold uppercase tracking-wide text-cocoa-500">What you paid</h2>
+              <span className="text-xs text-cocoa-500">Private · this computer only</span>
+            </div>
+            <p className="mt-1 text-xs text-cocoa-500">
+              Saved to <code>data/private.json</code>, never to watches.json, so it isn&apos;t committed or published.
+              {purchase ? " To remove it, use Clear purchase on the watch page." : " Leave blank to skip."}
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {purchaseField("amount", "Price paid", (
+              <div className="flex gap-2">
+                <input id={`${purchaseId}-amount`} className="input" inputMode="decimal" value={purchaseFields.amount} onChange={(e) => changePurchase("amount", e.target.value)} placeholder="Optional" {...purchaseDescribed("amount")} />
+                <select aria-label="Purchase currency" className="input w-28" value={purchaseFields.currency} onChange={(e) => changePurchase("currency", e.target.value)}>
+                  {CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+            {purchaseField("date", "Date bought", <input id={`${purchaseId}-date`} type="date" className="input" value={purchaseFields.date} onChange={(e) => changePurchase("date", e.target.value)} {...purchaseDescribed("date")} />)}
+            {purchaseField("source", "Bought from", <input id={`${purchaseId}-source`} className="input" value={purchaseFields.source} onChange={(e) => changePurchase("source", e.target.value)} placeholder="Brand site, r/Watchexchange…" {...purchaseDescribed("source")} />)}
+          </div>
+        </section>
+      )}
+
       <details className="card group" open={specsOpen} onToggle={(event) => setSpecsOpen(event.currentTarget.open)}>
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 [&::-webkit-details-marker]:hidden">
           <span>
@@ -718,11 +798,23 @@ export default function WatchForm({ initial, tracked }: {
         </div>
       </details>
 
-      {error && <p className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-700">{error}</p>}
+      {error && (
+        <p role="alert" className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-700">
+          {error}
+          {savedWithoutPurchase && (
+            <>
+              {" "}
+              <a href={`/watch/${savedWithoutPurchase}#purchase`} className="font-medium underline underline-offset-4">
+                Record it on the watch page
+              </a>
+            </>
+          )}
+        </p>
+      )}
 
       <div className="flex items-center gap-3">
         <button type="submit" className="btn-primary" disabled={submitting}>
-          {submitting ? "Saving…" : isEdit ? "Save changes" : "Add watch"}
+          {savedWithoutPurchase ? "Watch saved" : submitting ? "Saving…" : isEdit ? "Save changes" : "Add watch"}
         </button>
         <button type="button" className="btn-secondary" onClick={() => router.back()}>
           Cancel
