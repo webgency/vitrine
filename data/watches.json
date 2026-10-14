@@ -5184,6 +5184,7 @@
     "referenceNumber": "Regatta-blue",
     "status": "wishlist",
     "wishlistTier": "shortlist",
+    "scoringCategory": "chronograph",
     "designUniqueness": 5,
     "designPreferenceElo": 1100.5,
     "designComparisonCount": 13,
@@ -5216,7 +5217,7 @@
     "imageUrl": "https://monchardwatches.com/cdn/shop/files/Regatta_Blue_canvas.jpg?v=1786892336",
     "specs": {
       "caseDiameterMm": 38,
-      "caseThicknessMm": 10.8,
+      "caseThicknessMm": 12,
       "lugToLugMm": 46,
       "lugWidthMm": 20,
       "caseMaterial": "316L stainless steel",
@@ -5229,7 +5230,6 @@
     },
     "tags": [],
     "id": "mv7hphuwkgbljl",
-    "dateAdded": "2026-10-14T02:27:48.775Z",
-    "scoringCategory": "chronograph"
+    "dateAdded": "2026-10-14T02:27:48.775Z"
   }
 ]
