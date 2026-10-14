@@ -464,8 +464,8 @@
     "status": "wishlist",
     "wishlistTier": "pass",
     "designUniqueness": 4,
-    "designPreferenceElo": 936.3,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 920.49,
+    "designComparisonCount": 15,
     "price": {
       "amount": 2450,
       "currency": "USD"
@@ -1329,8 +1329,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 4,
-    "designPreferenceElo": 968.02,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 983.46,
+    "designComparisonCount": 15,
     "price": {
       "amount": 959,
       "currency": "USD"
@@ -1481,8 +1481,8 @@
     "model": "Gentleman 38",
     "status": "owned",
     "designUniqueness": 4,
-    "designPreferenceElo": 969.31,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 985.47,
+    "designComparisonCount": 15,
     "price": {
       "amount": 850,
       "currency": "USD"
@@ -2038,8 +2038,8 @@
     "wishlistTier": "pass",
     "scoringCategory": "dress",
     "designUniqueness": 4,
-    "designPreferenceElo": 969.13,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 952.53,
+    "designComparisonCount": 15,
     "price": {
       "amount": 2490,
       "currency": "EUR"
@@ -3653,8 +3653,8 @@
     "scoringCategory": "diver",
     "finalist": true,
     "designUniqueness": 4,
-    "designPreferenceElo": 1012.69,
-    "designComparisonCount": 13,
+    "designPreferenceElo": 1028.11,
+    "designComparisonCount": 14,
     "price": {
       "amount": 749,
       "currency": "USD"
@@ -4305,8 +4305,8 @@
     "wishlistTier": "shortlist",
     "scoringCategory": "dress",
     "designUniqueness": 4,
-    "designPreferenceElo": 995.73,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 1011.35,
+    "designComparisonCount": 15,
     "price": {
       "amount": 1890,
       "currency": "USD"
@@ -4446,7 +4446,7 @@
     "model": "Trek - Aqualight",
     "referenceNumber": "TREKAL9039",
     "status": "wishlist",
-    "wishlistTier": "shortlist",
+    "wishlistTier": "watching",
     "scoringCategory": "sports",
     "designUniqueness": 4,
     "designPreferenceElo": 1000.98,
@@ -4686,8 +4686,8 @@
     "wishlistTier": "watching",
     "scoringCategory": "chronograph",
     "designUniqueness": 4,
-    "designPreferenceElo": 971.44,
-    "designComparisonCount": 14,
+    "designPreferenceElo": 987.46,
+    "designComparisonCount": 15,
     "price": {
       "amount": 380,
       "currency": "USD"
@@ -4739,8 +4739,8 @@
     "wishlistTier": "watching",
     "scoringCategory": "sports",
     "designUniqueness": 4,
-    "designPreferenceElo": 1161.15,
-    "designComparisonCount": 13,
+    "designPreferenceElo": 1170.08,
+    "designComparisonCount": 14,
     "price": {
       "amount": 2120,
       "currency": "USD"
@@ -4802,8 +4802,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 4,
-    "designPreferenceElo": 891.19,
-    "designComparisonCount": 13,
+    "designPreferenceElo": 879.39,
+    "designComparisonCount": 14,
     "price": {
       "amount": 449,
       "currency": "USD"
@@ -4861,6 +4861,8 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "designUniqueness": 5,
+    "designPreferenceElo": 1128.88,
+    "designComparisonCount": 11,
     "price": {
       "amount": 599,
       "currency": "USD"
@@ -4919,6 +4921,8 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "designUniqueness": 5,
+    "designPreferenceElo": 1043.76,
+    "designComparisonCount": 11,
     "price": {
       "amount": 249,
       "currency": "USD"
@@ -4970,6 +4974,9 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "scoringCategory": "dress",
+    "designUniqueness": 4,
+    "designPreferenceElo": 956.62,
+    "designComparisonCount": 9,
     "price": {
       "amount": 550,
       "currency": "USD"
@@ -5018,6 +5025,8 @@
     "status": "owned",
     "scoringCategory": "sports",
     "designUniqueness": 5,
+    "designPreferenceElo": 968.4,
+    "designComparisonCount": 12,
     "price": {
       "amount": 339,
       "currency": "USD"
@@ -5075,6 +5084,8 @@
     "status": "owned",
     "scoringCategory": "sports",
     "designUniqueness": 5,
+    "designPreferenceElo": 858.96,
+    "designComparisonCount": 12,
     "price": {
       "amount": 359,
       "currency": "USD"
