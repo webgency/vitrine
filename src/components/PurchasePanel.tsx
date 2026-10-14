@@ -5,17 +5,8 @@ import { useRouter } from "next/navigation";
 import { CURRENCIES } from "@/lib/types";
 import { formatDate, formatMoney } from "@/lib/format";
 import { normalizeMoneyToUsd } from "@/lib/offer-signals.mjs";
-import { parsePurchaseFields, purchaseRevision, type PrivatePurchase, type PurchaseErrors, type PurchaseFields } from "@/lib/purchase-entry";
+import { parsePurchaseFields, purchaseFieldsFor, purchaseRevision, type PrivatePurchase, type PurchaseErrors, type PurchaseFields } from "@/lib/purchase-entry";
 import { IS_STATIC } from "@/lib/config";
-
-function fieldsFor(purchase?: PrivatePurchase): PurchaseFields {
-  return {
-    amount: purchase ? String(purchase.price.amount) : "",
-    currency: purchase?.price.currency ?? "USD",
-    date: purchase?.date ?? "",
-    source: purchase?.source ?? "",
-  };
-}
 
 function usd(amount: number) {
   return formatMoney({ amount, currency: "USD" });
@@ -41,7 +32,7 @@ export default function PurchasePanel({ watchId, watchLabel, purchase, exitMedia
   const trigger = useRef<HTMLButtonElement>(null);
   const amountInput = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
-  const [fields, setFields] = useState(() => fieldsFor(purchase));
+  const [fields, setFields] = useState(() => purchaseFieldsFor(purchase));
   const [revision, setRevision] = useState("");
   const [errors, setErrors] = useState<PurchaseErrors>({});
   const [error, setError] = useState("");
@@ -139,7 +130,7 @@ export default function PurchasePanel({ watchId, watchLabel, purchase, exitMedia
 
       {!open && (
         <button ref={trigger} type="button" className="mt-2 inline-flex min-h-11 items-center text-sm font-medium text-azalea-700 hover:underline" aria-expanded={open} aria-controls={`${id}-form`} onClick={() => {
-          setFields(fieldsFor(purchase)); setRevision(purchaseRevision(purchase)); setErrors({}); setError(""); setSaved(""); setOpen(true);
+          setFields(purchaseFieldsFor(purchase)); setRevision(purchaseRevision(purchase)); setErrors({}); setError(""); setSaved(""); setOpen(true);
         }}>{purchase ? "Edit purchase" : "Record purchase"}</button>
       )}
 

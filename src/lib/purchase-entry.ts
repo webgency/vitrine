@@ -52,6 +52,36 @@ export function parsePurchaseFields(input: unknown, today: Date = new Date()):
   };
 }
 
+/** Form fields for a stored purchase, or blank ones (USD) when there is none. */
+export function purchaseFieldsFor(purchase?: PrivatePurchase): PurchaseFields {
+  return {
+    amount: purchase ? String(purchase.price.amount) : "",
+    currency: purchase?.price.currency ?? "USD",
+    date: purchase?.date ?? "",
+    source: purchase?.source ?? "",
+  };
+}
+
+/** What the add/edit watch form should do with its "What you paid" fields.
+ * Blank fields, or fields that still match the stored purchase, send nothing,
+ * so an ordinary edit doesn't rewrite private.json. An emptied amount is an
+ * error, not a delete: clearing stays an explicit action in the purchase
+ * panel, where a stray backspace in a long form can't erase the record. */
+export function purchaseFormIntent(fields: PurchaseFields, stored?: PrivatePurchase, today: Date = new Date()):
+  | { kind: "skip" }
+  | { kind: "save"; purchase: PrivatePurchase }
+  | { kind: "invalid"; errors: PurchaseErrors } {
+  const blank = !fields.amount.trim() && !fields.date.trim() && !fields.source.trim();
+  if (blank && !stored) return { kind: "skip" };
+  const parsed = parsePurchaseFields(fields, today);
+  if (!parsed.ok) {
+    if (blank) parsed.errors.amount = "Enter what you paid. To remove the purchase, use Clear purchase on the watch page.";
+    return { kind: "invalid", errors: parsed.errors };
+  }
+  if (stored && purchaseRevision(parsed.purchase) === purchaseRevision(stored)) return { kind: "skip" };
+  return { kind: "save", purchase: parsed.purchase };
+}
+
 /** A stale draft must not overwrite a purchase changed in another tab. */
 export function purchaseRevision(purchase?: PrivatePurchase): string {
   return JSON.stringify([purchase?.price.amount ?? null, purchase?.price.currency ?? "", purchase?.date ?? "", purchase?.source ?? ""]);
