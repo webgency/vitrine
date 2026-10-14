@@ -1505,6 +1505,16 @@
         },
         "condition": "new",
         "observedAt": "2026-10-10T15:55:36.964Z"
+      },
+      {
+        "url": "https://www.reddit.com/r/Watchexchange/comments/1wdmhkr/wts_tissot_gentleman_38mm_in_green/",
+        "retailer": "reddit.com",
+        "price": {
+          "amount": 450,
+          "currency": "USD"
+        },
+        "condition": "pre-owned",
+        "observedAt": "2026-09-11T12:00:00.000Z"
       }
     ],
     "imageUrl": "https://www.tissotwatches.com/dw/image/v2/BKKD_PRD/on/demandware.static/-/Sites-Tissot-Catalogue/default/dwc5be96fe/product-pictures/d0874d32-cd20-485d-a326-81c78afd70d1_T165-807-11-091-00_shadow.png?sm=fit&sw=1680&sh=1680,gravity=center",
@@ -2161,6 +2171,16 @@
         },
         "condition": "new",
         "observedAt": "2026-10-10T15:55:45.393Z"
+      },
+      {
+        "url": "https://www.chrono24.com/studiounderd0g/us-based-watch-brand-new-unworn---mint-ch0c-chip-gen3--id48439601.htm",
+        "retailer": "chrono24.com",
+        "price": {
+          "amount": 714,
+          "currency": "USD"
+        },
+        "condition": "pre-owned",
+        "observedAt": "2026-10-13T12:00:00.000Z"
       }
     ],
     "imageUrl": "https://underd0g.com/cdn/shop/files/01MCBR_Product_Card_52168231-a0b0-4495-9049-ce5e2e103119.png?v=1783351280",
@@ -5057,6 +5077,16 @@
         },
         "condition": "new",
         "observedAt": "2026-10-14"
+      },
+      {
+        "url": "https://www.ebay.com/itm/278118822104",
+        "retailer": "ebay.com",
+        "price": {
+          "amount": 395,
+          "currency": "USD"
+        },
+        "condition": "pre-owned",
+        "observedAt": "2026-10-13T12:00:00.000Z"
       }
     ],
     "imageUrl": "https://ubiqwatches.com/cdn/shop/files/CORALGLOWFRONTNylon.png?v=1760789501&width=600",
