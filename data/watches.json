@@ -5010,5 +5010,123 @@
     "tags": [],
     "id": "mv2to452dpzm9l",
     "dateAdded": "2026-10-10T20:03:48.854Z"
+  },
+  {
+    "brand": "UBIQ Watches",
+    "model": "Trek - Coralglow",
+    "referenceNumber": "TREKCGVH31",
+    "status": "owned",
+    "wishlistTier": "shortlist",
+    "scoringCategory": "sports",
+    "designUniqueness": 5,
+    "price": {
+      "amount": 339,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 339,
+          "currency": "USD"
+        },
+        "date": "2026-10-14T01:04:40.378Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "hardenedCoatingHv": 600,
+      "microAdjustClasp": true,
+      "quickRelease": true,
+      "arCoated": true
+    },
+    "links": [
+      {
+        "url": "https://ubiqwatches.com/products/trek-coralglow",
+        "retailer": "ubiqwatches.com",
+        "price": {
+          "amount": 339,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-10-14"
+      }
+    ],
+    "imageUrl": "https://ubiqwatches.com/cdn/shop/files/CORALGLOWFRONTNylon.png?v=1760789501&width=600",
+    "specs": {
+      "caseDiameterMm": 38,
+      "caseThicknessMm": 11.1,
+      "lugToLugMm": 44,
+      "lugWidthMm": 20,
+      "caseMaterial": "Grade 2 Titanium",
+      "movement": "quartz",
+      "caliber": "TMI VH31",
+      "waterResistanceM": 100,
+      "crystal": "Sapphire",
+      "braceletStrap": "Nylon"
+    },
+    "tags": [
+      "field"
+    ],
+    "id": "mv7eqksc6jh7go",
+    "dateAdded": "2026-10-14T01:04:40.378Z"
+  },
+  {
+    "brand": "Montera watches",
+    "model": "Coral Montera Watch",
+    "status": "owned",
+    "wishlistTier": "watching",
+    "scoringCategory": "sports",
+    "designUniqueness": 5,
+    "price": {
+      "amount": 359,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 359,
+          "currency": "USD"
+        },
+        "date": "2026-10-14T01:31:46.000Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "quickRelease": true,
+      "arCoated": true
+    },
+    "links": [
+      {
+        "url": "https://monterawatches.com/products/pistachio-montera-watch-copy?variant=57711607349592",
+        "retailer": "monterawatches.com",
+        "price": {
+          "amount": 359,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-10-14"
+      }
+    ],
+    "imageUrl": "https://monterawatches.com/cdn/shop/files/674560FF-D996-43BB-833F-78F5646D6971_d10e790b-4f5e-4963-b3c0-b2431e22d45b.png?v=1784038215&width=1920",
+    "specs": {
+      "caseDiameterMm": 38,
+      "caseThicknessMm": 12,
+      "lugToLugMm": 46,
+      "lugWidthMm": 20,
+      "caseMaterial": "316L Stainless Steel",
+      "movement": "automatic",
+      "caliber": "Seiko NH35",
+      "powerReserveHours": 41,
+      "waterResistanceM": 100,
+      "crystal": "Sapphire",
+      "dialColor": "Textured dial",
+      "braceletStrap": "Suede leather + rubber",
+      "complications": "date"
+    },
+    "tags": [
+      "field"
+    ],
+    "id": "mv7fpf4iytjbz3",
+    "dateAdded": "2026-10-14T01:31:46.000Z"
   }
 ]
