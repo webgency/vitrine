@@ -5231,5 +5231,175 @@
     "tags": [],
     "id": "mv7hphuwkgbljl",
     "dateAdded": "2026-10-14T02:27:48.775Z"
+  },
+  {
+    "brand": "Jack Mason",
+    "model": "Strat-o-timer GMT: Dark Night",
+    "referenceNumber": "STRAT-DARK-C-7-LINK",
+    "status": "wishlist",
+    "wishlistTier": "shortlist",
+    "designUniqueness": 5,
+    "price": {
+      "amount": 1149,
+      "currency": "USD"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 1149,
+          "currency": "USD"
+        },
+        "date": "2026-10-14T02:54:00.517Z",
+        "source": "manual"
+      }
+    ],
+    "targetPrice": {
+      "amount": 1000,
+      "currency": "USD"
+    },
+    "qualityFlags": {
+      "accuracySpecSpd": 5,
+      "microAdjustClasp": true,
+      "quickRelease": true,
+      "braceletIncluded": true
+    },
+    "links": [
+      {
+        "url": "https://jackmasonbrand.com/products/strat-o-timer-gmt-dark-night-ceramic",
+        "retailer": "jackmasonbrand.com",
+        "price": {
+          "amount": 1149,
+          "currency": "USD"
+        },
+        "condition": "new",
+        "observedAt": "2026-10-14"
+      }
+    ],
+    "imageUrl": "https://jackmasonbrand.com/cdn/shop/files/JM-D303-107-1_7-Link.png?v=1759334896",
+    "specs": {
+      "caseDiameterMm": 40,
+      "caseThicknessMm": 13.2,
+      "lugToLugMm": 47,
+      "lugWidthMm": 20,
+      "caseMaterial": "316L Stainless Steel",
+      "movement": "automatic",
+      "caliber": "Miyota 9075",
+      "powerReserveHours": 42,
+      "waterResistanceM": 200,
+      "crystal": "Sapphire",
+      "braceletStrap": "7-Link",
+      "complications": "GMT"
+    },
+    "tags": [
+      "gmt"
+    ],
+    "id": "mv7in6md3esol4",
+    "dateAdded": "2026-10-14T02:54:00.517Z"
+  },
+  {
+    "brand": "Baltic",
+    "model": "Aquascaphe MK2 Warm Silver",
+    "status": "wishlist",
+    "wishlistTier": "watching",
+    "scoringCategory": "diver",
+    "price": {
+      "amount": 630,
+      "currency": "EUR"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 630,
+          "currency": "EUR"
+        },
+        "date": "2026-10-14T05:04:06.577Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "sapphireBezelInsert": true,
+      "arCoated": true
+    },
+    "links": [
+      {
+        "url": "https://baltic-watches.com/en/products/aquascaphe-mk2-warm-silver",
+        "retailer": "baltic-watches.com",
+        "price": {
+          "amount": 630,
+          "currency": "EUR"
+        },
+        "observedAt": "2026-10-14"
+      }
+    ],
+    "imageUrl": "https://cdn.baltic-watches.com/f/73554/774x967/06ed3d3409/aquascaphe-mk2-37-warm-silver-face.png?width=1200",
+    "specs": {
+      "caseDiameterMm": 37,
+      "caseThicknessMm": 12.9,
+      "lugToLugMm": 45,
+      "lugWidthMm": 20,
+      "caseMaterial": "Stainless steel 316L",
+      "movement": "automatic",
+      "caliber": "Miyota 9039",
+      "powerReserveHours": 42,
+      "waterResistanceM": 200,
+      "crystal": "Sapphire",
+      "braceletStrap": "Rubber Classic strap in vulcanized rubber (FKM)"
+    },
+    "tags": [],
+    "id": "mv7nahtdl6rxf4",
+    "dateAdded": "2026-10-14T05:04:06.577Z"
+  },
+  {
+    "brand": "Baltic",
+    "model": "Hermétique The Rift",
+    "status": "wishlist",
+    "wishlistTier": "watching",
+    "scoringCategory": "sports",
+    "designUniqueness": 4,
+    "price": {
+      "amount": 620,
+      "currency": "EUR"
+    },
+    "priceHistory": [
+      {
+        "price": {
+          "amount": 620,
+          "currency": "EUR"
+        },
+        "date": "2026-10-14T12:28:33.079Z",
+        "source": "manual"
+      }
+    ],
+    "qualityFlags": {
+      "arCoated": true
+    },
+    "links": [
+      {
+        "url": "https://baltic-watches.com/en/products/hermetique-the-rift?variant=59986117067136",
+        "retailer": "baltic-watches.com",
+        "price": {
+          "amount": 620,
+          "currency": "EUR"
+        },
+        "observedAt": "2026-10-14"
+      }
+    ],
+    "imageUrl": "https://cdn.baltic-watches.com/f/73554/3543x2362/e9dd69bda0/duo-hermetique-the-rift.jpg?width=400",
+    "specs": {
+      "caseDiameterMm": 34,
+      "caseThicknessMm": 10.8,
+      "lugToLugMm": 42.5,
+      "lugWidthMm": 18,
+      "caseMaterial": "Stainless steel 316L",
+      "movement": "automatic",
+      "caliber": "Miyota 9039",
+      "powerReserveHours": 42,
+      "waterResistanceM": 150,
+      "crystal": "Sapphire",
+      "braceletStrap": "Rubber Sport strap in vulcanized rubber (FKM)"
+    },
+    "tags": [],
+    "id": "mv8361tj6eb87p",
+    "dateAdded": "2026-10-14T12:28:33.079Z"
   }
 ]
