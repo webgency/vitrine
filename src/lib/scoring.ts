@@ -170,6 +170,12 @@ const CALIBER_TIER_PATTERNS: Array<[pattern: string, tier: number]> = [
   // the regulation and the rework, below Tudor's in-house COSC MT5450, which
   // is a movement rather than a treatment of someone else's.
   ["mu 9419", 0.75],
+  // Breitling Caliber 23: a Valjoux 7753 (the SW510's architecture) built by
+  // Breitling to COSC, 28,800 vph and 48h (breitling.com, Top Time Deus
+  // A233112A1A1X1). Level with the MU 9419: above the bare SW510 for the
+  // chronometer certification, below an in-house movement such as Tudor's
+  // MT5450. Breitling's in-house B01 is a different caliber and not this row.
+  ["breitling 23", 0.75],
   ["sw510", 0.72],
   ["l688", 0.72],
   ["st-1901b", 0.70],
@@ -263,7 +269,7 @@ export function caliberTier(
 // (9075 over 9015, SW330 over SW200-1), which is about what a GMT costs.
 // Meca-quartz chronographs never reach this: quartz is unrated.
 const CHRONOGRAPH_CALIBER_PATTERNS = [
-  "sw500", "sw510", "mu 9419", "alb01", "st-1901", "st1901", "ne86", "ne88", "l688", "7750",
+  "sw500", "sw510", "mu 9419", "breitling 23", "alb01", "st-1901", "st1901", "ne86", "ne88", "l688", "7750",
 ];
 export const CHRONOGRAPH_CREDIT = 0.15;
 

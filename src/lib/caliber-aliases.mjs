@@ -62,6 +62,7 @@ export const CANONICAL_CALIBERS = [
   "duw 4001",
   "alb01 a",
   "mu 9419",
+  "breitling 23",
   "sw510",
   "l688",
   "st-1901b",
