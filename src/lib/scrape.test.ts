@@ -24,6 +24,7 @@ const viisPage = readFileSync(new URL("./fixtures/viis-flieger-gmt-42-de.html", 
 const henryArcherPage = readFileSync(new URL("./fixtures/henry-archer-tidevand-kosmos.html", import.meta.url), "utf8");
 const av86Page = readFileSync(new URL("./fixtures/av86-1564-chronodate-steel-white.html", import.meta.url), "utf8");
 const malouinePage = readFileSync(new URL("./fixtures/le-forban-malouine.html", import.meta.url), "utf8");
+const breitlingPage = readFileSync(new URL("./fixtures/breitling-top-time-deus.html", import.meta.url), "utf8");
 // Viis's real Shopify body_html: marketing only, with no calibre or dimensions table.
 const VIIS_BODY_HTML =
   "<p>The Flieger GMT 42 Adriatic is like the sea: deep blue, clear and full of vastness. It masterfully combines " +
@@ -383,6 +384,34 @@ describe("Henry Archer Tidevand Meteorite (testimonials and other models below t
     expect(extractSpecs("• Bracelet; 316L stainless steel BoR (Beads-of-Rice) bracelet. 20 mm width.").braceletStrap)
       .toBe("316L stainless steel BoR (Beads-of-Rice) bracelet");
     expect(extractSpecs("• Strap; 20 mm; quick release").braceletStrap).toBeUndefined();
+  });
+});
+
+describe("Breitling Top Time Deus (each value in its own box after the label)", () => {
+  it("pairs a label with the value box after it, but not a section title with the next label", () => {
+    const text = productExtractionText(undefined, breitlingPage);
+    expect(text).toContain("Diameter: 41 mm; Thickness: 14.27 mm; Lug width (in-between lug): 20 mm");
+    expect(text).toContain("Strap; Strap material: Calfskin leather");
+    expect(text).not.toMatch(/Strap: Strap material/);
+
+    expect(extractSpecs(text)).toMatchObject({
+      caseDiameterMm: 41,
+      caseThicknessMm: 14.27,
+      lugWidthMm: 20,
+      powerReserveHours: 48,
+      waterResistanceM: 30, // "3 bars (30 m /99 ft)"
+      movement: "automatic",
+      caliber: "Breitling 23",
+      crystal: "Sapphire",
+      caseMaterial: "Stainless steel",
+      braceletStrap: "Calfskin leather",
+    });
+    // "Convex sapphire crystal, glareproofed both sides" is Breitling's AR wording.
+    expect(extractQualityFlags(text)).toMatchObject({ arCoated: true });
+  });
+
+  it("never stores a strap row's label as the strap under a heading-style panel", () => {
+    expect(extractSpecs("Strap; Strap material; Calfskin leather").braceletStrap).not.toBe("Strap material");
   });
 });
 

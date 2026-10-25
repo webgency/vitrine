@@ -129,6 +129,20 @@ function labeledRowText(row: string, _tag: string, _labelTag: string, label: str
   return name && value.trim() ? ` ${name}: ${value.trim()}; ` : row;
 }
 
+// The same pairing when the value sits in its own box after the label:
+// <p>Diameter</p><div><p>41 mm</p></div> (Breitling). Flattened, each block
+// ends a line, giving "Diameter; 41 mm" — and the spec patterns never pair a
+// label with a value across ";", so every such row was lost. Only a box
+// holding a single text element counts as a value: a section title is
+// followed by more rows ("Strap" over "Strap material"), never one value, so
+// it stays a heading rather than taking the next row's label as its value.
+const SPLIT_ROW =
+  /<(p|span|strong|label)\b[^>]*>([^<]{1,40})<\/\1>\s*<div\b[^>]*>\s*<(p|span)\b[^>]*>([^<]{1,120})<\/\3>\s*<\/div>/gi;
+
+function splitRowText(row: string, _labelTag: string, label: string, _valueTag: string, value: string): string {
+  return labeledRowText(row, "", "", label, value);
+}
+
 /** Whether `text` opens with `label` as a whole word ("Dial color: …" opens with "Dial"). */
 function opensWith(text: string, label: string): boolean {
   return text.toLowerCase().startsWith(label.toLowerCase()) && !/[A-Za-zÀ-ÿ]/.test(text.charAt(label.length));
@@ -190,6 +204,7 @@ function stripText(html: string): string {
         return ` ${name}: ${text}; `;
       })
       .replace(LABELED_ROW, labeledRowText)
+      .replace(SPLIT_ROW, splitRowText)
       .replace(/<script[\s\S]*?<\/script>/gi, " ")
       .replace(/<style[\s\S]*?<\/style>/gi, " ")
       // Paragraph, line and heading boundaries become "; ". Without them a
@@ -391,11 +406,11 @@ function firstHeading(html: string): string | undefined {
  * in productExtractionText instead.
  */
 const TECHNICAL_HEADINGS =
-  /^(?:Specifications?|Technical Details|Tech Specs|Spezifikationen|Technische (?:Daten|Details)|Spécifications?|Caractéristiques techniques|Especificaciones|Ficha técnica|Specifiche(?: tecniche)?|Scheda tecnica)$/i;
+  /^(?:Specifications?|Technical (?:Details|Data)|Tech Specs|Spezifikationen|Technische (?:Daten|Details)|Spécifications?|Caractéristiques techniques|Especificaciones|Ficha técnica|Specifiche(?: tecniche)?|Scheda tecnica)$/i;
 
 const TECHNICAL_SECTION_ANCHORS = [
   /\bSpecifications?\b/i,
-  /\bTechnical Details\b/i,
+  /\bTechnical (?:Details|Data)\b/i,
   /\bDetails\s+Price\b/i,
   /\bTech Specs\b/i,
   /\bSpezifikationen\b/i,
@@ -464,7 +479,7 @@ export function strongSpecSignals(text: string): number {
   const t = normalizeDecimals(text);
   return [
     /\b(?:Miyota|Seiko|Sellita|ETA|Ronda|Soprod|La Joux[ -]Perret|Seagull)\s+[A-Z0-9]*\d|\b(?:cali(?:ber|bre|bro)|Kaliber)\s*:/i,
-    /(?:water[\s-]*resist|wasserdicht|étanch|resistencia al agua|impermeabil)[^0-9]{0,20}\d{2,4}\s?m\b|\b\d{1,3}\s?(?:atm|bar)\b/i,
+    /(?:water[\s-]*resist|wasserdicht|étanch|resistencia al agua|impermeabil)[^0-9]{0,20}\d{2,4}\s?m\b|\b\d{1,3}\s?(?:atm|bars?)\b/i,
     new RegExp(`${L2L_LABEL}[^0-9]{0,16}\\d{2}`, "i"),
     new RegExp(`${THICKNESS_LABEL}[^0-9]{0,24}\\d{1,2}(?:\\.\\d{1,2})?\\s?mm`, "i"),
   ].filter((pattern) => pattern.test(t)).length;
@@ -556,6 +571,8 @@ export function extractSpecs(text: string): WatchSpecs {
     num(t, /(\d{2}(?:\.\d{1,2})?)\s?mm[^.;]{0,12}(?:from\s+)?lug[\s-]*to[\s-]*lug/i); // "measures 46mm from lug to lug"
   // Buckle width ("Schließenbreite") is not lug width and is never matched.
   s.lugWidthMm =
+    // "Lug width (in-between lug): 20 mm" — a qualifier in brackets is skipped.
+    num(t, /lug[\s-]*width\s*\([^)]{1,30}\)\s*:\s*(\d{2})\s?mm/i) ??
     num(t, /(?:lug[\s-]*width|Anstoßbreite|Bandanstoßbreite|Bandbreite|Stegbreite|largeur (?:des |entre )?cornes|entre-?cornes|ancho (?:de )?(?:las )?asas|ancho (?:de )?(?:la )?correa|larghezza (?:delle )?anse|larghezza (?:del )?cinturino)[^0-9.;,]{0,14}(\d{2})\s?mm/i) ??
     num(t, /strap[\s-]*width[^0-9.;,]{0,12}(\d{2})\s?mm/i) ??
     num(t, /\b(\d{2})\s?mm\s+(?:lug|strap)[\s-]*width\b/i) ?? // "20 mm lug width"
@@ -571,7 +588,8 @@ export function extractSpecs(text: string): WatchSpecs {
     t.match(/water[\s-]*resist[a-z]*[^0-9]{0,16}(\d{2,4})\s?m\b/i) ||
     t.match(/(?:Wasserdichtigkeit|wasserdicht(?:\s+bis)?|étanchéité|étanche|resistencia al agua|hermeticidad|impermeabilità|impermeabile)[^0-9]{0,16}(\d{2,4})\s?m\b/i) ||
     t.match(/(\d{2,4})\s?m(?:eters)?\s*(?:of\s*)?water/i);
-  const atm = t.match(/(\d{1,3})\s?(?:atm|bar)\b/i);
+  // "3 bars (30 m /99 ft)": the plural failed \b after "bar".
+  const atm = t.match(/(\d{1,3})\s?(?:atm|bars?)\b/i);
   if (wm) s.waterResistanceM = Number(wm[1]);
   else if (atm) s.waterResistanceM = Number(atm[1]) * 10;
 
@@ -626,7 +644,7 @@ export function extractSpecs(text: string): WatchSpecs {
   const dialColor = t.match(/dial colou?r\s*[:\-]\s*([A-Za-z][A-Za-z /\-]{1,30})/i);
   if (dialColor) s.dialColor = clean(dialColor[1]).split(/\s+(?:index|lens|crystal|case)\b/i)[0].trim();
   const band =
-    t.match(/\b(?:band|bracelet|strap)\s*:\s*([^.;]{3,100})/i) ??
+    t.match(/\b(?:band|bracelet|strap)(?:\s+material)?\s*:\s*([^.;]{3,100})/i) ??
     t.match(/(?<![A-Za-zÀ-ÿ])(?:Armband(?:material)?|Bandmaterial|Correa|Cinturino|Bracelete)\s*:\s*([^.;]{3,100})/i);
   if (band) {
     const value = clean(band[1]).split(/\s+(?:extra band|water resistance|weight|warranty|lug width)\b/i)[0].trim();
@@ -640,7 +658,13 @@ export function extractSpecs(text: string): WatchSpecs {
     // bracelet. 20 mm width."). The value ends at its first sentence, and a
     // bare width ("20 mm") is a measurement, not a strap.
     const underHeading = t.match(/(?:^|;\s*)(?:[•·▪–-]\s*)?(?:Armband|Strap|Bracelet|Correa|Cinturino)\s*;\s*([A-Za-zÀ-ÿ0-9][^;.]{2,80})/i);
-    if (underHeading && !/^\d+(?:\.\d+)?\s*mm\b/i.test(underHeading[1])) s.braceletStrap = clean(underHeading[1]);
+    // Nor is the next row's label: under "Strap" sat "Strap material", and it
+    // was stored as the strap.
+    if (
+      underHeading &&
+      !/^\d+(?:\.\d+)?\s*mm\b/i.test(underHeading[1]) &&
+      !/^(?:strap|bracelet|band)\s+(?:material|colou?r|type|width)\b/i.test(underHeading[1])
+    ) s.braceletStrap = clean(underHeading[1]);
   }
 
   const comps: string[] = [];
@@ -687,7 +711,7 @@ export function extractQualityFlags(text: string, variantTitle?: string): Qualit
   const layers = Number(layerCount?.[1]);
   if (layers >= 1 && layers <= 20) {
     flags.arLayers = layers;
-  } else if (/\banti[- ]reflective\s+(?:coating|coated)\b|\bantireflex|\bentspiegelt|\banti-?reflets?\b|\bantirreflej|\bantirifless/i.test(arText)) {
+  } else if (/\banti[- ]reflective\s+(?:coating|coated)\b|\bglare-?proof(?:ed)?\b|\bantireflex|\bentspiegelt|\banti-?reflets?\b|\bantirreflej|\bantirifless/i.test(arText)) {
     flags.arCoated = true;
   }
   if (/\bmicro[- ]?adjust(?:ment)?\b|\bon[- ]the[- ]fly adjustment clasp\b|\bquick[- ]adjust clasp\b|\bFeinverstellung|\bMikroverstellung|\bmicro-?réglage/i.test(t)) {
