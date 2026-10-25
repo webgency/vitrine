@@ -92,6 +92,9 @@ export interface QualityFlags {
   /** Antimagnetic rating in A/m, e.g. 25000. */
   antimagneticAm?: number;
   sapphireBezelInsert?: boolean;
+  /** Ceramic bezel insert (Rolex Cerachrom and the like). Shares the bezel input
+   * with sapphireBezelInsert; an aluminium insert records both as false. */
+  ceramicBezelInsert?: boolean;
   drilledLugs?: boolean;
   microAdjustClasp?: boolean;
   quickRelease?: boolean;

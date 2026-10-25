@@ -1,5 +1,5 @@
-import { DIMENSIONS, RubricCategory } from "./rubrics";
-import { caseProfileEvidence, deriveCategory, landedPriceUsd, scoreDimensionEvidence, thicknessAllowanceMm, valueFromEvidence } from "./scoring";
+import { RubricCategory } from "./rubrics";
+import { caseProfileEvidence, compositeQuality, deriveCategory, landedPriceUsd, scoreDimensionEvidence, thicknessAllowanceMm, valueFromEvidence } from "./scoring";
 import { Watch } from "./types";
 
 /**
@@ -43,13 +43,10 @@ export function calibrationScore(watch: Watch): CalibrationResult {
     );
   }
 
-  const rated = DIMENSIONS.filter((dimension) => evidence[dimension] !== undefined);
-  if (!rated.length) return {};
-  const totalWeight = rated.reduce((sum, dimension) => sum + evidence[dimension]!.coverage, 0);
-  const qualityScore = rated.reduce(
-    (sum, dimension) => sum + evidence[dimension]!.raw * evidence[dimension]!.coverage,
-    0
-  ) / totalWeight;
+  // Production's quality rule, so the only difference the report shows is the
+  // thickness allowance.
+  const qualityScore = compositeQuality(evidence);
+  if (qualityScore === undefined) return {};
 
   return {
     qualityScore,

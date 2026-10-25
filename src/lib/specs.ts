@@ -96,6 +96,14 @@ export const QUALITY_FLAG_FIELDS: QualityFlagField[] = [
     chapter: "case",
   },
   { key: "sapphireBezelInsert", label: "Sapphire bezel insert", type: "boolean", dimension: "caseCraft", chapter: "case" },
+  {
+    key: "ceramicBezelInsert",
+    label: "Ceramic bezel insert",
+    type: "boolean",
+    dimension: "caseCraft",
+    hint: "One bezel input with sapphire: an aluminium insert is No on both.",
+    chapter: "case",
+  },
   { key: "drilledLugs", label: "Drilled lugs", type: "boolean", dimension: "caseCraft", chapter: "case" },
   {
     key: "arLayers",

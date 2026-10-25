@@ -207,7 +207,9 @@ describe("scoreDimensions", () => {
   it("rates caseCraft from any one of its own flags, and bracelet independently", () => {
     const watch = makeWatch({ qualityFlags: { drilledLugs: true } });
     const raw = scoreDimensions(watch);
-    expect(raw.caseCraft).toBeCloseTo(0.45);
+    // The one known input is fully achieved; coverage (1 of 4) says how little
+    // of the case that is.
+    expect(raw.caseCraft).toBeCloseTo(1);
     expect(raw.bracelet).toBeUndefined();
   });
 
@@ -221,17 +223,28 @@ describe("scoreDimensions", () => {
     expect(scoreDimensions(watch).bracelet).toBeCloseTo(0.65);
   });
 
-  it("tracks missing sub-inputs as lower evidence rather than recorded failures", () => {
+  it("tracks missing sub-inputs as lower evidence, never as absent features", () => {
     const partial = makeWatch({ qualityFlags: { drilledLugs: true } });
-    const moreCertain = makeWatch({ qualityFlags: { drilledLugs: true, sapphireBezelInsert: false } });
+    const withAbsence = makeWatch({ qualityFlags: { drilledLugs: true, sapphireBezelInsert: false } });
+    const withCeramic = makeWatch({ qualityFlags: { drilledLugs: true, ceramicBezelInsert: true } });
     const partialEvidence = scoreDimensionEvidence(partial).caseCraft!;
-    const certainEvidence = scoreDimensionEvidence(moreCertain).caseCraft!;
 
-    // Recording an absent feature does not retroactively lower the verified
-    // capability score, but it does make the evidence more complete.
-    expect(certainEvidence.raw).toBe(partialEvidence.raw);
+    // An omitted flag moves nothing; a recorded "no" is evidence of absence and
+    // counts against the case; a recorded feature never lowers it. Under the
+    // old fixed scale an unknown feature scored as absent, so recording a
+    // ceramic bezel alone read 45 of 100.
     expect(partialEvidence.coverage).toBe(0.25);
-    expect(certainEvidence.coverage).toBe(0.5);
+    expect(scoreDimensionEvidence(withAbsence).caseCraft!.raw).toBeLessThan(partialEvidence.raw);
+    expect(scoreDimensionEvidence(withAbsence).caseCraft!.coverage).toBe(0.5);
+    expect(scoreDimensionEvidence(makeWatch({ qualityFlags: { ceramicBezelInsert: true } })).caseCraft!.raw).toBeGreaterThan(0.45);
+    expect(scoreDimensionEvidence(withCeramic).caseCraft!.raw).toBeGreaterThan(scoreDimensionEvidence(withAbsence).caseCraft!.raw);
+  });
+
+  it("leaves a dimension with too little evidence out of quality, so one fact can't swing it", () => {
+    const specs = { caliber: "3285", movement: "automatic" as const, powerReserveHours: 70, waterResistanceM: 100, crystal: "Sapphire" };
+    const without = computeStanding(makeWatch({ specs }), []).qualityScore!;
+    const oneFact = computeStanding(makeWatch({ specs, qualityFlags: { ceramicBezelInsert: true } }), []).qualityScore!;
+    expect(oneFact).toBeCloseTo(without, 6);
   });
 
   it("reports durability coverage separately from its verified score", () => {

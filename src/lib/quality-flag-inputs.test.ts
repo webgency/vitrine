@@ -63,12 +63,15 @@ describe("the audit's quality-flag lists match what the engine reads", () => {
     }
   });
 
-  it("keeps caseCraft at four inputs despite five keys", () => {
-    // arLayers and arCoated are one input recorded at two precisions. If a
-    // sixth key is ever added as a genuinely new input, this fails and the
-    // coverage denominator has to be considered rather than drift.
+  it("keeps caseCraft at four inputs despite six keys", () => {
+    // arLayers and arCoated are one input recorded at two precisions, and
+    // sapphireBezelInsert and ceramicBezelInsert are the one bezel input. If a
+    // key is ever added as a genuinely new input, this fails and the coverage
+    // denominator has to be considered rather than drift.
     const ev = scoreDimensionEvidence(watchWith({ arCoated: true })).caseCraft!;
     expect(ev.totalInputs).toBe(4);
-    expect(CASE_CRAFT_FLAG_KEYS).toHaveLength(5);
+    expect(CASE_CRAFT_FLAG_KEYS).toHaveLength(6);
+    const bothBezels = scoreDimensionEvidence(watchWith({ sapphireBezelInsert: false, ceramicBezelInsert: true })).caseCraft!;
+    expect(bothBezels.knownInputs).toBe(1);
   });
 });

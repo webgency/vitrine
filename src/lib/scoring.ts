@@ -314,7 +314,8 @@ export function landedPriceUsd(watch: Watch, onWarning?: (message: string) => vo
 // 5 and drop under MIN_REFERENCE_COVERAGE without anyone touching its data.
 const CASE_CRAFT_INPUTS: Array<(flags: QualityFlags) => boolean> = [
   (f) => f.hardenedCoatingHv !== undefined,
-  (f) => f.sapphireBezelInsert !== undefined,
+  // One bezel input recorded two ways: what the insert is made of.
+  (f) => f.sapphireBezelInsert !== undefined || f.ceramicBezelInsert !== undefined,
   (f) => f.drilledLugs !== undefined,
   (f) => f.arLayers !== undefined || f.arCoated !== undefined,
 ];
@@ -474,30 +475,47 @@ export function scoreDimensionEvidence(watch: Watch): Partial<Record<Dimension, 
   // every band's rubric reference, so the watch was guaranteed to trail on a
   // dimension nobody had measured.
   if (CASE_CRAFT_INPUTS.some((recorded) => recorded(f))) {
+    // Each input is weighed only once it is known: `achievable` counts what
+    // the known inputs could have earned, `achieved` what they did. Summing
+    // achieved points on a fixed scale treated every unknown feature as
+    // absent, so recording a ceramic bezel alone scored 45 of 100 and pulled a
+    // Rolex's quality from 100 to 86. Now an omitted flag moves nothing, a
+    // recorded "no" counts against the case and a "yes" for it, and coverage
+    // says how much of the case was inspected.
     let achieved = 0;
+    let achievable = 0;
     if (f.hardenedCoatingHv !== undefined) {
+      achievable += 0.2;
       if (f.hardenedCoatingHv > 0) achieved += 0.2;
     }
-    if (f.sapphireBezelInsert !== undefined) {
+    if (f.sapphireBezelInsert !== undefined || f.ceramicBezelInsert !== undefined) {
+      // Ceramic is the luxury standard over aluminium — it neither scratches
+      // nor fades — and earns 0.10. Sapphire is harder still and rarer, so
+      // keeps 0.15. One insert, so one credit: the better material if both.
+      achievable += 0.15;
       if (f.sapphireBezelInsert) achieved += 0.15;
+      else if (f.ceramicBezelInsert) achieved += 0.1;
     }
     if (f.drilledLugs !== undefined) {
+      achievable += 0.1;
       if (f.drilledLugs) achieved += 0.1;
     }
-    if (f.arLayers !== undefined) {
-      achieved += (Math.min(f.arLayers, 8) / 8) * 0.2;
-    } else if (f.arCoated) {
-      // Credit exactly what "it is coated" guarantees: one layer. A brand that
-      // publishes a real count scores higher, which is the right incentive —
-      // awarding the average coating here would be inventing a number the
-      // manufacturer declined to give.
-      achieved += (1 / 8) * 0.2;
+    if (f.arLayers !== undefined || f.arCoated !== undefined) {
+      achievable += 0.2;
+      if (f.arLayers !== undefined) {
+        achieved += (Math.min(f.arLayers, 8) / 8) * 0.2;
+      } else if (f.arCoated) {
+        // Credit exactly what "it is coated" guarantees: one layer. A brand
+        // that publishes a real count scores higher, which is the right
+        // incentive — awarding the average coating here would be inventing a
+        // number the manufacturer declined to give.
+        achieved += (1 / 8) * 0.2;
+      }
     }
     const knownInputs = CASE_CRAFT_INPUTS.filter((recorded) => recorded(f)).length;
-    // Keep the established rubric scale: the score states verified capability,
-    // while coverage states how much of the possible evidence was inspected.
-    // Unknown features add neither verified points nor negative evidence.
-    out.caseCraft = evidence(0.35 + achieved, knownInputs, CASE_CRAFT_INPUTS.length);
+    // 0.35 stays the floor of the established rubric scale: every known
+    // feature recorded as absent.
+    out.caseCraft = evidence(0.35 + 0.65 * (achieved / achievable), knownInputs, CASE_CRAFT_INPUTS.length);
   }
 
   // A watch sold on a strap has no bracelet to judge, so the dimension is not
@@ -669,10 +687,17 @@ export interface Standing {
   frictions: string[];
 }
 
-function compositeQuality(raw: Partial<Record<Dimension, DimensionEvidence>>): number | undefined {
+/**
+ * Quality: rated dimensions weighted by coverage. A dimension below its
+ * MIN_REFERENCE_COVERAGE is left out, as it already is from value and from
+ * the panel's verdicts: one recorded fact is not enough to judge the whole
+ * case or bracelet, and averaging it in let a single flag move a watch's
+ * quality by up to 14 points.
+ */
+export function compositeQuality(raw: Partial<Record<Dimension, DimensionEvidence>>): number | undefined {
   const rated = DIMENSIONS.flatMap((dimension) => {
     const value = raw[dimension];
-    return value === undefined ? [] : [value];
+    return value === undefined || value.coverage < MIN_REFERENCE_COVERAGE[dimension] ? [] : [value];
   });
   if (rated.length === 0) return undefined;
   const totalWeight = rated.reduce((sum, value) => sum + value.coverage, 0);
