@@ -489,7 +489,8 @@
     ],
     "qualityFlags": {
       "accuracySpecSpd": 6,
-      "sapphireBezelInsert": false
+      "sapphireBezelInsert": false,
+      "ceramicBezelInsert": true
     },
     "links": [
       {
@@ -540,6 +541,7 @@
     "qualityFlags": {
       "antimagneticAm": 4800,
       "sapphireBezelInsert": false,
+      "ceramicBezelInsert": true,
       "microAdjustClasp": true,
       "braceletIncluded": true
     },
@@ -712,6 +714,7 @@
       "accuracySpecSpd": 5,
       "antimagneticAm": 1200000,
       "sapphireBezelInsert": false,
+      "ceramicBezelInsert": false,
       "microAdjustClasp": true,
       "braceletIncluded": true
     },
@@ -764,6 +767,8 @@
     "priceUpdatedAt": "2026-10-25T11:00:10.409Z",
     "qualityFlags": {
       "accuracySpecSpd": 40,
+      "sapphireBezelInsert": false,
+      "ceramicBezelInsert": false,
       "braceletIncluded": false,
       "arCoated": true
     },
@@ -909,6 +914,7 @@
     "priceUpdatedAt": "2026-10-25T11:00:12.701Z",
     "qualityFlags": {
       "sapphireBezelInsert": false,
+      "ceramicBezelInsert": true,
       "braceletIncluded": false,
       "arCoated": true
     },
@@ -1370,6 +1376,7 @@
     "priceUpdatedAt": "2026-06-23T03:23:35.877Z",
     "qualityFlags": {
       "sapphireBezelInsert": false,
+      "ceramicBezelInsert": true,
       "drilledLugs": true,
       "quickRelease": true,
       "braceletIncluded": false
@@ -2941,7 +2948,8 @@
       }
     ],
     "qualityFlags": {
-      "arLayers": 6
+      "arLayers": 6,
+      "ceramicBezelInsert": true
     },
     "links": [
       {
@@ -3001,6 +3009,10 @@
         "source": "manual"
       }
     ],
+    "qualityFlags": {
+      "sapphireBezelInsert": false,
+      "ceramicBezelInsert": false
+    },
     "links": [
       {
         "url": "https://www.boldrsupply.co/products/gmt-banff",
@@ -3058,6 +3070,7 @@
     ],
     "qualityFlags": {
       "sapphireBezelInsert": false,
+      "ceramicBezelInsert": false,
       "braceletIncluded": false
     },
     "links": [
@@ -3209,6 +3222,9 @@
         "source": "manual"
       }
     ],
+    "qualityFlags": {
+      "ceramicBezelInsert": true
+    },
     "links": [
       {
         "url": "https://av86.com/products/1956-marine-automatic-steel-blue-fade",
@@ -3527,7 +3543,9 @@
       }
     ],
     "qualityFlags": {
-      "accuracySpecSpd": 2
+      "accuracySpecSpd": 2,
+      "ceramicBezelInsert": true,
+      "microAdjustClasp": true
     },
     "links": [
       {
@@ -3662,6 +3680,10 @@
     "targetPrice": {
       "amount": 850,
       "currency": "USD"
+    },
+    "qualityFlags": {
+      "ceramicBezelInsert": true,
+      "microAdjustClasp": true
     },
     "links": [
       {
@@ -3825,6 +3847,7 @@
     ],
     "qualityFlags": {
       "accuracySpecSpd": 5,
+      "ceramicBezelInsert": true,
       "microAdjustClasp": true,
       "quickRelease": true,
       "braceletIncluded": true
@@ -4565,6 +4588,7 @@
       }
     ],
     "qualityFlags": {
+      "hardenedCoatingHv": 1200,
       "microAdjustClasp": true,
       "quickRelease": true,
       "arCoated": true
@@ -5091,6 +5115,9 @@
         "source": "manual"
       }
     ],
+    "qualityFlags": {
+      "ceramicBezelInsert": true
+    },
     "links": [
       {
         "url": "https://www.borealiswatch.com/collections/diver-watches/products/porto-covo-ice-blue?variant=54201113837915",
@@ -5669,7 +5696,9 @@
       }
     ],
     "qualityFlags": {
-      "accuracySpecSpd": 2
+      "accuracySpecSpd": 2,
+      "ceramicBezelInsert": true,
+      "microAdjustClasp": true
     },
     "links": [
       {

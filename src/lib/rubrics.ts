@@ -32,7 +32,7 @@ export const DIMENSION_LABELS: Record<Dimension, string> = {
 /** What each dimension actually reads, for tooltips and detail views. */
 export const DIMENSION_BLURBS: Record<Dimension, string> = {
   movement: "Caliber tier, plus a chronograph credit, regulation and power reserve.",
-  caseCraft: "Recorded case hardware and treatments: hardening, sapphire bezel insert, drilled lugs, and AR layers. This does not rate visual finishing quality.",
+  caseCraft: "Recorded case hardware and treatments: hardening, a sapphire or ceramic bezel insert, drilled lugs, and AR layers, scored on what is known. This does not rate visual finishing quality.",
   wearability: "Objective case proportions from diameter, thickness, and—when recorded—lug-to-lug. Personal fit is rated separately.",
   durability: "Water resistance on one scale for every category (full marks at 100m), plus a sapphire crystal.",
   bracelet: "Bracelet hardware: whether one is included, micro-adjust clasp, quick-release.",

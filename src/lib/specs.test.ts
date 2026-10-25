@@ -103,7 +103,8 @@ describe("quality flags reaching the scoring engine", () => {
 
   it("rates caseCraft once the form records one of its flags", () => {
     const flags = qualityFlagsFromForm({ ...blankForm(), drilledLugs: "yes" })!;
-    expect(scoreDimensions(makeWatch(flags)).caseCraft).toBeCloseTo(0.45, 5);
+    // Its one known input fully achieved; coverage records how little that is.
+    expect(scoreDimensions(makeWatch(flags)).caseCraft).toBeCloseTo(1, 5);
   });
 });
 

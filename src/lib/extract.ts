@@ -49,6 +49,7 @@ const ExtractionSchema = z.object({
     hardenedCoatingHv: z.number().nullable(),
     antimagneticAm: z.number().nullable(),
     sapphireBezelInsert: z.boolean().nullable(),
+    ceramicBezelInsert: z.boolean().nullable(),
     drilledLugs: z.boolean().nullable(),
     microAdjustClasp: z.boolean().nullable(),
     quickRelease: z.boolean().nullable(),

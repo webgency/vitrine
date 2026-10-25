@@ -368,9 +368,11 @@ describe("Henry Archer Tidevand Meteorite (testimonials and other models below t
       crystal: "Sapphire",
       braceletStrap: "316L stainless steel BoR (Beads-of-Rice) bracelet",
     });
-    // The Tidevand has a ceramic bezel and no GMT; both came from below the specs.
+    // The Tidevand has a ceramic bezel and no GMT. A GMT and a sapphire bezel
+    // (the Dacnis) used to come from below the specs; the ceramic bezel is its
+    // own spec line ("• Bezel; 120-click uni-directional ceramic bezel").
     expect(specs.complications).toBeUndefined();
-    expect(extractQualityFlags(text)).toEqual({ arLayers: 6 });
+    expect(extractQualityFlags(text)).toEqual({ arLayers: 6, ceramicBezelInsert: true });
   });
 
   it("records a stated AR layer count instead of a plain coating flag", () => {
@@ -462,6 +464,44 @@ describe("Tissot Le Locle (label and value as two divs in an indented row)", () 
     });
     // The site menu's "Chronograph" is outside the technical section.
     expect(specs.complications).toBeUndefined();
+  });
+});
+
+describe("construction details", () => {
+  it("reads a ceramic bezel insert, including Rolex's Cerachrom", () => {
+    const rolex = extractQualityFlags(productExtractionText(undefined, rolexPage));
+    expect(rolex).toMatchObject({ ceramicBezelInsert: true, microAdjustClasp: true }); // Cerachrom; Easylink
+    expect(extractQualityFlags("Bezel: Unidirectional, ceramic insert with Super-LumiNova pip").ceramicBezelInsert).toBe(true);
+    expect(extractQualityFlags("Bezel; Ceramic; Crystal; Sapphire").ceramicBezelInsert).toBe(true);
+  });
+
+  it("never reads a ceramic case, dial or bearing as a ceramic bezel", () => {
+    for (const text of [
+      "Case: black ceramic",
+      "Dial: ceramic, grand feu",
+      "rotor on ceramic ball bearings",
+      // A choice across the range states nothing about this model (EREBUS).
+      "fully lumed, and ceramic or steel 24 click bidirectional bezels; sandblasted bicolour ceramic bezel inserts",
+    ]) {
+      expect(extractQualityFlags(text).ceramicBezelInsert).toBeUndefined();
+    }
+  });
+
+  it("records an aluminium insert as evidence the bezel is neither sapphire nor ceramic", () => {
+    expect(extractQualityFlags("BEZEL; Aluminum / Blue; LUME; Swiss")).toMatchObject({ sapphireBezelInsert: false, ceramicBezelInsert: false });
+    // A sapphire insert stays sapphire.
+    expect(extractQualityFlags("Sapphire bezel insert; aluminium case back ring")).toMatchObject({ sapphireBezelInsert: true });
+  });
+
+  it("reads a stated case hardness, but not a bracelet's or a bare material's", () => {
+    expect(extractQualityFlags("Case: 316L steel, hardened to 1,200 HV").hardenedCoatingHv).toBe(1200);
+    expect(extractQualityFlags("DLC coating, 2000 Vickers").hardenedCoatingHv).toBe(2000);
+    expect(extractQualityFlags("titanium multilink bracelet hardened to 600HV").hardenedCoatingHv).toBeUndefined();
+    expect(extractQualityFlags("316L stainless steel (200 HV)").hardenedCoatingHv).toBeUndefined();
+    // Straum: the bracelet is named after the figure.
+    expect(extractQualityFlags("CNC-machined from Grade 5 Titanium, hardened to a minimum of 1200 Vickers, the bracelet tapers").hardenedCoatingHv).toBeUndefined();
+    // UBIQ: the standard case's figure, not the DLC variant's.
+    expect(extractQualityFlags("Materials: Grade 2 Titanium case with 1200HV hardness coating (600HV on black DLC models)").hardenedCoatingHv).toBe(1200);
   });
 });
 

@@ -70,6 +70,7 @@ const TEXT_SPECS = [
 const QUALITY_FLAGS = [
   ["hardenedCoatingHv", "surface hardening in Vickers (HV), e.g. a DLC or Cerakote figure"],
   ["sapphireBezelInsert", "whether the bezel insert is sapphire (true/false)"],
+  ["ceramicBezelInsert", "whether the bezel insert is ceramic, e.g. Cerachrom (true/false)"],
   ["drilledLugs", "whether the lugs are drilled through (true/false)"],
   ["arLayers", "number of anti-reflective coating layers on the crystal"],
   ["regulatedPositions", "number of positions the movement is regulated in"],
@@ -108,6 +109,7 @@ const TagsFlagsSchema = z.object({
     hardenedCoatingHv: z.number().nullable(),
     antimagneticAm: z.number().nullable(),
     sapphireBezelInsert: z.boolean().nullable(),
+    ceramicBezelInsert: z.boolean().nullable(),
     drilledLugs: z.boolean().nullable(),
     microAdjustClasp: z.boolean().nullable(),
     quickRelease: z.boolean().nullable(),

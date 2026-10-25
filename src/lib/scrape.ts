@@ -748,6 +748,47 @@ export function extractQualityFlags(text: string, variantTitle?: string): Qualit
   if (/\bsapphire\s+(?:crystal\s+)?(?:bezel|insert)\b|\bbezel[^.;]{0,50}\bsapphire\s+insert\b/i.test(t)) {
     flags.sapphireBezelInsert = true;
   }
+  // A ceramic insert is named with the bezel or insert, so a ceramic case,
+  // dial or ball bearing never counts. Rolex calls it Cerachrom.
+  // "ceramic or steel bezels" offers a choice across a range and states neither
+  // for this model (EREBUS), so it stays unknown.
+  if (
+    !flags.sapphireBezelInsert &&
+    !/\bceramic\s+or\s+\w+|\w+\s+or\s+ceramic\b/i.test(t) &&
+    /\bCerachrom\b|\bceramic\s+(?:bezel|insert)\b|\b(?:bezel|insert)\s+(?:in|of|made of)\s+ceramic\b|\bbezel(?:\s+insert)?\s*[:;]\s*(?:[^.;]{0,30}\s)?ceramic\b/i.test(t)
+  ) {
+    flags.ceramicBezelInsert = true;
+  }
+  // An aluminium insert is recorded evidence that the bezel is neither, which
+  // is not the same as not knowing: coverage counts it, the score doesn't.
+  if (
+    flags.sapphireBezelInsert === undefined &&
+    flags.ceramicBezelInsert === undefined &&
+    /\balumin(?:i)?um\s+(?:bezel|insert)\b|\b(?:bezel|insert)\s+(?:in|of|made of)\s+alumin(?:i)?um\b|\bbezel(?:\s+insert)?\s*[:;]\s*(?:[^.;]{0,30}\s)?alumin(?:i)?um\b/i.test(t)
+  ) {
+    flags.sapphireBezelInsert = false;
+    flags.ceramicBezelInsert = false;
+  }
+  // A stated surface hardness, from a hardening clause ("hardened to 1200 HV",
+  // "case with 1200HV hardness coating"). Not a bracelet's or clasp's, which
+  // says nothing about the case, whether the bracelet is named before the
+  // figure or after it ("hardened to 1200 Vickers, the bracelet tapers" on
+  // Straum). Not a bare material hardness either, which any steel has. The
+  // first qualifying figure wins: UBIQ's "1200HV hardness coating (600HV on
+  // black DLC models)" is the standard case, the second a variant.
+  for (const hv of t.matchAll(/(\d{1,2}[.,]\d{3}|\d{3,4})\s*(?:HV|Vickers)\b/gi)) {
+    const at = hv.index ?? 0;
+    const before = t.slice(Math.max(0, at - 80), at);
+    const clause = before.split(/[.;]/).pop() ?? "";
+    const after = t.slice(at + hv[0].length).split(/[.;]/)[0].slice(0, 60);
+    if (/bracelet|strap|clasp|buckle|\bband\b|armband/i.test(before + after)) continue;
+    if (!/harden|coat|DLC|treat|surface|tegiment|diashield/i.test(clause + after)) continue;
+    const value = Number(hv[1].replace(/[.,]/g, ""));
+    if (value >= 300 && value <= 3000) {
+      flags.hardenedCoatingHv = value;
+      break;
+    }
+  }
   if (/\bdrilled\s+lugs?\b|\blug holes?\b|\bdurchbohrte?\s+(?:Band)?anst/i.test(t)) flags.drilledLugs = true;
   // A stated layer count ("6-layer AR coating", "AR coating (6 layers)",
   // "6-fach entspiegelt") is recorded as arLayers, which scores above a plain
@@ -764,7 +805,8 @@ export function extractQualityFlags(text: string, variantTitle?: string): Qualit
   } else if (/\banti[- ]reflective\s+(?:coating|coated)\b|\bglare-?proof(?:ed)?\b|\bantireflex|\bentspiegelt|\banti-?reflets?\b|\bantirreflej|\bantirifless/i.test(arText)) {
     flags.arCoated = true;
   }
-  if (/\bmicro[- ]?adjust(?:ment)?\b|\bon[- ]the[- ]fly adjustment clasp\b|\bquick[- ]adjust clasp\b|\bFeinverstellung|\bMikroverstellung|\bmicro-?réglage/i.test(t)) {
+  // Rolex's Glidelock and Easylink adjust the fit on the wrist without tools.
+  if (/\bmicro[- ]?adjust(?:ment)?\b|\bGlidelock\b|\bEasylink\b|\bon[- ]the[- ]fly adjustment clasp\b|\bquick[- ]adjust clasp\b|\bFeinverstellung|\bMikroverstellung|\bmicro-?réglage/i.test(t)) {
     flags.microAdjustClasp = true;
   }
   if (/\bquick[- ]release\b|\bquick[- ]change strap|\bSchnellwechsel|\bdégagement rapide\b|\bliberación rápida\b|\bsgancio rapido\b/i.test(t)) {

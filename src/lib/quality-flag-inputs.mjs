@@ -8,13 +8,15 @@
 // suite rather than skewing a coverage number nobody re-derives.
 
 /**
- * Keys that make caseCraft rated. Five keys, four inputs: arLayers and
- * arCoated are the same input recorded at two precisions, so a record holding
- * either one counts once toward coverage. See CASE_CRAFT_INPUTS in scoring.ts.
+ * Keys that make caseCraft rated. Six keys, four inputs: arLayers and arCoated
+ * are the same input recorded at two precisions, and sapphireBezelInsert and
+ * ceramicBezelInsert are the one bezel input, so a record holding either of a
+ * pair counts once toward coverage. See CASE_CRAFT_INPUTS in scoring.ts.
  */
 export const CASE_CRAFT_FLAG_KEYS = [
   "hardenedCoatingHv",
   "sapphireBezelInsert",
+  "ceramicBezelInsert",
   "drilledLugs",
   "arLayers",
   "arCoated",

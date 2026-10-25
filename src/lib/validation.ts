@@ -363,6 +363,7 @@ function cleanQualityFlags(value: unknown, errors: string[]): QualityFlags | und
 
   const booleans = [
     "sapphireBezelInsert",
+    "ceramicBezelInsert",
     "drilledLugs",
     "microAdjustClasp",
     "quickRelease",
