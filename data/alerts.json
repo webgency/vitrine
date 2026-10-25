@@ -95,6 +95,51 @@
           "currency": "USD"
         }
       }
+    },
+    {
+      "id": "fresh_offer-w16-mvmkf7qc",
+      "watchId": "w16",
+      "type": "fresh_offer",
+      "createdAt": "2026-10-24T15:40:20.580Z",
+      "payload": {
+        "watch": "Tudor Black Bay 58 GMT",
+        "price": {
+          "amount": 5650,
+          "currency": "USD"
+        },
+        "priceUsd": 5650,
+        "asOf": "2026-10-24T12:00:00.000Z",
+        "basis": "listed",
+        "kind": "new",
+        "source": "tudorwatch.com",
+        "url": "https://www.tudorwatch.com/en/watches/black-bay-58/m7939g1a0nru-0003",
+        "condition": "new"
+      }
+    },
+    {
+      "id": "price_drop-mv7hphuwkgbljl-mvn6nbeo",
+      "watchId": "mv7hphuwkgbljl",
+      "type": "price_drop",
+      "createdAt": "2026-10-25T02:02:30.144Z",
+      "payload": {
+        "watch": "Monchard watches Regatta Blue on Strap",
+        "price": {
+          "amount": 570,
+          "currency": "USD"
+        },
+        "priceUsd": 570,
+        "asOf": "2026-10-25T02:02:28.145Z",
+        "basis": "listed",
+        "previousPrice": {
+          "amount": 673,
+          "currency": "USD"
+        },
+        "previousAsOf": "2026-10-14",
+        "dropPct": 0.153,
+        "source": "monchardwatches.com",
+        "url": "https://monchardwatches.com/products/regatta-blue-on-strap?variant=57504123257205",
+        "condition": "new"
+      }
     }
   ]
 }
