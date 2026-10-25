@@ -5,6 +5,8 @@ import { cleanModelName } from "./model-name";
 describe("cleanModelName", () => {
   it.each([
     ["GMT-Master II watch - m126710blnr-0002", { brand: "Rolex", referenceNumber: "126710BLNR", caseDiameterMm: 40 }, "GMT-Master II"],
+    // Rolex's newer title form, 2026-10-25.
+    ["Rolex GMT-Master II watch: Oystersteel - m126720vtnr-0001", { brand: "Rolex", referenceNumber: "126720VTNR", caseDiameterMm: 40, caseMaterial: "Oystersteel" }, "GMT-Master II"],
     ["Retrograph - Espresso Chronograph Watch", { brand: "Brew Watches", referenceNumber: "RG-RTRO", caseDiameterMm: 38 }, "Retrograph - Espresso Chronograph"],
     ["Argo Bronze 200M Automatic Diver Watch PY057B Spiral Sunray Blue", { brand: "Phoibos", referenceNumber: "PY057B", caseDiameterMm: 40.5 }, "Argo Bronze 200M Automatic Diver Spiral Sunray Blue"],
     ["Nereide Corallo - 4521546", { brand: "Venezianico", referenceNumber: "4521546", caseDiameterMm: 42 }, "Nereide Corallo"],
@@ -29,6 +31,8 @@ describe("cleanModelName", () => {
     ["Thresher 44mm 'Azure'", { brand: "Zelos Watches", caseDiameterMm: 44 }],
     ["D5 Meridian Navy Auto - 39mm USA", { brand: "Vaer Watches", caseDiameterMm: 39 }],
     ["Club Campus 36mm", { brand: "NOMOS Glashütte", caseDiameterMm: 38.5 }],
+    // A material that isn't the recorded case material stays.
+    ["Datejust watch: Everose Rolesor", { brand: "Rolex", caseMaterial: "Oystersteel" }],
   ])("leaves %s alone", (model, context) => {
     expect(cleanModelName(model, context)).toBe(model);
   });

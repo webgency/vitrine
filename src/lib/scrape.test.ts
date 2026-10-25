@@ -25,6 +25,8 @@ const henryArcherPage = readFileSync(new URL("./fixtures/henry-archer-tidevand-k
 const av86Page = readFileSync(new URL("./fixtures/av86-1564-chronodate-steel-white.html", import.meta.url), "utf8");
 const malouinePage = readFileSync(new URL("./fixtures/le-forban-malouine.html", import.meta.url), "utf8");
 const breitlingPage = readFileSync(new URL("./fixtures/breitling-top-time-deus.html", import.meta.url), "utf8");
+const rolexPage = readFileSync(new URL("./fixtures/rolex-gmt-master-ii-126720vtnr.html", import.meta.url), "utf8");
+const tissotPage = readFileSync(new URL("./fixtures/tissot-le-locle-t0064073603300.html", import.meta.url), "utf8");
 // Viis's real Shopify body_html: marketing only, with no calibre or dimensions table.
 const VIIS_BODY_HTML =
   "<p>The Flieger GMT 42 Adriatic is like the sea: deep blue, clear and full of vastness. It masterfully combines " +
@@ -412,6 +414,61 @@ describe("Breitling Top Time Deus (each value in its own box after the label)", 
 
   it("never stores a strap row's label as the strap under a heading-style panel", () => {
     expect(extractSpecs("Strap; Strap material; Calfskin leather").braceletStrap).not.toBe("Strap material");
+  });
+});
+
+describe("Rolex GMT-Master II (label and value as the two children of a list row)", () => {
+  it("reads each <li><h5>label</h5><p>value</p></li> row and the case's bare Material row", () => {
+    const text = productExtractionText(undefined, rolexPage);
+    expect(text).toContain("Diameter: 40 mm; Material: Oystersteel");
+    expect(extractSpecs(text)).toMatchObject({
+      caseDiameterMm: 40,
+      waterResistanceM: 100, // "Waterproof to 100 metres / 330 feet"
+      caliber: "3285",
+      caseMaterial: "Oystersteel",
+      dialColor: "Black",
+      braceletStrap: "Oyster, three-piece solid links",
+      powerReserveHours: 70,
+      movement: "automatic",
+      crystal: "Sapphire",
+    });
+  });
+});
+
+describe("Tissot Le Locle (label and value as two divs in an indented row)", () => {
+  it("pairs each row despite the indentation, so values stop at their own row", () => {
+    const text = productExtractionText(undefined, tissotPage);
+    expect(text).toContain("Case lug width (mm): 19.00; Case water resistance:");
+    const specs = extractSpecs(text);
+    expect(specs).toMatchObject({
+      caseDiameterMm: 39.3,
+      caseThicknessMm: 9.75,
+      lugWidthMm: 19, // the unit is in the label: "(mm): 19.00"
+      waterResistanceM: 30,
+      caseMaterial: "316L stainless steel & PVD coating",
+      dialColor: "Silver",
+      braceletStrap: "Leather",
+      caliber: "Powermatic 80", // named only in the feature copy
+      powerReserveHours: 80,
+    });
+    // The site menu's "Chronograph" is outside the technical section.
+    expect(specs.complications).toBeUndefined();
+  });
+});
+
+describe("label/value rows that must not pair", () => {
+  it("never reads a product card's price as its value", () => {
+    const html = '<main><h2>Specifications</h2><div><span>White Leather Strap</span><span>$50.00</span></div></main>';
+    expect(extractSpecs(productExtractionText(undefined, html)).braceletStrap).toBeUndefined();
+  });
+
+  it("never reads the tail of another label as the strap", () => {
+    expect(extractSpecs("Case Weight: 70.87g; Weight inc. Strap: 178g; Strap Material: Bader bracelet").braceletStrap).toBe("Bader bracelet");
+  });
+
+  it("reads a bare Dial row only when it names a colour", () => {
+    expect(extractSpecs("LUME; Hands: Swiss; Dial: Swiss; DIAL; Blue").dialColor).toBeUndefined();
+    expect(extractSpecs("Dial: Black; Details: Chromalight").dialColor).toBe("Black");
   });
 });
 

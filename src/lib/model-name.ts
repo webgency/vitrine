@@ -3,7 +3,8 @@
  * carry the brand, the reference, the case size and the word "Watch" for
  * search engines ("GMT-Master II watch - m126710blnr-0002"), and those leaked
  * into the collection's names. Each rule removes only text the watch already
- * records elsewhere — the brand field, the reference, the diameter — or a
+ * records elsewhere — the brand field, the reference, the diameter, the case
+ * material — or a
  * "Watch" that follows a category word, so nothing descriptive is guessed away,
  * and title-cases shouted words for consistency.
  *
@@ -37,7 +38,7 @@ export function titleCaseShouting(name: string): string {
 
 export function cleanModelName(
   model: string,
-  context: { brand?: string; referenceNumber?: string; caseDiameterMm?: number } = {}
+  context: { brand?: string; referenceNumber?: string; caseDiameterMm?: number; caseMaterial?: string } = {}
 ): string {
   const original = model.trim().replace(/\s+/g, " ");
   let name = original;
@@ -58,6 +59,12 @@ export function cleanModelName(
     // The reference as a word, with a "Watch" right before it:
     // "Automatic Diver Watch PY057B Spiral Sunray Blue".
     name = name.replace(new RegExp(`(?:\\s+watch)?\\s+${escape(context.referenceNumber!.trim())}(?=\\s|$)`, "iu"), "");
+  }
+
+  if (context.caseMaterial?.trim()) {
+    // Rolex titles name the material after a colon: "GMT-Master II watch:
+    // Oystersteel - m126720vtnr-0001". Only the recorded case material goes.
+    name = name.replace(new RegExp(`\\s*:\\s*${escape(context.caseMaterial.trim())}$`, "iu"), "");
   }
 
   if (context.caseDiameterMm !== undefined) {

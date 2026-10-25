@@ -186,6 +186,7 @@ export default function WatchForm({ initial, tracked, purchase }: {
           brand: data.brand || brand,
           referenceNumber: data.referenceNumber || referenceNumber,
           caseDiameterMm: Number.isFinite(diameter) && diameter > 0 ? diameter : undefined,
+          caseMaterial: typeof data.specs?.caseMaterial === "string" ? data.specs.caseMaterial : undefined,
         });
         setModel(cleaned);
         setScrapedModel(cleaned === data.model.trim() ? null : data.model);
