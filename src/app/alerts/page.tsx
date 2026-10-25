@@ -6,6 +6,7 @@ import { ALERT_TYPE_LABELS } from "@/lib/alert-status";
 import { getAlertState } from "@/lib/alert-store";
 import {
   ALERT_TYPES,
+  FRESH_OFFER_DISCOUNT,
   PRICE_DROP_THRESHOLD,
   isTypeEnabled,
   visibleAlerts,
@@ -24,7 +25,7 @@ const TYPE_LABEL = ALERT_TYPE_LABELS;
 const TYPE_RULE: Record<AlertType, string> = {
   target_met: "A dated ask or your tracked price reaches your target. Setting a target doesn't fire one.",
   price_drop: `A listing's ask falls ${PRICE_DROP_THRESHOLD * 100}% or more below its highest recorded ask since the last drop alert.`,
-  fresh_offer: "A new dated ask, or one confirmed again after going stale, on wishlist watches not marked Pass.",
+  fresh_offer: `A new dated ask, or one confirmed again after going stale, on wishlist watches not marked Pass. A new-condition ask ${FRESH_OFFER_DISCOUNT * 100}% or more under the tracked price is marked as a discount.`,
 };
 
 // A listed price is what the retailer shows, so it is never called landed.
@@ -66,7 +67,13 @@ function AlertBody({ event }: { event: AlertEvent }) {
   return (
     <>
       {p.kind === "back" ? "Ask confirmed again after going stale: " : "New dated ask: "}
-      <strong className="tabular-nums">{formatMoney(p.price)}</strong>.
+      <strong className="tabular-nums">{formatMoney(p.price)}</strong>
+      {p.belowTrackedPct !== undefined && p.trackedPrice ? (
+        <>
+          , <strong>{Math.round(p.belowTrackedPct * 1000) / 10}% below</strong> your tracked{" "}
+          <span className="tabular-nums">{formatMoney(p.trackedPrice)}</span>.
+        </>
+      ) : "."}
     </>
   );
 }

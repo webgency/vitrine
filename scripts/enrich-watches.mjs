@@ -26,6 +26,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { readAlertState, writeAlertState } from "../src/lib/alert-file.mjs";
 import { appendAlerts, detectAlerts } from "../src/lib/alerts.mjs";
+import { mergeRefreshed } from "../src/lib/refresh-merge.mjs";
 import { recordAskMove } from "../src/lib/listing-history.mjs";
 import { recordOfferObservation } from "../src/lib/offer-observation.mjs";
 import {
@@ -403,11 +404,27 @@ async function main() {
     for (const change of offerCurrencyChanges) console.log(`  · ${change}`);
   }
 
+  // Write onto the file as it is now, not as this run read it: the run takes
+  // minutes, and an edit saved in the app meanwhile must survive it.
+  let output = watches;
+  const skipped = new Set();
+  if (!DRY && changed) {
+    const merged = mergeRefreshed(JSON.parse(await readFile(DATA_URL, "utf8")), before, watches);
+    output = merged.watches;
+    for (const id of merged.skipped) skipped.add(id);
+    if (skipped.size) {
+      console.log(`\nEdited during this run, so left as edited (refreshed next run): ${output.filter((w) => skipped.has(w.id)).map((w) => short(`${w.brand} ${w.model}`, 30)).join("; ")}`);
+    }
+  }
+  const written = new Set(output.map((w) => w.id));
+
   // Same rules as an edit in the app. A dry run lists what would fire and
-  // records nothing.
+  // records nothing. A watch whose refresh was dropped announces nothing.
   const alertState = await readAlertState(ALERTS_URL);
   const alertNow = new Date();
-  const candidates = targets.flatMap((w) => detectAlerts(before.get(w.id), w, { now: alertNow, events: alertState.events }));
+  const candidates = targets
+    .filter((w) => written.has(w.id) && !skipped.has(w.id))
+    .flatMap((w) => detectAlerts(before.get(w.id), w, { now: alertNow, events: alertState.events }));
   const { state: nextAlertState, added: newAlerts } = appendAlerts(alertState, candidates, alertNow);
   if (newAlerts.length) {
     console.log(`\n${DRY ? "Would record" : "Alerts"} (${newAlerts.length}):`);
@@ -418,7 +435,7 @@ async function main() {
 
   if (DRY) return console.log("\n--dry: nothing written.");
   if (changed) {
-    await writeFile(DATA_URL, JSON.stringify(watches, null, 2) + "\n");
+    await writeFile(DATA_URL, JSON.stringify(output, null, 2) + "\n");
     console.log("\nWrote data/watches.json — review with: git diff data/watches.json");
     if (newAlerts.length) {
       await writeAlertState(ALERTS_URL, nextAlertState);
