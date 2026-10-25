@@ -24,6 +24,10 @@ import {
   CHRONOGRAPH_CREDIT,
   VALUE_DIMENSIONS,
   valueFromEvidence,
+  accuracyCredit,
+  dimensionVerdict,
+  CHRONOGRAPH_THICKNESS_ALLOWANCE_MM,
+  caseProfileEvidence,
 } from "./scoring";
 import { CANONICAL_CALIBERS, isQuartzCaliber, isQuartzMovement, QUARTZ_MOVEMENTS } from "./calibers";
 import { DIMENSIONS, dimensionPar, PAR } from "./rubrics";
@@ -748,5 +752,78 @@ describe("value for money", () => {
     const flagged = complete({ qualityFlags: { hardenedCoatingHv: 1200, drilledLugs: true, braceletIncluded: true, microAdjustClasp: true } });
     expect(computeStanding(flagged, []).valueScore).toBe(computeStanding(bare, []).valueScore);
     expect(valueFromEvidence({}, 800)).toBeUndefined();
+  });
+});
+
+describe("accuracy spec as regulation", () => {
+  it("credits a stated accuracy linearly from ±20 s/d (nothing) to ±2 s/d (full 0.2)", () => {
+    expect(accuracyCredit(40)).toBe(0);
+    expect(accuracyCredit(20)).toBe(0);
+    expect(accuracyCredit(6)).toBeCloseTo(0.156, 3); // COSC -4/+6
+    expect(accuracyCredit(2)).toBe(0.2);
+  });
+
+  it("shares one credit with regulated positions, the larger, never both", () => {
+    const base = { caliber: "SW200-1", movement: "automatic" as const };
+    const movement = (qualityFlags: Watch["qualityFlags"]) =>
+      scoreDimensionEvidence(makeWatch({ specs: base, qualityFlags })).movement!.raw;
+    const positions4 = movement({ regulatedPositions: 4 });
+    expect(movement({ regulatedPositions: 4, accuracySpecSpd: 6 })).toBeCloseTo(positions4, 6);
+    expect(movement({ accuracySpecSpd: 2 })).toBeCloseTo(positions4, 6);
+    expect(movement({ accuracySpecSpd: 6 })).toBeGreaterThan(movement({}));
+  });
+
+  it("counts a stated accuracy as the regulation input being known", () => {
+    const watch = makeWatch({ specs: { caliber: "SW200-1", movement: "automatic" }, qualityFlags: { accuracySpecSpd: 10 } });
+    expect(scoreDimensionEvidence(watch).movement!.knownInputs).toBe(2);
+  });
+});
+
+describe("chronograph thickness allowance", () => {
+  const specs = { caseDiameterMm: 41, caseThicknessMm: 14.27 };
+
+  it("expects a chronograph caliber's case to be taller by the module", () => {
+    const chrono = scoreDimensionEvidence(makeWatch({ specs: { ...specs, caliber: "Sellita SW510", movement: "automatic" } })).wearability!.raw;
+    expect(chrono).toBeCloseTo(caseProfileEvidence(specs, CHRONOGRAPH_THICKNESS_ALLOWANCE_MM)!.raw, 6);
+    expect(chrono).toBeGreaterThan(caseProfileEvidence(specs)!.raw);
+  });
+
+  it("reads the caliber, not the category or the complications text", () => {
+    const threeHand = scoreDimensionEvidence(makeWatch({
+      scoringCategory: "chronograph",
+      specs: { ...specs, caliber: "SW200-1", movement: "automatic", complications: "Chronograph" },
+    })).wearability!.raw;
+    expect(threeHand).toBeCloseTo(caseProfileEvidence(specs)!.raw, 6);
+  });
+});
+
+describe("dimensionVerdict", () => {
+  it("reads a score at the ceiling as top of scale once par has passed it, not as trailing", () => {
+    expect(dimensionVerdict("movement", 1, 1.14, 0.67)).toBe("top");
+    expect(dimensionVerdict("movement", 0.96, 1.14, 0.67)).toBe("top");
+  });
+
+  it("keeps full marks against a par of exactly 1 as expected (durability at any price)", () => {
+    expect(dimensionVerdict("durability", 1, 1, 1)).toBe("par");
+  });
+
+  it("still trails when the score is short of the ceiling", () => {
+    expect(dimensionVerdict("movement", 0.9, 1.14, 0.67)).toBe("trails");
+    expect(dimensionVerdict("movement", 0.5, 0.7, 0.67)).toBe("trails");
+  });
+
+  it("keeps beats, par, limited and unbanded as before", () => {
+    expect(dimensionVerdict("movement", 0.9, 0.7, 0.67)).toBe("beats");
+    expect(dimensionVerdict("movement", 0.72, 0.7, 0.67)).toBe("par");
+    expect(dimensionVerdict("movement", 1, 1.14, 0.2)).toBe("limited");
+    expect(dimensionVerdict("movement", 1, undefined, 1)).toBe("unbanded");
+  });
+
+  it("leaves value unchanged: a dearer watch with the same specs is still worse value", () => {
+    const specs = { caliber: "3285", movement: "automatic" as const, powerReserveHours: 70, caseDiameterMm: 40, caseThicknessMm: 12, waterResistanceM: 100, crystal: "Sapphire" };
+    const at = (amount: number) => computeStanding(makeWatch({ specs, price: { amount, currency: "USD" } }), []).valueScore!;
+    expect(at(12000)).toBeLessThan(at(8000));
+    const standing = computeStanding(makeWatch({ specs, price: { amount: 12000, currency: "USD" } }), []);
+    expect(standing.trails).not.toContain("movement");
   });
 });

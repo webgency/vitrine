@@ -140,7 +140,8 @@ export const QUALITY_FLAG_FIELDS: QualityFlagField[] = [
     label: "Accuracy spec",
     unit: "s/d",
     type: "number",
-    hint: "Recorded for reference; no dimension reads it.",
+    dimension: "movement",
+    hint: "The larger deviation either side: -4/+6 is 6. Credited as regulation.",
     chapter: "movement",
   },
 ];

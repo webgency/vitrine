@@ -1,10 +1,10 @@
 import EvidenceCoverage from "./EvidenceCoverage";
-import { MIN_REFERENCE_COVERAGE, RUBRIC_TOLERANCE, Standing, unratedReason } from "@/lib/scoring";
+import { SCORE_CEILING, Standing, dimensionVerdict, unratedReason, type DimensionVerdict } from "@/lib/scoring";
 import { DIMENSIONS, DIMENSION_BLURBS, DIMENSION_LABELS, type Dimension } from "@/lib/rubrics";
 import { movementNote } from "@/lib/movement-notes";
 import type { Watch } from "@/lib/types";
 
-type Verdict = "beats" | "par" | "trails" | "limited" | "unbanded";
+type Verdict = DimensionVerdict;
 
 // Status encoding, not series identity. Every row also carries the verdict in
 // words, so the colour never has to be read on its own — which is what lets the
@@ -18,6 +18,15 @@ const VERDICT: Record<Verdict, { label: string; fill: string; track: string; tex
   },
   par: {
     label: "As expected",
+    fill: "bg-cocoa-500",
+    track: "bg-cocoa-200",
+    text: "text-cocoa-600",
+  },
+  // At the ceiling while par, which keeps rising with price, has passed it.
+  // Neutral rather than green: the score is the most it can be, not beyond
+  // what the money should buy.
+  top: {
+    label: "Top of scale",
     fill: "bg-cocoa-500",
     track: "bg-cocoa-200",
     text: "text-cocoa-600",
@@ -49,12 +58,9 @@ function pct(value: number): number {
   return Math.round(value * 100);
 }
 
-function verdictFor(dimension: Dimension, raw: number, reference: number | undefined, coverage: number): Verdict {
-  if (reference === undefined) return "unbanded";
-  if (coverage < MIN_REFERENCE_COVERAGE[dimension]) return "limited";
-  if (raw > reference + RUBRIC_TOLERANCE) return "beats";
-  if (raw < reference - RUBRIC_TOLERANCE) return "trails";
-  return "par";
+/** Par as the reader sees it: a score can't pass 100, so par beyond it is "100+". */
+function expectedText(reference: number): string {
+  return reference > SCORE_CEILING ? "100+" : String(pct(reference));
 }
 
 /**
@@ -77,7 +83,7 @@ function DimensionMeter({
   knownInputs: number;
   totalInputs: number;
 }) {
-  const verdict = verdictFor(dimension, raw, reference, coverage);
+  const verdict = dimensionVerdict(dimension, raw, reference, coverage);
   const style = VERDICT[verdict];
 
   return (
@@ -94,7 +100,7 @@ function DimensionMeter({
             ? `${DIMENSION_LABELS[dimension]}: ${pct(raw)} of 100, no price benchmark`
             : verdict === "limited"
               ? `${DIMENSION_LABELS[dimension]}: ${pct(raw)} of 100; limited evidence, so no comparison is made`
-            : `${DIMENSION_LABELS[dimension]}: ${pct(raw)} of 100; expected ${pct(reference)} at this price — ${style.label}`
+            : `${DIMENSION_LABELS[dimension]}: ${pct(raw)} of 100; expected ${expectedText(reference)} at this price — ${style.label}`
         }
       >
         <div className={`h-full rounded-full ${style.fill}`} style={{ width: `${Math.max(pct(raw), 1.5)}%` }} />
@@ -103,7 +109,7 @@ function DimensionMeter({
           // runs past it.
           <div
             className="absolute inset-y-0 w-0.5 -translate-x-1/2 bg-cocoa-900/70"
-            style={{ left: `${pct(reference)}%` }}
+            style={{ left: `${Math.min(pct(reference), 100)}%` }}
           />
         )}
       </div>
@@ -114,7 +120,7 @@ function DimensionMeter({
             Below expected" beside "35 · As expected" read as a contradiction
             until the reader found the tick. */}
         {reference !== undefined && verdict !== "limited" && (
-          <span className="text-xs tabular-nums text-cocoa-400">expected {pct(reference)}</span>
+          <span className="text-xs tabular-nums text-cocoa-400">expected {expectedText(reference)}</span>
         )}
         <span className={`w-24 text-right text-xs font-medium ${style.text}`}>{style.label}</span>
       </div>

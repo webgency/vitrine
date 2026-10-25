@@ -32,7 +32,7 @@ describe("evidence coverage explanations", () => {
   it("distinguishes unknown flags from verified absence and respects caliber gating", () => {
     const watch: Watch = { ...nomos, specs: { ...nomos.specs, caliber: "Unknown" }, qualityFlags: { arCoated: false } };
     const rows = evidenceBreakdown(watch);
-    expect(rows.find(r => r.dimension === "movement")).toMatchObject({ coverage: 0, gated: true, missing: ["Recognized caliber", "Regulation positions"] });
+    expect(rows.find(r => r.dimension === "movement")).toMatchObject({ coverage: 0, gated: true, missing: ["Recognized caliber", "Regulation (positions or accuracy spec)"] });
     expect(rows.find(r => r.dimension === "caseCraft")).toMatchObject({ coverage: 0.25, recorded: ["AR coating"] });
     expect(rows.find(r => r.dimension === "bracelet")).toMatchObject({ applicable: true, coverage: 0 });
   });

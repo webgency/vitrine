@@ -170,12 +170,13 @@ const CALIBER_TIER_PATTERNS: Array<[pattern: string, tier: number]> = [
   // the regulation and the rework, below Tudor's in-house COSC MT5450, which
   // is a movement rather than a treatment of someone else's.
   ["mu 9419", 0.75],
-  // Breitling Caliber 23: a Valjoux 7753 (the SW510's architecture) built by
-  // Breitling to COSC, 28,800 vph and 48h (breitling.com, Top Time Deus
-  // A233112A1A1X1). Level with the MU 9419: above the bare SW510 for the
-  // chronometer certification, below an in-house movement such as Tudor's
-  // MT5450. Breitling's in-house B01 is a different caliber and not this row.
-  ["breitling 23", 0.75],
+  // Breitling Caliber 23: a Valjoux 7753 (the SW510's architecture) at
+  // 28,800 vph and 48h (breitling.com, Top Time Deus A233112A1A1X1). Level
+  // with the SW510: its COSC certification is regulation, credited through
+  // accuracySpecSpd like any stated accuracy, so it must not also lift the
+  // tier (it sat at 0.75 for COSC until accuracy was credited). Breitling's
+  // in-house B01 is a different caliber and not this row.
+  ["breitling 23", 0.72],
   ["sw510", 0.72],
   ["l688", 0.72],
   ["st-1901b", 0.70],
@@ -397,6 +398,36 @@ export function isSapphireCrystal(crystal: string): boolean {
  * - caseCraft and bracelet each need one of their own qualityFlags recorded
  * - durability needs water resistance or the crystal
  */
+/**
+ * A stated accuracy spec as regulation credit, on the same 0–0.2 scale as
+ * regulated positions. Linear from ±20 s/day, which is what an unregulated
+ * NH35 or Miyota 9039 is sold at and earns nothing, to ±2 s/day (Rolex's
+ * Superlative Chronometer), which earns the full 0.2 that four regulated
+ * positions do. COSC's -4/+6 (recorded as 6) earns 0.16; a brand's ±10 earns
+ * 0.11. Recorded as the larger deviation either side, so -4/+6 is 6.
+ */
+const ACCURACY_NO_CREDIT_SPD = 20;
+const ACCURACY_FULL_CREDIT_SPD = 2;
+export function accuracyCredit(specSpd: number): number {
+  return clamp01((ACCURACY_NO_CREDIT_SPD - specSpd) / (ACCURACY_NO_CREDIT_SPD - ACCURACY_FULL_CREDIT_SPD)) * 0.2;
+}
+
+/**
+ * The extra case height a mechanical chronograph's module needs. Measured over
+ * the collection on 2026-10-25: the 12 watches with a chronograph caliber sit a
+ * median 1.21mm above the expected-thickness line, everything else 0.22mm
+ * below it, so the module costs about 1.4mm. Judged without it, every
+ * chronograph read as a badly proportioned three-hander (the Breitling Top
+ * Time, 41 x 14.27mm, scored 7 of 100 on case profile). Read from the caliber,
+ * as CHRONOGRAPH_CREDIT is: the height comes from the movement, whatever the
+ * category says. Frozen, like the par anchors — refitting it as watches are
+ * added would move scores for reasons that have nothing to do with them.
+ */
+export const CHRONOGRAPH_THICKNESS_ALLOWANCE_MM = 1.5;
+export function thicknessAllowanceMm(specs: Watch["specs"]): number {
+  return isChronographCaliber(specs.caliber, specs.movement) ? CHRONOGRAPH_THICKNESS_ALLOWANCE_MM : 0;
+}
+
 export function scoreDimensionEvidence(watch: Watch): Partial<Record<Dimension, DimensionEvidence>> {
   const s = watch.specs ?? {};
   const f = watch.qualityFlags ?? {};
@@ -405,15 +436,22 @@ export function scoreDimensionEvidence(watch: Watch): Partial<Record<Dimension, 
   const caliberBase = caliberTier(s.caliber, s.movement);
   if (caliberBase !== undefined) {
     // Regulation is expensive and almost nobody at this price point does it.
-    const regBonus = f.regulatedPositions ? Math.min(0.2, f.regulatedPositions * 0.05) : 0;
+    // Two records show it: regulated positions, or a stated accuracy spec
+    // (COSC, a brand's ±10). They measure the same work, so they share one
+    // credit — the larger — rather than adding up.
+    const regBonus = Math.max(
+      f.regulatedPositions ? Math.min(0.2, f.regulatedPositions * 0.05) : 0,
+      f.accuracySpecSpd !== undefined ? accuracyCredit(f.accuracySpecSpd) : 0
+    );
     const prBonus =
       s.powerReserveHours !== undefined ? clamp01((s.powerReserveHours - 38) / 42) * 0.1 : 0;
     const chronoCredit = isChronographCaliber(s.caliber, s.movement) ? CHRONOGRAPH_CREDIT : 0;
-    const knownInputs = 1 + Number(f.regulatedPositions !== undefined) + Number(s.powerReserveHours !== undefined);
+    const regulationKnown = f.regulatedPositions !== undefined || f.accuracySpecSpd !== undefined;
+    const knownInputs = 1 + Number(regulationKnown) + Number(s.powerReserveHours !== undefined);
     out.movement = evidence(caliberBase + chronoCredit + regBonus + prBonus, knownInputs, 3);
   }
 
-  const profile = caseProfileEvidence(s);
+  const profile = caseProfileEvidence(s, thicknessAllowanceMm(s));
   if (profile) {
     // Thickness measured against what this diameter should cost, not as a bare
     // thickness/diameter ratio. A ratio assumes height scales with width, and
@@ -688,6 +726,38 @@ function frictionChips(watch: Watch): string[] {
  * the fixed band-midpoint anchors; the discrete band contributes only the peer
  * label, membership, and (when n >= 6) percentile ranking.
  */
+/** The most any dimension score can be. */
+export const SCORE_CEILING = 1;
+
+export type DimensionVerdict = "beats" | "par" | "trails" | "top" | "limited" | "unbanded";
+
+/**
+ * How one dimension stands against par. Shared by the standing (beats/trails)
+ * and the panel, so the two can't disagree.
+ *
+ * "top": par keeps rising with price, but a score stops at 1. Movement par
+ * passes the ceiling near $6,350 and case-profile par near $7,000, so above
+ * that a watch at the very top of the scale — a Rolex 3285 — read "Below
+ * expected" whatever it had. At the ceiling it has the most the scale can
+ * show; that is not falling short. Value is unchanged: it still measures what
+ * the price buys, so a dearer watch with the same specs is still worse value.
+ */
+export function dimensionVerdict(
+  dimension: Dimension,
+  raw: number,
+  reference: number | undefined,
+  coverage: number
+): DimensionVerdict {
+  if (reference === undefined) return "unbanded";
+  if (coverage < MIN_REFERENCE_COVERAGE[dimension]) return "limited";
+  if (raw > reference + RUBRIC_TOLERANCE) return "beats";
+  // Only once par is past the ceiling: durability's par is exactly 1 at every
+  // price, and full marks there are simply as expected.
+  if (reference > SCORE_CEILING && raw >= SCORE_CEILING - RUBRIC_TOLERANCE) return "top";
+  if (raw < reference - RUBRIC_TOLERANCE) return "trails";
+  return "par";
+}
+
 export function computeStanding(watch: Watch, allWatches: Watch[]): Standing {
   const peerGroup = derivePeerGroup(watch, allWatches);
   const raw = scoreDimensionEvidence(watch);
@@ -709,10 +779,9 @@ export function computeStanding(watch: Watch, allWatches: Watch[]): Standing {
       rubricBand: band?.id ?? "unbanded",
       reference,
     };
-    if (reference !== undefined && value.coverage >= MIN_REFERENCE_COVERAGE[dimension]) {
-      if (value.raw > reference + RUBRIC_TOLERANCE) beats.push(dimension);
-      else if (value.raw < reference - RUBRIC_TOLERANCE) trails.push(dimension);
-    }
+    const verdict = dimensionVerdict(dimension, value.raw, reference, value.coverage);
+    if (verdict === "beats") beats.push(dimension);
+    else if (verdict === "trails") trails.push(dimension);
   }
 
   const qualityScore = compositeQuality(raw);

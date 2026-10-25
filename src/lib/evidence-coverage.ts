@@ -8,7 +8,7 @@ export function evidenceBreakdown(watch: Watch) {
   const f = watch.qualityFlags ?? {};
   const evidence = scoreDimensionEvidence(watch);
   const inputs: Record<typeof DIMENSIONS[number], Array<[string, boolean]>> = {
-    movement: [["Recognized caliber", caliberTier(s.caliber, s.movement) !== undefined], ["Regulation positions", f.regulatedPositions !== undefined], ["Power reserve", s.powerReserveHours !== undefined]],
+    movement: [["Recognized caliber", caliberTier(s.caliber, s.movement) !== undefined], ["Regulation (positions or accuracy spec)", f.regulatedPositions !== undefined || f.accuracySpecSpd !== undefined], ["Power reserve", s.powerReserveHours !== undefined]],
     wearability: [["Case diameter", s.caseDiameterMm !== undefined && s.caseDiameterMm > 0], ["Case thickness", s.caseThicknessMm !== undefined], ["Lug-to-lug", s.lugToLugMm !== undefined]],
     caseCraft: [["Case hardening", f.hardenedCoatingHv !== undefined], ["Sapphire bezel insert", f.sapphireBezelInsert !== undefined], ["Drilled lugs", f.drilledLugs !== undefined], ["AR coating", f.arLayers !== undefined || f.arCoated !== undefined]],
     bracelet: [["Included bracelet or strap", f.braceletIncluded !== undefined], ["Clasp micro-adjustment", f.microAdjustClasp !== undefined], ["Quick release", f.quickRelease !== undefined]],

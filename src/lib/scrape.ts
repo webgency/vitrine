@@ -731,7 +731,18 @@ export function extractQualityFlags(text: string, variantTitle?: string): Qualit
   if (asymmetricAccuracy) {
     flags.accuracySpecSpd = Math.max(Math.abs(Number(asymmetricAccuracy[1])), Math.abs(Number(asymmetricAccuracy[2])));
   } else if (symmetricAccuracy) {
-    flags.accuracySpecSpd = Number(symmetricAccuracy[1]);
+    // A range ("+/-5 seconds per day to +/-12 seconds per day", William Wood
+    // quoting Sellita's grades) is only as good as its worst end.
+    const rangeEnd = t
+      .slice((symmetricAccuracy.index ?? 0) + symmetricAccuracy[0].length)
+      .match(/^[^.;]{0,30}?\bto\s*(?:\+\s*\/\s*-|±)\s*(\d+(?:\.\d+)?)/i);
+    flags.accuracySpecSpd = Math.max(Number(symmetricAccuracy[1]), Number(rangeEnd?.[1] ?? 0));
+  } else if (/\bCOSC\b|\bMETAS\b|\bMaster Chronometer\b/i.test(t)) {
+    // A certification is a published accuracy bound, not a guess: COSC is
+    // -4/+6 s/day. METAS is recorded at the same 6, never better, because
+    // brands quote it differently (Omega's own page says 0/+6). A stated
+    // figure wins over either.
+    flags.accuracySpecSpd = 6;
   }
 
   if (/\bsapphire\s+(?:crystal\s+)?(?:bezel|insert)\b|\bbezel[^.;]{0,50}\bsapphire\s+insert\b/i.test(t)) {
