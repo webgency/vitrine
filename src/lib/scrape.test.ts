@@ -412,6 +412,15 @@ describe("Breitling Top Time Deus (each value in its own box after the label)", 
     expect(extractQualityFlags(text)).toMatchObject({ arCoated: true });
   });
 
+  it("records a stated certification as its accuracy bound, and a stated figure over it", () => {
+    expect(extractQualityFlags("powered by the Breitling Caliber 23, a COSC-certified chronometer").accuracySpecSpd).toBe(6);
+    expect(extractQualityFlags("Co-Axial Master Chronometer, certified by METAS").accuracySpecSpd).toBe(6);
+    expect(extractQualityFlags("Superlative Chronometer; Precision: -2/+2 sec/day; COSC").accuracySpecSpd).toBe(2);
+    expect(extractQualityFlags("a classic chronometer-style dial").accuracySpecSpd).toBeUndefined();
+    // A quoted range counts at its worst end.
+    expect(extractQualityFlags("The timekeeping tolerance provided by Sellita is +/-5 seconds per day to +/-12 seconds per day.").accuracySpecSpd).toBe(12);
+  });
+
   it("never stores a strap row's label as the strap under a heading-style panel", () => {
     expect(extractSpecs("Strap; Strap material; Calfskin leather").braceletStrap).not.toBe("Strap material");
   });

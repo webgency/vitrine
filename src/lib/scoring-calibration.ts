@@ -1,11 +1,16 @@
 import { DIMENSIONS, RubricCategory } from "./rubrics";
-import { caseProfileEvidence, deriveCategory, landedPriceUsd, scoreDimensionEvidence, valueFromEvidence } from "./scoring";
+import { caseProfileEvidence, deriveCategory, landedPriceUsd, scoreDimensionEvidence, thicknessAllowanceMm, valueFromEvidence } from "./scoring";
 import { Watch } from "./types";
 
-/** Experimental allowance for the extra case stack associated with each category. */
+/**
+ * Experimental allowance for the extra case stack associated with each
+ * category, on top of production's. Production now allows for a chronograph
+ * caliber's module (CHRONOGRAPH_THICKNESS_ALLOWANCE_MM), so the chronograph
+ * category adds nothing more here.
+ */
 export const CATEGORY_THICKNESS_ALLOWANCE_MM: Record<RubricCategory, number> = {
   diver: 1,
-  chronograph: 0.5,
+  chronograph: 0,
   gmt: 0.3,
   dress: 0,
   // No dive-case stack and no chronograph pushers, but not held to a dress
@@ -32,7 +37,10 @@ export function calibrationScore(watch: Watch): CalibrationResult {
   const evidence = scoreDimensionEvidence(watch);
 
   if (category && evidence.wearability && watch.specs.caseDiameterMm && watch.specs.caseThicknessMm !== undefined) {
-    evidence.wearability = caseProfileEvidence(watch.specs, CATEGORY_THICKNESS_ALLOWANCE_MM[category]);
+    evidence.wearability = caseProfileEvidence(
+      watch.specs,
+      thicknessAllowanceMm(watch.specs) + CATEGORY_THICKNESS_ALLOWANCE_MM[category]
+    );
   }
 
   const rated = DIMENSIONS.filter((dimension) => evidence[dimension] !== undefined);
