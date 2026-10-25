@@ -3265,7 +3265,6 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
-    "finalist": true,
     "designUniqueness": 5,
     "designPreferenceElo": 942.51,
     "designComparisonCount": 14,
@@ -3738,7 +3737,6 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "diver",
-    "finalist": true,
     "designUniqueness": 4,
     "designPreferenceElo": 1044.11,
     "designComparisonCount": 15,
@@ -4094,7 +4092,8 @@
     },
     "tags": [],
     "id": "mtvyvp64okbj79",
-    "dateAdded": "2026-09-10T20:15:35.209Z"
+    "dateAdded": "2026-09-10T20:15:35.209Z",
+    "finalist": true
   },
   {
     "brand": "Lima Watch",
@@ -5455,6 +5454,7 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "scoringCategory": "diver",
+    "finalist": true,
     "designUniqueness": 5,
     "designPreferenceElo": 885.63,
     "designComparisonCount": 14,
@@ -5731,6 +5731,7 @@
     "referenceNumber": "A233112A1A1X1",
     "status": "wishlist",
     "wishlistTier": "watching",
+    "finalist": true,
     "price": {
       "amount": 6200,
       "currency": "USD"
