@@ -138,6 +138,35 @@ describe("fresh_offer", () => {
       expect(ofType(detectAlerts(before(overrides), after(overrides), { now: NOW }), "fresh_offer")).toHaveLength(0);
     }
   });
+
+  describe("discount against the tracked price", () => {
+    const DEALER = "https://dealer.example/bb58";
+    const fresh = (price: Money, condition: RetailerLink["condition"] = "new") =>
+      ofType(
+        detectAlerts(watch(), watch({ links: [link({ url: DEALER, retailer: "Dealer", price, condition, observedAt: daysAgo(0) })] }), { now: NOW }),
+        "fresh_offer"
+      )[0]?.payload;
+
+    it("marks a new-condition ask 10% or more under the tracked price", () => {
+      expect(fresh(usd(4462.5))).toMatchObject({ belowTrackedPct: 0.15, trackedPrice: usd(5250) });
+      expect(fresh(usd(4725))).toMatchObject({ belowTrackedPct: 0.1 });
+    });
+
+    it("leaves a smaller gap unmarked", () => {
+      expect(fresh(usd(4800))).not.toHaveProperty("belowTrackedPct");
+    });
+
+    it("never marks a pre-owned ask, which sits under a new price as a matter of course", () => {
+      expect(fresh(usd(3000), "pre-owned")).not.toHaveProperty("belowTrackedPct");
+    });
+
+    it("measures from the tracked price before the write, even if a refresh moved it to the same ask", () => {
+      const before = watch({ links: [link({ observedAt: daysAgo(40) })] });
+      const after = watch({ price: usd(4462.5), links: [link({ price: usd(4462.5), observedAt: daysAgo(0) })] });
+      const [alert] = ofType(detectAlerts(before, after, { now: NOW }), "fresh_offer");
+      expect(alert.payload).toMatchObject({ kind: "back", belowTrackedPct: 0.15, trackedPrice: usd(5250) });
+    });
+  });
 });
 
 it("never fires for a newly added watch", () => {

@@ -27,6 +27,8 @@ import { detectTargetNotification } from "./target-notifications.mjs";
  * @property {string} [previousAsOf]
  * @property {number} [dropPct]
  * @property {"new" | "back"} [kind]
+ * @property {number} [belowTrackedPct] Fresh offer only: how far a new-condition ask sits under the tracked price.
+ * @property {Money} [trackedPrice] The tracked price belowTrackedPct is measured from.
  */
 /** @typedef {{ id: string, watchId: string, type: AlertType, createdAt: string, read?: boolean, payload: AlertPayload }} AlertEvent */
 /** @typedef {{ version: 1, settings: { types: Partial<Record<AlertType, boolean>> }, muted: string[], events: AlertEvent[] }} AlertState */
@@ -50,6 +52,16 @@ export const FRESH_OFFER_TIERS = ["shortlist", "watching"];
 export function watchesForFreshOffers(watch) {
   return watch.status === "wishlist" && FRESH_OFFER_TIERS.includes(watch.wishlistTier ?? "watching");
 }
+
+/**
+ * A fresh offer this far or more under the tracked price says so. A drop alert
+ * needs a listing's own earlier ask to fall from, so a dealer that first
+ * appears already discounted was announced as a plain new ask. Only a
+ * new-condition ask is compared: a pre-owned ask under a new price is the
+ * normal state of the market, not a deal (one owned watch's resale ask sat 47%
+ * under its tracked price).
+ */
+export const FRESH_OFFER_DISCOUNT = 0.10;
 
 export const DEDUPE_WINDOW_MS = 24 * 60 * 60 * 1000;
 
@@ -219,6 +231,13 @@ function freshOffers(before, after, now) {
       kind = "back";
     }
 
+    // Measured from the tracked price before this write: a refresh can move
+    // the headline to the very ask being announced, which would read as 0%.
+    const tracked = before.price ?? after.price;
+    const trackedUsd = normalizeMoneyToUsd(tracked);
+    const belowTracked = link.condition === "new" && trackedUsd ? (trackedUsd - priceUsd) / trackedUsd : undefined;
+    const discounted = belowTracked !== undefined && belowTracked >= FRESH_OFFER_DISCOUNT;
+
     found.push({
       type: "fresh_offer",
       watchId: after.id,
@@ -229,6 +248,8 @@ function freshOffers(before, after, now) {
         asOf: link.observedAt,
         basis: "listed",
         kind,
+        belowTrackedPct: discounted ? Math.round(belowTracked * 10000) / 10000 : undefined,
+        trackedPrice: discounted ? tracked : undefined,
         source: linkSource(link),
         url: link.url,
         condition: link.condition,
