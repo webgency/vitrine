@@ -143,6 +143,23 @@ function splitRowText(row: string, _labelTag: string, label: string, _valueTag: 
   return labeledRowText(row, "", "", label, value);
 }
 
+// A row holding exactly a label and a value, each its own text-only element:
+// <li><h5>Diameter</h5><p>40 mm</p></li> (Rolex) and <div class="row">
+// <div>Case lug width (mm)</div><div>19.00</div></div> (Tissot). Divs are not
+// line breaks, so Tissot's table ran together ("Case material 316L … Case
+// options See-through") and Rolex's read "Diameter; 40 mm"; either way the
+// patterns lost the row. A product card has the same shape ("White Leather
+// Strap" over "$50.00"), and pairing it would read a price as a strap, so a
+// row whose value is a price is left alone. Whitespace around each text is
+// outside the length limits: Tissot indents a 19-character label by 70.
+const PAIR_ROW =
+  /<(li|div|tr)\b[^>]*>\s*<(h[1-6]|p|span|div|th|td|dt|strong|b|label)\b[^>]*>\s*([^<]{1,60}?)\s*<\/\2>\s*<(p|span|div|td|dd)\b[^>]*>\s*([^<]{1,200}?)\s*<\/\4>\s*<\/\1>/gi;
+const PRICE_VALUE = /^\s*(?:[$€£¥₣]|(?:US|A|AU|C|CA)\$|\d[\d.,\s]*\s*(?:USD|EUR|GBP|CHF|JPY|AUD|CAD)\b)/i;
+
+function pairRowText(row: string, _tag: string, _labelTag: string, label: string, _valueTag: string, value: string): string {
+  return PRICE_VALUE.test(value) ? row : labeledRowText(row, "", "", label, value);
+}
+
 /** Whether `text` opens with `label` as a whole word ("Dial color: …" opens with "Dial"). */
 function opensWith(text: string, label: string): boolean {
   return text.toLowerCase().startsWith(label.toLowerCase()) && !/[A-Za-zÀ-ÿ]/.test(text.charAt(label.length));
@@ -205,6 +222,7 @@ function stripText(html: string): string {
       })
       .replace(LABELED_ROW, labeledRowText)
       .replace(SPLIT_ROW, splitRowText)
+      .replace(PAIR_ROW, pairRowText)
       .replace(/<script[\s\S]*?<\/script>/gi, " ")
       .replace(/<style[\s\S]*?<\/style>/gi, " ")
       // Paragraph, line and heading boundaries become "; ". Without them a
@@ -230,6 +248,8 @@ const DOMAIN_BRANDS: Record<string, string> = {
   "maenwatches.com": "Maen",
   "spinnaker-watches.com": "Spinnaker",
   "viiswatch.com": "VIIS",
+  // The page's product schema names no brand, only "Rolex GMT-Master II watch: …".
+  "rolex.com": "Rolex",
 };
 
 // Shopify's default vendor is the store's placeholder name in the admin
@@ -529,6 +549,10 @@ function num(text: string, re: RegExp): number | undefined {
 const HAND_WINDING_CAPABILITY =
   /(?:hand[\s-]?(?:wound|wind(?:ing)?)|manual[\s-]?wind(?:ing)?|handaufzug|remontage manuel|carica manuale|cuerda manual)\s*(?:möglich|possible|capability|capable|function|funktion)|\b(?:with|mit|avec|con|and|und|et|y|e)\s+(?:(?:hand|manual)[\s-]?wind(?:ing)?|handaufzug|remontage manuel|carica manuale|cuerda manual)/gi;
 
+// Colour words for reading a bare "Dial:" row; anything else there is not a colour.
+const DIAL_COLOUR =
+  "(?:black|white|blue|navy|green|grey|gray|silver|red|orange|yellow|brown|chocolate|espresso|pink|salmon|purple|teal|turquoise|cream|ivory|champagne|gold|bronze|copper|beige|tan|anthracite|slate|burgundy|olive|khaki|sand|mint|aqua|azure)";
+
 export function extractSpecs(text: string): WatchSpecs {
   const t = normalizeDecimals(text.replace(/\s+/g, " "));
   const low = t.toLowerCase();
@@ -573,6 +597,8 @@ export function extractSpecs(text: string): WatchSpecs {
   s.lugWidthMm =
     // "Lug width (in-between lug): 20 mm" — a qualifier in brackets is skipped.
     num(t, /lug[\s-]*width\s*\([^)]{1,30}\)\s*:\s*(\d{2})\s?mm/i) ??
+    // "Case lug width (mm): 19.00" (Tissot): the unit is in the label.
+    num(t, /lug[\s-]*width\s*\(\s*mm\s*\)\s*:\s*(\d{2})(?:\.0+)?(?![\d.])/i) ??
     num(t, /(?:lug[\s-]*width|Anstoßbreite|Bandanstoßbreite|Bandbreite|Stegbreite|largeur (?:des |entre )?cornes|entre-?cornes|ancho (?:de )?(?:las )?asas|ancho (?:de )?(?:la )?correa|larghezza (?:delle )?anse|larghezza (?:del )?cinturino)[^0-9.;,]{0,14}(\d{2})\s?mm/i) ??
     num(t, /strap[\s-]*width[^0-9.;,]{0,12}(\d{2})\s?mm/i) ??
     num(t, /\b(\d{2})\s?mm\s+(?:lug|strap)[\s-]*width\b/i) ?? // "20 mm lug width"
@@ -585,7 +611,8 @@ export function extractSpecs(text: string): WatchSpecs {
     num(t, /(\d{2,3})\s*(?:Stunden|Std\.?|heures|horas|ore)\s*(?:de\s+|di\s+)?(?:Gangreserve|réserve de marche|reserva de marcha|riserva di carica)/i);
 
   const wm =
-    t.match(/water[\s-]*resist[a-z]*[^0-9]{0,16}(\d{2,4})\s?m\b/i) ||
+    // "Waterproof to 100 metres" (Rolex): a spelled-out unit, not just "m".
+    t.match(/water[\s-]*resist[a-z]*[^0-9]{0,24}(\d{2,4})\s?m(?:et(?:er|re)s?)?\b/i) ||
     t.match(/(?:Wasserdichtigkeit|wasserdicht(?:\s+bis)?|étanchéité|étanche|resistencia al agua|hermeticidad|impermeabilità|impermeabile)[^0-9]{0,16}(\d{2,4})\s?m\b/i) ||
     t.match(/(\d{2,4})\s?m(?:eters)?\s*(?:of\s*)?water/i);
   // "3 bars (30 m /99 ft)": the plural failed \b after "bar".
@@ -620,7 +647,9 @@ export function extractSpecs(text: string): WatchSpecs {
   const cal =
     t.match(/\b(?:cali(?:ber|bre|bro)|Kaliber)\s*:\s*([A-Za-z0-9][\w .\-\/]{1,30})/i) ??
     t.match(/(?:cali(?:ber|bre|bro)|kaliber)\s*[:\-]?\s*([A-Za-z0-9][\w .\-\/]{1,30})/i);
-  const namedMovement = t.match(/\b((?:Miyota|Seiko|Sellita|ETA|Ronda|Soprod|La Joux[ -]Perret|Seagull)\s+[A-Z0-9][A-Z0-9.\-]{1,15})(?=[\s;,)]|$)/i);
+  // Powermatic is Swatch Group's ETA-based family (Tissot, Certina, Hamilton
+  // as H-10 aside); Tissot names it only in feature copy, never in the table.
+  const namedMovement = t.match(/\b((?:Miyota|Seiko|Sellita|ETA|Ronda|Soprod|La Joux[ -]Perret|Seagull|Powermatic)\s+[A-Z0-9][A-Z0-9.\-]{1,15})(?=[\s;,)]|$)/i);
   if (cal || namedMovement) {
     // A maker + caliber token is stronger than a loose "calibre" label,
     // which marketing prose sometimes follows with "beats at 28,800...".
@@ -639,12 +668,22 @@ export function extractSpecs(text: string): WatchSpecs {
     t.match(/case material\s*[:\-]?\s*([^.;]{3,60})/i) ??
     t.match(/(?:Gehäusematerial|matériau du boîtier|material de la caja|materiale della cassa)\s*[:\-]?\s*([^.;]{3,60})/i) ??
     // Directly under a case heading or panel, a bare "Material:" is the case's.
-    t.match(/(?<![A-Za-zÀ-ÿ])(?:Gehäuse|Case|Boîtier|Caja|Cassa)\s*;\s*Material\s*:\s*([^.;]{3,60})/i);
+    t.match(/(?<![A-Za-zÀ-ÿ])(?:Gehäuse|Case|Boîtier|Caja|Cassa)\s*;\s*Material\s*:\s*([^.;]{3,60})/i) ??
+    // Rolex: "Model case: Oyster, 40 mm…; Diameter: 40 mm; Material: Oystersteel".
+    // Still the case section only while no bracelet, strap, dial or movement
+    // heading has started; the bracelet's "Material:" comes later.
+    t.match(/(?<![A-Za-zÀ-ÿ])Model case\s*[:;](?:(?!(?<![A-Za-zÀ-ÿ])(?:Bracelet|Strap|Dial|Movement)(?![A-Za-zÀ-ÿ]))[^]){0,400}?(?<![A-Za-zÀ-ÿ])Material\s*:\s*([^.;]{3,60})/i);
   if (caseMaterial) s.caseMaterial = clean(caseMaterial[1]).split(/\s+(?:case finish|case size|diameter|thickness|bezel|crystal)\b/i)[0].trim();
-  const dialColor = t.match(/dial colou?r\s*[:\-]\s*([A-Za-z][A-Za-z /\-]{1,30})/i);
+  const dialColor =
+    t.match(/dial colou?r\s*[:\-]\s*([A-Za-z][A-Za-z /\-]{1,30})/i) ??
+    // A bare "Dial: Black" row (Rolex). Only when the value names a colour: a
+    // "Dial" row can describe something else ("Lume — Hands: Swiss, Dial:
+    // Swiss" on Sheffield is the lume's origin).
+    t.match(new RegExp(`(?<![A-Za-zÀ-ÿ])Dial\\s*:\\s*((?:[A-Za-z][A-Za-z\\-]*\\s+){0,3}?${DIAL_COLOUR}(?:\\s+[A-Za-z][A-Za-z\\-]*){0,3})(?=\\s*(?:;|$))`, "i"));
   if (dialColor) s.dialColor = clean(dialColor[1]).split(/\s+(?:index|lens|crystal|case)\b/i)[0].trim();
   const band =
-    t.match(/\b(?:band|bracelet|strap)(?:\s+material)?\s*:\s*([^.;]{3,100})/i) ??
+    // Not the tail of another label: "Weight inc. Strap: 178g" is a weight.
+    t.match(/(?<!(?:weight|inc\.?|incl\.?|including|with)\s+)\b(?:band|bracelet|strap)(?:\s+material)?\s*:\s*([^.;]{3,100})/i) ??
     t.match(/(?<![A-Za-zÀ-ÿ])(?:Armband(?:material)?|Bandmaterial|Correa|Cinturino|Bracelete)\s*:\s*([^.;]{3,100})/i);
   if (band) {
     const value = clean(band[1]).split(/\s+(?:extra band|water resistance|weight|warranty|lug width)\b/i)[0].trim();
