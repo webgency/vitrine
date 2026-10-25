@@ -15,6 +15,7 @@
     },
     "priceUpdatedAt": "2026-10-25T11:00:01.441Z",
     "qualityFlags": {
+      "accuracySpecSpd": 6,
       "antimagneticAm": 1200000,
       "sapphireBezelInsert": false,
       "braceletIncluded": true
@@ -487,6 +488,7 @@
       }
     ],
     "qualityFlags": {
+      "accuracySpecSpd": 6,
       "sapphireBezelInsert": false
     },
     "links": [
@@ -1262,6 +1264,7 @@
     },
     "priceUpdatedAt": "2026-06-23T03:08:23.771Z",
     "qualityFlags": {
+      "accuracySpecSpd": 12,
       "sapphireBezelInsert": false,
       "quickRelease": true,
       "braceletIncluded": false,
@@ -3523,6 +3526,9 @@
         "source": "manual"
       }
     ],
+    "qualityFlags": {
+      "accuracySpecSpd": 2
+    },
     "links": [
       {
         "url": "https://www.rolex.com/en-us/watches/gmt-master-ii/m126710blnr-0002",
@@ -5711,6 +5717,7 @@
       }
     ],
     "qualityFlags": {
+      "accuracySpecSpd": 6,
       "arCoated": true
     },
     "links": [
