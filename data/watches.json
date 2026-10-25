@@ -3897,6 +3897,7 @@
     "status": "wishlist",
     "wishlistTier": "shortlist",
     "scoringCategory": "gmt",
+    "finalist": true,
     "designUniqueness": 4,
     "designPreferenceElo": 1132.58,
     "designComparisonCount": 14,
@@ -3933,7 +3934,7 @@
         "observedAt": "2026-10-25T02:02:15.786Z"
       }
     ],
-    "imageUrl": "https://usd.farer.com/cdn/shop/files/GREEN-MSTV-green.png?v=1779798861&width=2048",
+    "imageUrl": "https://usd.farer.com/cdn/shop/files/GREEN-SUEDE-grey.png?v=1779798861",
     "specs": {
       "caseDiameterMm": 40,
       "caseThicknessMm": 12.5,
@@ -5447,9 +5448,7 @@
     "status": "wishlist",
     "wishlistTier": "watching",
     "scoringCategory": "sports",
-    "designUniqueness": 4,
-    "designPreferenceElo": 1090.56,
-    "designComparisonCount": 14,
+    "designUniqueness": 5,
     "price": {
       "amount": 620,
       "currency": "EUR"
@@ -5480,7 +5479,7 @@
         "observedAt": "2026-10-25T02:02:29.846Z"
       }
     ],
-    "imageUrl": "https://cdn.baltic-watches.com/f/73554/3543x2362/e9dd69bda0/duo-hermetique-the-rift.jpg?width=400",
+    "imageUrl": "https://cdn.shopify.com/s/files/1/0012/9299/2583/files/Baltic_Hermetique_The_Rfit_34_Face.png?v=1790590234",
     "specs": {
       "caseDiameterMm": 34,
       "caseThicknessMm": 10.8,
