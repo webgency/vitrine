@@ -131,13 +131,20 @@ export const CATEGORY_EXPECTATION: Record<
  * enough of them. They are constants on purpose: par must not move when a
  * watch is added, or a score would change for reasons that have nothing to do
  * with that watch.
+ *
+ * One deliberate refit, for a change of scale rather than of collection:
+ * caseCraft moved from a fixed sum of achieved points to a score over the
+ * inputs that are known (2026-10-25), which lifted its raw scores, and the old
+ * 0.47 anchor then had 13 of 18 rated watches "above expected". Refit the same
+ * way — the median at $1000 of the 18 watches with enough case evidence, slope
+ * kept — at 0.64, and frozen again.
  */
 export const PAR_ANCHOR_USD = 1000;
 export const PAR: Record<Dimension, { atAnchor: number; perDoubling: number }> = {
   movement: { atAnchor: 0.60, perDoubling: 0.15 },
   wearability: { atAnchor: 0.58, perDoubling: 0.15 },
   durability: { atAnchor: 1.00, perDoubling: 0 },
-  caseCraft: { atAnchor: 0.47, perDoubling: 0.05 },
+  caseCraft: { atAnchor: 0.64, perDoubling: 0.05 },
   bracelet: { atAnchor: 0.68, perDoubling: 0.08 },
 };
 
