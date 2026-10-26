@@ -164,6 +164,14 @@ const CALIBER_TIER_PATTERNS: Array<[pattern: string, tier: number]> = [
   // Proprietary automatic monopusher chronograph with a patented retrograde
   // regatta module and 64h reserve; kept below the METAS anchor above.
   ["alb01 a", 0.80],
+  // TAG Heuer TH20 family (the Heuer 02 lineage; TH20-04 adds a tide module):
+  // in-house automatic chronograph with a column wheel, vertical clutch and
+  // bi-directional winding at 28,800 vph (tagheuer.com, Carrera Seafarer
+  // CBS2016.EB0430). Level with the ALB01 A above, the other in-house
+  // column-wheel automatic chronograph. Its 80h reserve is credited by the
+  // power-reserve bonus, and the tide indicator is a complication rather than
+  // movement architecture, so neither lifts the tier.
+  ["th20", 0.80],
   // Muehle MU 9419: a Sellita SW500 (the 7750-architecture automatic
   // chronograph) reworked with the woodpecker-neck regulation, a Glashuette
   // three-quarter plate and a 62h barrel. Above the bare SW510 below it for
@@ -270,7 +278,7 @@ export function caliberTier(
 // (9075 over 9015, SW330 over SW200-1), which is about what a GMT costs.
 // Meca-quartz chronographs never reach this: quartz is unrated.
 const CHRONOGRAPH_CALIBER_PATTERNS = [
-  "sw500", "sw510", "mu 9419", "breitling 23", "alb01", "st-1901", "st1901", "ne86", "ne88", "l688", "7750",
+  "sw500", "sw510", "mu 9419", "breitling 23", "alb01", "th20", "st-1901", "st1901", "ne86", "ne88", "l688", "7750",
 ];
 export const CHRONOGRAPH_CREDIT = 0.15;
 
